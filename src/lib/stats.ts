@@ -75,6 +75,8 @@ export function applyLevelUp(
     previousLevel: currentLevel,
     newLevel: currentLevel + levelsGained,
     statGains: totalGains,
+    newSkills: [],
+    newTitles: [],
   };
 }
 

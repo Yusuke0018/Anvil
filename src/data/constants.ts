@@ -54,4 +54,4 @@ export const INITIAL_CHARACTER: import('@/types').CharacterStatus = {
   totalCompletions: { life: 0, hobby: 0, work: 0 },
 };
 
-export const GAME_STATE_VERSION = 1;
+export const GAME_STATE_VERSION = 2;

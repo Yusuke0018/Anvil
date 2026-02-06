@@ -15,6 +15,9 @@ function defaultGameState(): GameState {
     habits: [],
     dailyRecords: [],
     currentDate: getToday(),
+    unlockedSkillIds: [],
+    unlockedTitleIds: [],
+    equippedTitleId: null,
   };
 }
 
@@ -87,10 +90,18 @@ export function saveDailyRecord(state: GameState, record: DailyRecord): GameStat
  * データマイグレーション
  */
 function migrateState(state: GameState): GameState {
-  // v1: 初期バージョン - マイグレーション不要
   if (!state.version) {
-    state.version = GAME_STATE_VERSION;
+    state.version = 1;
   }
+
+  // v1 → v2: スキル・称号システム追加
+  if (state.version === 1) {
+    state.unlockedSkillIds = [];
+    state.unlockedTitleIds = [];
+    state.equippedTitleId = null;
+    state.version = 2;
+  }
+
   return state;
 }
 

@@ -49,7 +49,7 @@ export interface CategoryCompletions {
   work: number;
 }
 
-// ===== スキル (Phase 2) =====
+// ===== スキル =====
 export interface Skill {
   id: string;
   name: string;
@@ -58,10 +58,11 @@ export interface Skill {
   category: HabitCategory;
 }
 
-// ===== 称号 (Phase 2) =====
+// ===== 称号 =====
 export interface Title {
   id: string;
   name: string;
+  icon: string;
   description: string;
   condition: string;
 }
@@ -73,6 +74,9 @@ export interface GameState {
   habits: Habit[];
   dailyRecords: DailyRecord[];
   currentDate: string; // YYYY-MM-DD
+  unlockedSkillIds: string[];
+  unlockedTitleIds: string[];
+  equippedTitleId: string | null;
 }
 
 // ===== 覚悟ゲージ (Phase 2 型定義先行) =====
@@ -87,4 +91,13 @@ export interface LevelUpResult {
   newLevel: number;
   statGains: Stats;
   previousLevel: number;
+  newSkills: Skill[];
+  newTitles: Title[];
+}
+
+// ===== 称号チェック用コンテキスト =====
+export interface TitleCheckContext {
+  level: number;
+  submittedDays: number;
+  totalCompletions: CategoryCompletions;
 }

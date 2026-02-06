@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { GameState, Habit, DailyRecord, HabitCheck, CheckStatus, LevelUpResult, HabitCategory } from '@/types';
+import { GameState, Habit, DailyRecord, HabitCheck, CheckStatus, LevelUpResult, HabitCategory, Skill, Title } from '@/types';
 import { loadGameState, saveGameState, getToday, getDailyRecord, saveDailyRecord } from '@/lib/storage';
 import { calculateDailyXP, applyXP } from '@/lib/xp';
 import { applyLevelUp, addStats } from '@/lib/stats';
 import { MAX_HABITS_PER_CATEGORY } from '@/data/constants';
+import { checkNewSkills, checkNewTitles } from '@/lib/unlocks';
 
 export function useGameState() {
   const [state, setState] = useState<GameState | null>(null);
@@ -100,20 +101,48 @@ export function useGameState() {
     let newStats = state.character.stats;
     let levelResult: LevelUpResult | null = null;
 
+    const newTotalCompletions = {
+      life: state.character.totalCompletions.life + categoryCompletions.life,
+      hobby: state.character.totalCompletions.hobby + categoryCompletions.hobby,
+      work: state.character.totalCompletions.work + categoryCompletions.work,
+    };
+
     if (xpResult.levelsGained > 0) {
-      const totalCompletions = {
-        life: state.character.totalCompletions.life + categoryCompletions.life,
-        hobby: state.character.totalCompletions.hobby + categoryCompletions.hobby,
-        work: state.character.totalCompletions.work + categoryCompletions.work,
-      };
       levelResult = applyLevelUp(
         state.character.stats,
         state.character.level,
         xpResult.levelsGained,
-        totalCompletions
+        newTotalCompletions
       );
       newStats = addStats(state.character.stats, levelResult.statGains);
+    }
+
+    // スキル解放チェック
+    const newSkills: Skill[] = checkNewSkills(xpResult.level, state.unlockedSkillIds);
+    const newSkillIds = newSkills.map(s => s.id);
+
+    // 称号解放チェック（記録日数は今回の確定を含める）
+    const submittedDays = state.dailyRecords.filter(r => r.submitted).length + 1;
+    const newTitles: Title[] = checkNewTitles(
+      { level: xpResult.level, submittedDays, totalCompletions: newTotalCompletions },
+      state.unlockedTitleIds
+    );
+    const newTitleIds = newTitles.map(t => t.id);
+
+    // レベルアップ結果にスキル・称号を含める
+    if (levelResult) {
+      levelResult.newSkills = newSkills;
+      levelResult.newTitles = newTitles;
       setLevelUpResult(levelResult);
+    } else if (newSkills.length > 0 || newTitles.length > 0) {
+      // レベルアップなしでも新規解放がある場合
+      setLevelUpResult({
+        previousLevel: state.character.level,
+        newLevel: state.character.level,
+        statGains: { vitality: 0, curiosity: 0, intellect: 0 },
+        newSkills,
+        newTitles,
+      });
     }
 
     // 記録更新
@@ -135,12 +164,10 @@ export function useGameState() {
           currentXP: xpResult.currentXP,
           totalXP: withRecord.character.totalXP + xpGained,
           stats: newStats,
-          totalCompletions: {
-            life: prev.character.totalCompletions.life + categoryCompletions.life,
-            hobby: prev.character.totalCompletions.hobby + categoryCompletions.hobby,
-            work: prev.character.totalCompletions.work + categoryCompletions.work,
-          },
+          totalCompletions: newTotalCompletions,
         },
+        unlockedSkillIds: [...prev.unlockedSkillIds, ...newSkillIds],
+        unlockedTitleIds: [...prev.unlockedTitleIds, ...newTitleIds],
       };
     });
   }, [state, today, todayRecord, isSubmitted]);
@@ -187,6 +214,12 @@ export function useGameState() {
     });
   }, [state]);
 
+  // 称号を装備/解除
+  const equipTitle = useCallback((titleId: string | null) => {
+    if (!state) return;
+    setState(prev => prev ? { ...prev, equippedTitleId: titleId } : prev);
+  }, [state]);
+
   // レベルアップモーダルを閉じる
   const dismissLevelUp = useCallback(() => {
     setLevelUpResult(null);
@@ -207,5 +240,6 @@ export function useGameState() {
     dismissLevelUp,
     submittedXP,
     submittedAllDone,
+    equipTitle,
   };
 }

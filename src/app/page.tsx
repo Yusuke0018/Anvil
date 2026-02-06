@@ -8,6 +8,7 @@ import DailySubmit from '@/components/DailySubmit';
 import LevelUpModal from '@/components/LevelUpModal';
 import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
+import { TITLES } from '@/data/titles';
 
 export default function Dashboard() {
   const {
@@ -31,6 +32,10 @@ export default function Dashboard() {
     );
   }
 
+  const equippedTitle = state.equippedTitleId
+    ? TITLES.find(t => t.id === state.equippedTitleId)
+    : null;
+
   return (
     <>
       <header className="px-4 pt-6 pb-2 flex items-start justify-between">
@@ -38,7 +43,14 @@ export default function Dashboard() {
           <h1 className="text-lg font-bold tracking-wide">
             <span className="text-accent">⚒</span> Anvil
           </h1>
-          <p className="text-xs text-text-secondary mt-1">{today}</p>
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-xs text-text-secondary">{today}</p>
+            {equippedTitle && (
+              <span className="text-xs text-gold">
+                {equippedTitle.icon} {equippedTitle.name}
+              </span>
+            )}
+          </div>
         </div>
         <ThemeToggle />
       </header>
