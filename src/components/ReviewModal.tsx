@@ -18,15 +18,15 @@ export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
   // 励ましメッセージ
   let message: string;
   if (ratePercent >= 90) {
-    message = '素晴らしい鍛錬だ。炉の炎は力強く燃えている。';
+    message = '素晴らしい冒険だ。その道は明るく輝いている。';
   } else if (ratePercent >= 70) {
     message = '着実に腕を磨いている。この調子で進め。';
   } else if (ratePercent >= 50) {
     message = '半ばを超えた。まだまだ伸びしろがある。';
   } else if (ratePercent >= 30) {
-    message = '炉の火は弱いが、消えてはいない。一歩ずつ進もう。';
+    message = '道は険しいが、足は止まっていない。一歩ずつ進もう。';
   } else {
-    message = '鍛冶場に立つだけでも価値がある。続けることが力だ。';
+    message = '冒険の道に立つだけでも価値がある。続けることが力だ。';
   }
 
   return (
@@ -49,7 +49,7 @@ export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
           >
             {title}
           </h2>
-          <p className="text-xs text-text-secondary mt-1">{periodLabel}の鍛錬の成果</p>
+          <p className="text-xs text-text-secondary mt-1">{periodLabel}の冒険の成果</p>
         </div>
 
         {/* 統計 */}
@@ -85,7 +85,7 @@ export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
           className="w-full py-3 bg-gold/90 text-bg-deep rounded-lg font-bold text-sm active:scale-[0.98] transition-transform"
           style={{ animation: 'fade-in 0.3s ease-out 1.0s both' }}
         >
-          次の鍛錬へ
+          次の冒険へ
         </button>
       </div>
     </div>

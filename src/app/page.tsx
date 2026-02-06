@@ -49,7 +49,7 @@ export default function Dashboard() {
       <header className="px-4 pt-6 pb-2 flex items-start justify-between">
         <div>
           <h1 className="text-lg font-bold tracking-wide">
-            <span className="text-accent">⚒</span> Anvil
+            <span className="text-accent">⚔️</span> Anvil
           </h1>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-xs text-text-secondary">{today}</p>

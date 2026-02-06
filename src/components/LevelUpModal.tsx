@@ -70,13 +70,13 @@ export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
       >
         {hasLevelUp ? (
           <>
-            {/* ⚒ アンビルストライク */}
+            {/* ⚔️ 剣振り下ろし */}
             <div className="text-center mb-2">
               <div
                 className="text-5xl inline-block"
                 style={{ animation: 'anvil-strike 0.5s ease-out 0.2s both' }}
               >
-                ⚒
+                ⚔️
               </div>
             </div>
 

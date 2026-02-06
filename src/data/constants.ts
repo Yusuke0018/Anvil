@@ -34,13 +34,13 @@ export const CATEGORY_INFO: Record<HabitCategory, { label: string; emoji: string
 
 // ===== UI =====
 export const COLORS = {
-  bgDeep: '#0f0f13',
-  bgCard: '#1a1a24',
-  bgSurface: '#252535',
+  bgDeep: '#f5f6f8',
+  bgCard: '#ffffff',
+  bgSurface: '#eef0f4',
   accent: '#ff6b2b',
   gold: '#ffd700',
-  textPrimary: '#e8e6e3',
-  textSecondary: '#9996a6',
+  textPrimary: '#1a1c2b',
+  textSecondary: '#6b7280',
   success: '#4ade80',
   danger: '#ef4444',
 } as const;

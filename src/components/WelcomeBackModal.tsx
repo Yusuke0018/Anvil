@@ -28,7 +28,7 @@ export default function WelcomeBackModal({ missedDays, decayAmount, onDismiss }:
               textShadow: '0 0 16px rgba(255,107,43,0.4)',
             }}
           >
-            おかえり、鍛冶師よ。
+            おかえり、冒険者よ。
           </h2>
         </div>
 
@@ -65,7 +65,7 @@ export default function WelcomeBackModal({ missedDays, decayAmount, onDismiss }:
           className="w-full py-3 bg-accent text-white rounded-lg font-bold text-sm active:scale-[0.98] transition-transform"
           style={{ animation: 'fade-in 0.3s ease-out 1.0s both' }}
         >
-          炉に再び火を灯そう
+          再び冒険に出発しよう
         </button>
       </div>
     </div>

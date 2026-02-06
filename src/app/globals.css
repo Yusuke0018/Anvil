@@ -1,46 +1,49 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-bg-deep: #0f0f13;
-  --color-bg-card: #1a1a24;
-  --color-bg-surface: #252535;
+  --color-bg-deep: #f5f6f8;
+  --color-bg-card: #ffffff;
+  --color-bg-surface: #eef0f4;
   --color-accent: #ff6b2b;
   --color-gold: #ffd700;
-  --color-text-primary: #e8e6e3;
-  --color-text-secondary: #9996a6;
+  --color-text-primary: #1a1c2b;
+  --color-text-secondary: #6b7280;
   --color-success: #4ade80;
   --color-danger: #ef4444;
-  --color-accent-dim: #ff6b2b33;
-  --color-gold-dim: #ffd70033;
-  --color-success-dim: #4ade8033;
-  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
-}
-
-/* ダークモード (デフォルト) - 夜空/ダンジョン風 */
-:root {
-  --color-bg-deep: #0f0f13;
-  --color-bg-card: #1a1a24;
-  --color-bg-surface: #252535;
-  --color-text-primary: #e8e6e3;
-  --color-text-secondary: #9996a6;
-  --adventure-bg: linear-gradient(170deg, #0f0f13 0%, #1a1028 40%, #0d1520 70%, #0f0f13 100%);
-  --adventure-overlay: radial-gradient(ellipse at 20% 20%, rgba(100, 80, 160, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 60%, rgba(30, 60, 120, 0.06) 0%, transparent 50%);
-}
-
-/* ライトモード - 羊皮紙/古地図風 */
-[data-theme="light"] {
-  --color-bg-deep: #f5efe0;
-  --color-bg-card: #fffef8;
-  --color-bg-surface: #ede6d6;
-  --color-text-primary: #2a2438;
-  --color-text-secondary: #6b6880;
   --color-accent-dim: #ff6b2b22;
   --color-gold-dim: #ffd70022;
   --color-success-dim: #4ade8022;
-  --adventure-bg: linear-gradient(170deg, #f5efe0 0%, #ebe0c8 40%, #f0e8d4 70%, #f5efe0 100%);
-  --adventure-overlay: radial-gradient(ellipse at 30% 30%, rgba(180, 140, 60, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 70%, rgba(160, 120, 40, 0.04) 0%, transparent 50%);
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* ライトモード (デフォルト) - クリーンな白基調 */
+:root {
+  --color-bg-deep: #f5f6f8;
+  --color-bg-card: #ffffff;
+  --color-bg-surface: #eef0f4;
+  --color-text-primary: #1a1c2b;
+  --color-text-secondary: #6b7280;
+  --color-accent-dim: #ff6b2b22;
+  --color-gold-dim: #ffd70022;
+  --color-success-dim: #4ade8022;
+  --adventure-bg: linear-gradient(170deg, #f5f6f8 0%, #eef0f8 40%, #f2f4fa 70%, #f5f6f8 100%);
+  --adventure-overlay: radial-gradient(ellipse at 30% 30%, rgba(100, 130, 200, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(255, 107, 43, 0.03) 0%, transparent 50%);
+}
+
+/* ダークモード */
+[data-theme="dark"] {
+  --color-bg-deep: #0f0f13;
+  --color-bg-card: #1a1a24;
+  --color-bg-surface: #252535;
+  --color-text-primary: #e8e6e3;
+  --color-text-secondary: #9996a6;
+  --color-accent-dim: #ff6b2b33;
+  --color-gold-dim: #ffd70033;
+  --color-success-dim: #4ade8033;
+  --adventure-bg: linear-gradient(170deg, #0f0f13 0%, #1a1028 40%, #0d1520 70%, #0f0f13 100%);
+  --adventure-overlay: radial-gradient(ellipse at 20% 20%, rgba(100, 80, 160, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(30, 60, 120, 0.06) 0%, transparent 50%);
 }
 
 body {
@@ -123,7 +126,7 @@ body * {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* ⚒ ハンマー振り下ろし */
+/* 剣振り下ろし */
 @keyframes anvil-strike {
   0% { transform: translateY(-60px) rotate(-15deg); opacity: 0; }
   50% { transform: translateY(4px) rotate(3deg); opacity: 1; }

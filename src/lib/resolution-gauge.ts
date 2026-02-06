@@ -16,11 +16,11 @@ export interface ResolutionTier {
 }
 
 export const RESOLUTION_TIERS: ResolutionTier[] = [
-  { min: 0, max: 20, name: '冷えた炉', emoji: '🪨', color: 'gray' },
-  { min: 21, max: 40, name: '燻る炎', emoji: '💨', color: 'dim' },
-  { min: 41, max: 60, name: '赤い炎', emoji: '🔥', color: 'accent' },
-  { min: 61, max: 80, name: '白い炎', emoji: '✨', color: 'gold' },
-  { min: 81, max: 100, name: '覇気の炉', emoji: '👑', color: 'gold-glow' },
+  { min: 0, max: 20, name: '休息の野営', emoji: '🏕️', color: 'gray' },
+  { min: 21, max: 40, name: '旅の始まり', emoji: '🥾', color: 'dim' },
+  { min: 41, max: 60, name: '冒険の道', emoji: '⚔️', color: 'accent' },
+  { min: 61, max: 80, name: '勇者の覚悟', emoji: '🛡️', color: 'gold' },
+  { min: 81, max: 100, name: '伝説の意志', emoji: '👑', color: 'gold-glow' },
 ];
 
 /** 現在値に対応するティアを返す */
