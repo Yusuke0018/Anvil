@@ -79,6 +79,21 @@ export interface GameState {
   equippedTitleId: string | null;
   resolutionGauge: ResolutionGauge;
   comebackChallenge: ComebackChallenge | null;
+  lastReviewedSubmittedDays: number;
+}
+
+// ===== 振り返りイベント =====
+export interface ReviewEvent {
+  type: 'weekly' | 'monthly';
+  periodDays: number;
+  xpGained: number;
+  levelsGained: number;
+  skillsUnlocked: number;
+  titlesUnlocked: number;
+  completionRate: number;
+  streakBest: number;
+  startLevel: number;
+  endLevel: number;
 }
 
 // ===== 覚悟ゲージ =====

@@ -21,6 +21,7 @@ function defaultGameState(): GameState {
     equippedTitleId: null,
     resolutionGauge: { ...INITIAL_RESOLUTION },
     comebackChallenge: null,
+    lastReviewedSubmittedDays: 0,
   };
 }
 
@@ -110,6 +111,12 @@ function migrateState(state: GameState): GameState {
     state.resolutionGauge = { ...INITIAL_RESOLUTION };
     state.comebackChallenge = null;
     state.version = 3;
+  }
+
+  // v3 → v4: 振り返りイベント追加
+  if (state.version === 3) {
+    state.lastReviewedSubmittedDays = 0;
+    state.version = 4;
   }
 
   return state;

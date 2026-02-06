@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { GameState, Habit, DailyRecord, HabitCheck, CheckStatus, LevelUpResult, HabitCategory, Skill, Title, MilestoneEvent } from '@/types';
+import { GameState, Habit, DailyRecord, HabitCheck, CheckStatus, LevelUpResult, HabitCategory, Skill, Title, MilestoneEvent, ReviewEvent } from '@/types';
 import { loadGameState, saveGameState, getToday, getDailyRecord, saveDailyRecord } from '@/lib/storage';
 import { calculateDailyXP, applyXP } from '@/lib/xp';
 import { applyLevelUp, addStats } from '@/lib/stats';
@@ -22,6 +22,7 @@ export function useGameState() {
   const [submittedXP, setSubmittedXP] = useState<number | null>(null);
   const [submittedAllDone, setSubmittedAllDone] = useState(false);
   const [welcomeBackInfo, setWelcomeBackInfo] = useState<WelcomeBackInfo | null>(null);
+  const [reviewEvent, setReviewEvent] = useState<ReviewEvent | null>(null);
 
   // 初回ロード
   useEffect(() => {
@@ -195,6 +196,52 @@ export function useGameState() {
       }
     }
 
+    // 振り返りイベント判定 (7日/30日ごと)
+    const prevSubmittedDays = submittedDays - 1; // 今回確定前の日数
+    const lastReviewed = state.lastReviewedSubmittedDays;
+    let newLastReviewed = lastReviewed;
+
+    // 月次振り返り (30日ごと) を優先、なければ週次 (7日ごと)
+    const monthlyMilestone = Math.floor(submittedDays / 30) > Math.floor(lastReviewed / 30);
+    const weeklyMilestone = Math.floor(submittedDays / 7) > Math.floor(lastReviewed / 7);
+
+    if (monthlyMilestone || weeklyMilestone) {
+      const isMonthly = monthlyMilestone;
+      const periodDays = isMonthly ? 30 : 7;
+
+      // 期間内の記録を集計
+      const allSubmitted = state.dailyRecords.filter(r => r.submitted);
+      const recentRecords = allSubmitted.length > 0
+        ? allSubmitted.sort((a, b) => b.date.localeCompare(a.date)).slice(0, periodDays)
+        : [];
+      const periodXP = recentRecords.reduce((sum, r) => sum + r.xpGained, 0);
+      const periodCompletions = recentRecords.reduce((sum, r) => {
+        const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
+        return sum + done;
+      }, 0);
+      const periodTotal = recentRecords.reduce((sum, _) => sum + state.habits.length, 0);
+      const completionRateVal = periodTotal > 0 ? periodCompletions / periodTotal : 0;
+
+      // この期間内の新スキル・称号数はスナップショットとして概算
+      const recentSkillCount = newSkillIds.length;
+      const recentTitleCount = newTitleIds.length;
+
+      setReviewEvent({
+        type: isMonthly ? 'monthly' : 'weekly',
+        periodDays,
+        xpGained: periodXP + xpGained, // 今回分も含む
+        levelsGained: xpResult.levelsGained,
+        skillsUnlocked: recentSkillCount,
+        titlesUnlocked: recentTitleCount,
+        completionRate: completionRateVal,
+        streakBest: newGauge.maxStreak,
+        startLevel: state.character.level,
+        endLevel: xpResult.level,
+      });
+
+      newLastReviewed = submittedDays;
+    }
+
     // レベルアップ結果にスキル・称号・マイルストーンを含める
     if (levelResult) {
       levelResult.newSkills = newSkills;
@@ -238,6 +285,7 @@ export function useGameState() {
         unlockedTitleIds: [...prev.unlockedTitleIds, ...newTitleIds],
         resolutionGauge: newGauge,
         comebackChallenge: newComebackChallenge,
+        lastReviewedSubmittedDays: newLastReviewed,
       };
     });
   }, [state, today, todayRecord, isSubmitted]);
@@ -300,6 +348,11 @@ export function useGameState() {
     setWelcomeBackInfo(null);
   }, []);
 
+  // 振り返りモーダルを閉じる
+  const dismissReview = useCallback(() => {
+    setReviewEvent(null);
+  }, []);
+
   return {
     state,
     today,
@@ -318,5 +371,7 @@ export function useGameState() {
     equipTitle,
     welcomeBackInfo,
     dismissWelcomeBack,
+    reviewEvent,
+    dismissReview,
   };
 }

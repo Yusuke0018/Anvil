@@ -11,6 +11,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import ResolutionGauge from '@/components/ResolutionGauge';
 import WelcomeBackModal from '@/components/WelcomeBackModal';
 import ComebackBanner from '@/components/ComebackBanner';
+import ReviewModal from '@/components/ReviewModal';
 import { TITLES } from '@/data/titles';
 
 export default function Dashboard() {
@@ -27,6 +28,8 @@ export default function Dashboard() {
     submittedAllDone,
     welcomeBackInfo,
     dismissWelcomeBack,
+    reviewEvent,
+    dismissReview,
   } = useGameState();
 
   if (!state) {
@@ -91,6 +94,10 @@ export default function Dashboard() {
 
       {levelUpResult && (
         <LevelUpModal result={levelUpResult} onDismiss={dismissLevelUp} />
+      )}
+
+      {reviewEvent && !levelUpResult && (
+        <ReviewModal review={reviewEvent} onDismiss={dismissReview} />
       )}
 
       {welcomeBackInfo && (
