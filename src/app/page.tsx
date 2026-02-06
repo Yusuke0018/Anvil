@@ -19,6 +19,8 @@ export default function Dashboard() {
     submitDay,
     levelUpResult,
     dismissLevelUp,
+    submittedXP,
+    submittedAllDone,
   } = useGameState();
 
   if (!state) {
@@ -60,6 +62,8 @@ export default function Dashboard() {
         getCheckStatus={getCheckStatus}
         isSubmitted={isSubmitted}
         onSubmit={submitDay}
+        xpGained={submittedXP}
+        wasAllDone={submittedAllDone}
       />
 
       {levelUpResult && (

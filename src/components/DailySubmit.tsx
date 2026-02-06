@@ -9,7 +9,11 @@ interface DailySubmitProps {
   getCheckStatus: (habitId: string) => CheckStatus;
   isSubmitted: boolean;
   onSubmit: () => void;
+  xpGained: number | null;
+  wasAllDone: boolean;
 }
+
+const CONFETTI_COLORS = ['#ff6b2b', '#ffd700', '#4ade80', '#60a5fa', '#f472b6', '#a78bfa'];
 
 export default function DailySubmit({
   level,
@@ -17,6 +21,8 @@ export default function DailySubmit({
   getCheckStatus,
   isSubmitted,
   onSubmit,
+  xpGained,
+  wasAllDone,
 }: DailySubmitProps) {
   const completedCount = habits.filter(
     h => getCheckStatus(h.id) === 'done' || getCheckStatus(h.id) === 'auto'
@@ -31,8 +37,43 @@ export default function DailySubmit({
   if (isSubmitted) {
     return (
       <div className="px-4 py-4">
-        <div className="bg-bg-card rounded-lg p-4 text-center border border-success/30">
-          <p className="text-success text-sm font-medium">本日の記録を確定しました</p>
+        <div className="bg-bg-card rounded-lg p-4 text-center border border-success/30 relative overflow-hidden">
+          {/* accent色の控えめフラッシュ */}
+          <div
+            className="submit-flash absolute inset-0 rounded-lg pointer-events-none"
+            style={{ backgroundColor: 'var(--color-accent)' }}
+          />
+
+          {/* +XP 上昇フェードアウト */}
+          {xpGained != null && xpGained > 0 && (
+            <div className="float-up-anim text-2xl font-black text-accent mb-1">
+              +{xpGained} XP
+            </div>
+          )}
+
+          {/* 全達成時の紙吹雪 */}
+          {wasAllDone && (
+            <div className="relative h-6 mb-1">
+              {CONFETTI_COLORS.map((color, i) => (
+                <span
+                  key={i}
+                  className="confetti absolute text-lg"
+                  style={{
+                    color,
+                    left: `${15 + i * 13}%`,
+                    animationDelay: `${i * 0.1}s`,
+                  }}
+                >
+                  ●
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* 確定テキスト（遅延フェードイン） */}
+          <p className="fade-in-delayed text-success text-sm font-medium">
+            本日の記録を確定しました
+          </p>
         </div>
       </div>
     );

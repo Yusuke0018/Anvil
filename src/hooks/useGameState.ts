@@ -10,6 +10,8 @@ import { MAX_HABITS_PER_CATEGORY } from '@/data/constants';
 export function useGameState() {
   const [state, setState] = useState<GameState | null>(null);
   const [levelUpResult, setLevelUpResult] = useState<LevelUpResult | null>(null);
+  const [submittedXP, setSubmittedXP] = useState<number | null>(null);
+  const [submittedAllDone, setSubmittedAllDone] = useState(false);
 
   // 初回ロード
   useEffect(() => {
@@ -71,8 +73,14 @@ export function useGameState() {
     const completedCount = checks.filter(c => c.status === 'done' || c.status === 'auto').length;
     const totalHabits = state.habits.length;
 
+    const allDone = completedCount === totalHabits && totalHabits > 0;
+
     // XP計算
     const xpGained = calculateDailyXP(state.character.level, completedCount, totalHabits);
+
+    // 確定時の情報を保持（演出用）
+    setSubmittedXP(xpGained);
+    setSubmittedAllDone(allDone);
 
     // XP適用 & レベルアップ判定
     const xpResult = applyXP(state.character.level, state.character.currentXP, xpGained);
@@ -197,5 +205,7 @@ export function useGameState() {
     deleteHabit,
     levelUpResult,
     dismissLevelUp,
+    submittedXP,
+    submittedAllDone,
   };
 }
