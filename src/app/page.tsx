@@ -7,6 +7,7 @@ import StatsOverview from '@/components/StatsOverview';
 import DailySubmit from '@/components/DailySubmit';
 import LevelUpModal from '@/components/LevelUpModal';
 import BottomNav from '@/components/BottomNav';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function Dashboard() {
   const {
@@ -30,11 +31,14 @@ export default function Dashboard() {
 
   return (
     <>
-      <header className="px-4 pt-6 pb-2">
-        <h1 className="text-lg font-bold tracking-wide">
-          <span className="text-accent">⚒</span> Anvil
-        </h1>
-        <p className="text-xs text-text-secondary mt-1">{today}</p>
+      <header className="px-4 pt-6 pb-2 flex items-start justify-between">
+        <div>
+          <h1 className="text-lg font-bold tracking-wide">
+            <span className="text-accent">⚒</span> Anvil
+          </h1>
+          <p className="text-xs text-text-secondary mt-1">{today}</p>
+        </div>
+        <ThemeToggle />
       </header>
 
       <LevelBar level={state.character.level} currentXP={state.character.currentXP} />

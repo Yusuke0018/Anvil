@@ -3,6 +3,7 @@
 import { useGameState } from '@/hooks/useGameState';
 import HabitEditor from '@/components/HabitEditor';
 import BottomNav from '@/components/BottomNav';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function HabitsPage() {
   const { state, addHabit, updateHabit, deleteHabit } = useGameState();
@@ -17,13 +18,16 @@ export default function HabitsPage() {
 
   return (
     <>
-      <header className="px-4 pt-6 pb-4">
-        <h1 className="text-lg font-bold tracking-wide">
-          <span className="text-accent">📋</span> 習慣管理
-        </h1>
-        <p className="text-xs text-text-secondary mt-1">
-          各カテゴリ最大3つまで登録できます
-        </p>
+      <header className="px-4 pt-6 pb-4 flex items-start justify-between">
+        <div>
+          <h1 className="text-lg font-bold tracking-wide">
+            <span className="text-accent">📋</span> 習慣管理
+          </h1>
+          <p className="text-xs text-text-secondary mt-1">
+            各カテゴリ最大3つまで登録できます
+          </p>
+        </div>
+        <ThemeToggle />
       </header>
 
       <HabitEditor

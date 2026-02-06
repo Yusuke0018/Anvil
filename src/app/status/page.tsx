@@ -4,6 +4,7 @@ import { useGameState } from '@/hooks/useGameState';
 import StatCard from '@/components/StatCard';
 import LevelBar from '@/components/LevelBar';
 import BottomNav from '@/components/BottomNav';
+import ThemeToggle from '@/components/ThemeToggle';
 import { expToNextLevel, xpPerHabit } from '@/lib/xp';
 
 export default function StatusPage() {
@@ -24,10 +25,11 @@ export default function StatusPage() {
 
   return (
     <>
-      <header className="px-4 pt-6 pb-2">
+      <header className="px-4 pt-6 pb-2 flex items-start justify-between">
         <h1 className="text-lg font-bold tracking-wide">
           <span className="text-accent">📊</span> ステータス
         </h1>
+        <ThemeToggle />
       </header>
 
       <LevelBar level={character.level} currentXP={character.currentXP} />

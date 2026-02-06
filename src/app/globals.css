@@ -16,12 +16,50 @@
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
 }
 
+/* ダークモード (デフォルト) - 夜空/ダンジョン風 */
+:root {
+  --color-bg-deep: #0f0f13;
+  --color-bg-card: #1a1a24;
+  --color-bg-surface: #252535;
+  --color-text-primary: #e8e6e3;
+  --color-text-secondary: #9996a6;
+  --adventure-bg: linear-gradient(170deg, #0f0f13 0%, #1a1028 40%, #0d1520 70%, #0f0f13 100%);
+  --adventure-overlay: radial-gradient(ellipse at 20% 20%, rgba(100, 80, 160, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(30, 60, 120, 0.06) 0%, transparent 50%);
+}
+
+/* ライトモード - 羊皮紙/古地図風 */
+[data-theme="light"] {
+  --color-bg-deep: #f5efe0;
+  --color-bg-card: #fffef8;
+  --color-bg-surface: #ede6d6;
+  --color-text-primary: #2a2438;
+  --color-text-secondary: #6b6880;
+  --color-accent-dim: #ff6b2b22;
+  --color-gold-dim: #ffd70022;
+  --color-success-dim: #4ade8022;
+  --adventure-bg: linear-gradient(170deg, #f5efe0 0%, #ebe0c8 40%, #f0e8d4 70%, #f5efe0 100%);
+  --adventure-overlay: radial-gradient(ellipse at 30% 30%, rgba(180, 140, 60, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(160, 120, 40, 0.04) 0%, transparent 50%);
+}
+
 body {
-  background: var(--color-bg-deep);
+  background: var(--adventure-bg);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--adventure-overlay);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* XPバー アニメーション */
@@ -62,6 +100,12 @@ body {
 
 .modal-enter {
   animation: fade-in 0.3s ease-out;
+}
+
+/* テーマ切り替えトランジション */
+body,
+body * {
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* スクロールバー */
