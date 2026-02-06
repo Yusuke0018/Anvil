@@ -54,7 +54,7 @@ export default function DailySubmit({
           </div>
         </div>
         {allDone && (
-          <p className="text-gold text-xs mt-1 text-right">🎉 全達成ボーナス!</p>
+          <p className="text-xs mt-1 text-right gold-shimmer font-bold">🎉 全達成ボーナス!</p>
         )}
       </div>
 
@@ -66,7 +66,7 @@ export default function DailySubmit({
           ${totalCount === 0
             ? 'bg-bg-surface text-text-secondary cursor-not-allowed'
             : allDone
-              ? 'bg-accent text-white active:scale-[0.98] glow-pulse'
+              ? 'bg-accent text-white active:scale-[0.98] btn-glow-strong'
               : 'bg-accent/80 text-white active:scale-[0.98]'
           }`}
       >

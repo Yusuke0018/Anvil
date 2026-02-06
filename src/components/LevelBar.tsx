@@ -24,7 +24,7 @@ export default function LevelBar({ level, currentXP }: LevelBarProps) {
       </div>
       <div className="h-3 bg-bg-surface rounded-full overflow-hidden">
         <div
-          className="h-full bg-accent rounded-full transition-all duration-500 ease-out xp-bar-animate"
+          className={`h-full bg-accent rounded-full transition-all duration-500 ease-out xp-bar-animate${percent >= 80 ? ' xp-glow' : ''}`}
           style={{ width: `${percent}%` }}
         />
       </div>
