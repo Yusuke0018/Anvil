@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-bg-deep: #0f0f13;
+  --color-bg-card: #1a1a24;
+  --color-bg-surface: #252535;
+  --color-accent: #ff6b2b;
+  --color-gold: #ffd700;
+  --color-text-primary: #e8e6e3;
+  --color-text-secondary: #9996a6;
+  --color-success: #4ade80;
+  --color-danger: #ef4444;
+  --color-accent-dim: #ff6b2b33;
+  --color-gold-dim: #ffd70033;
+  --color-success-dim: #4ade8033;
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-deep);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* XPバー アニメーション */
+@keyframes xp-fill {
+  from { width: 0%; }
+}
+
+.xp-bar-animate {
+  animation: xp-fill 0.6s ease-out;
+}
+
+/* レベルアップ グロー */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px var(--color-accent); }
+  50% { box-shadow: 0 0 24px var(--color-accent), 0 0 48px var(--color-accent-dim); }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* チェックボタン タップフィードバック */
+@keyframes check-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.check-pop {
+  animation: check-pop 0.2s ease-out;
+}
+
+/* モーダル フェードイン */
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-enter {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* スクロールバー */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-surface);
+  border-radius: 2px;
 }
