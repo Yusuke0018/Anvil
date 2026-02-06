@@ -89,4 +89,23 @@ export const TITLES: TitleDefinition[] = [
     description: '全ての道を均等に歩む賢者', condition: '各カテゴリ30回以上',
     check: (ctx) => ctx.totalCompletions.life >= 30 && ctx.totalCompletions.hobby >= 30 && ctx.totalCompletions.work >= 30,
   },
+
+  // ===== 連続達成系 =====
+  {
+    id: 't-streak7', name: '七日の炎', icon: '🔥',
+    description: '七日間途切れぬ炎を灯した者', condition: '7日連続記録',
+    check: (ctx) => ctx.maxStreak >= 7,
+  },
+  {
+    id: 't-streak30', name: '月炎の守護者', icon: '🌕',
+    description: '三十日の月光に導かれし守護者', condition: '30日連続記録',
+    check: (ctx) => ctx.maxStreak >= 30,
+  },
+
+  // ===== 復帰系 =====
+  {
+    id: 't-comeback', name: '不死鳥の帰還', icon: '🔥',
+    description: '炉に再び火を灯した不屈の鍛冶師', condition: '復帰チャレンジ達成',
+    check: () => false, // プログラムで直接解放する
+  },
 ];

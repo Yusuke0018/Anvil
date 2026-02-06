@@ -1,22 +1,58 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { GameState, Habit, DailyRecord, HabitCheck, CheckStatus, LevelUpResult, HabitCategory, Skill, Title } from '@/types';
+import { GameState, Habit, DailyRecord, HabitCheck, CheckStatus, LevelUpResult, HabitCategory, Skill, Title, MilestoneEvent } from '@/types';
 import { loadGameState, saveGameState, getToday, getDailyRecord, saveDailyRecord } from '@/lib/storage';
 import { calculateDailyXP, applyXP } from '@/lib/xp';
 import { applyLevelUp, addStats } from '@/lib/stats';
 import { MAX_HABITS_PER_CATEGORY } from '@/data/constants';
 import { checkNewSkills, checkNewTitles } from '@/lib/unlocks';
+import { updateGaugeOnSubmit, checkAndApplyDecay } from '@/lib/resolution-gauge';
+import { getMilestoneEvent } from '@/data/milestones';
+import { TITLES } from '@/data/titles';
+
+export interface WelcomeBackInfo {
+  missedDays: number;
+  decayAmount: number;
+}
 
 export function useGameState() {
   const [state, setState] = useState<GameState | null>(null);
   const [levelUpResult, setLevelUpResult] = useState<LevelUpResult | null>(null);
   const [submittedXP, setSubmittedXP] = useState<number | null>(null);
   const [submittedAllDone, setSubmittedAllDone] = useState(false);
+  const [welcomeBackInfo, setWelcomeBackInfo] = useState<WelcomeBackInfo | null>(null);
 
   // 初回ロード
   useEffect(() => {
-    setState(loadGameState());
+    const loaded = loadGameState();
+    const today = getToday();
+
+    // 最終記録日を取得
+    const submittedRecords = loaded.dailyRecords
+      .filter(r => r.submitted)
+      .sort((a, b) => b.date.localeCompare(a.date));
+    const lastSubmittedDate = submittedRecords.length > 0 ? submittedRecords[0].date : null;
+
+    // 覚悟ゲージ減衰チェック
+    const decayResult = checkAndApplyDecay(loaded.resolutionGauge, lastSubmittedDate, today);
+    loaded.resolutionGauge = decayResult.gauge;
+
+    // 復帰イベント判定 (2日以上未記録)
+    if (decayResult.missedDays >= 2) {
+      setWelcomeBackInfo({
+        missedDays: decayResult.missedDays,
+        decayAmount: decayResult.decayAmount,
+      });
+      // 復帰チャレンジ開始
+      loaded.comebackChallenge = {
+        active: true,
+        startDate: today,
+        daysCompleted: 0,
+      };
+    }
+
+    setState(loaded);
   }, []);
 
   // 状態変更時に保存
@@ -107,6 +143,9 @@ export function useGameState() {
       work: state.character.totalCompletions.work + categoryCompletions.work,
     };
 
+    // マイルストーンイベント判定
+    let milestoneEvent: MilestoneEvent | null = null;
+
     if (xpResult.levelsGained > 0) {
       levelResult = applyLevelUp(
         state.character.stats,
@@ -115,24 +154,52 @@ export function useGameState() {
         newTotalCompletions
       );
       newStats = addStats(state.character.stats, levelResult.statGains);
+      milestoneEvent = getMilestoneEvent(state.character.level, xpResult.level);
     }
+
+    // 覚悟ゲージ更新
+    const newGauge = updateGaugeOnSubmit(state.resolutionGauge, completedCount, totalHabits);
 
     // スキル解放チェック
     const newSkills: Skill[] = checkNewSkills(xpResult.level, state.unlockedSkillIds);
     const newSkillIds = newSkills.map(s => s.id);
 
-    // 称号解放チェック（記録日数は今回の確定を含める）
+    // 称号解放チェック（記録日数は今回の確定を含める、maxStreakも含める）
     const submittedDays = state.dailyRecords.filter(r => r.submitted).length + 1;
     const newTitles: Title[] = checkNewTitles(
-      { level: xpResult.level, submittedDays, totalCompletions: newTotalCompletions },
+      { level: xpResult.level, submittedDays, totalCompletions: newTotalCompletions, maxStreak: newGauge.maxStreak },
       state.unlockedTitleIds
     );
     const newTitleIds = newTitles.map(t => t.id);
 
-    // レベルアップ結果にスキル・称号を含める
+    // 復帰チャレンジ進行
+    let newComebackChallenge = state.comebackChallenge;
+    let comebackTitleUnlocked = false;
+    if (newComebackChallenge?.active) {
+      const newDaysCompleted = newComebackChallenge.daysCompleted + 1;
+      if (newDaysCompleted >= 3) {
+        // 3日達成 → 称号解放 + チャレンジ終了
+        comebackTitleUnlocked = true;
+        newComebackChallenge = null;
+      } else {
+        newComebackChallenge = { ...newComebackChallenge, daysCompleted: newDaysCompleted };
+      }
+    }
+
+    // 復帰称号を新規称号に追加
+    if (comebackTitleUnlocked && !state.unlockedTitleIds.includes('t-comeback') && !newTitleIds.includes('t-comeback')) {
+      const comebackTitle = TITLES.find(t => t.id === 't-comeback');
+      if (comebackTitle) {
+        newTitles.push(comebackTitle);
+        newTitleIds.push('t-comeback');
+      }
+    }
+
+    // レベルアップ結果にスキル・称号・マイルストーンを含める
     if (levelResult) {
       levelResult.newSkills = newSkills;
       levelResult.newTitles = newTitles;
+      levelResult.milestoneEvent = milestoneEvent;
       setLevelUpResult(levelResult);
     } else if (newSkills.length > 0 || newTitles.length > 0) {
       // レベルアップなしでも新規解放がある場合
@@ -142,6 +209,7 @@ export function useGameState() {
         statGains: { vitality: 0, curiosity: 0, intellect: 0 },
         newSkills,
         newTitles,
+        milestoneEvent: null,
       });
     }
 
@@ -168,6 +236,8 @@ export function useGameState() {
         },
         unlockedSkillIds: [...prev.unlockedSkillIds, ...newSkillIds],
         unlockedTitleIds: [...prev.unlockedTitleIds, ...newTitleIds],
+        resolutionGauge: newGauge,
+        comebackChallenge: newComebackChallenge,
       };
     });
   }, [state, today, todayRecord, isSubmitted]);
@@ -225,6 +295,11 @@ export function useGameState() {
     setLevelUpResult(null);
   }, []);
 
+  // 復帰モーダルを閉じる
+  const dismissWelcomeBack = useCallback(() => {
+    setWelcomeBackInfo(null);
+  }, []);
+
   return {
     state,
     today,
@@ -241,5 +316,7 @@ export function useGameState() {
     submittedXP,
     submittedAllDone,
     equipTitle,
+    welcomeBackInfo,
+    dismissWelcomeBack,
   };
 }

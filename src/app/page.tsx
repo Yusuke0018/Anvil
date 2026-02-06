@@ -8,6 +8,9 @@ import DailySubmit from '@/components/DailySubmit';
 import LevelUpModal from '@/components/LevelUpModal';
 import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
+import ResolutionGauge from '@/components/ResolutionGauge';
+import WelcomeBackModal from '@/components/WelcomeBackModal';
+import ComebackBanner from '@/components/ComebackBanner';
 import { TITLES } from '@/data/titles';
 
 export default function Dashboard() {
@@ -22,6 +25,8 @@ export default function Dashboard() {
     dismissLevelUp,
     submittedXP,
     submittedAllDone,
+    welcomeBackInfo,
+    dismissWelcomeBack,
   } = useGameState();
 
   if (!state) {
@@ -57,6 +62,12 @@ export default function Dashboard() {
 
       <LevelBar level={state.character.level} currentXP={state.character.currentXP} />
 
+      <ResolutionGauge gauge={state.resolutionGauge} />
+
+      {state.comebackChallenge?.active && (
+        <ComebackBanner challenge={state.comebackChallenge} />
+      )}
+
       <StatsOverview stats={state.character.stats} />
 
       <div className="mt-2">
@@ -80,6 +91,14 @@ export default function Dashboard() {
 
       {levelUpResult && (
         <LevelUpModal result={levelUpResult} onDismiss={dismissLevelUp} />
+      )}
+
+      {welcomeBackInfo && (
+        <WelcomeBackModal
+          missedDays={welcomeBackInfo.missedDays}
+          decayAmount={welcomeBackInfo.decayAmount}
+          onDismiss={dismissWelcomeBack}
+        />
       )}
 
       <BottomNav />

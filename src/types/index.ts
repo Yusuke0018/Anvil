@@ -77,13 +77,30 @@ export interface GameState {
   unlockedSkillIds: string[];
   unlockedTitleIds: string[];
   equippedTitleId: string | null;
+  resolutionGauge: ResolutionGauge;
+  comebackChallenge: ComebackChallenge | null;
 }
 
-// ===== 覚悟ゲージ (Phase 2 型定義先行) =====
+// ===== 覚悟ゲージ =====
 export interface ResolutionGauge {
   current: number; // 0-100
   streak: number; // 連続達成日数
   maxStreak: number;
+}
+
+// ===== 復帰チャレンジ =====
+export interface ComebackChallenge {
+  active: boolean;
+  startDate: string;
+  daysCompleted: number;
+}
+
+// ===== マイルストーンイベント =====
+export interface MilestoneEvent {
+  level: number;
+  name: string;
+  emoji: string;
+  message: string;
 }
 
 // ===== レベルアップ結果 =====
@@ -93,6 +110,7 @@ export interface LevelUpResult {
   previousLevel: number;
   newSkills: Skill[];
   newTitles: Title[];
+  milestoneEvent: MilestoneEvent | null;
 }
 
 // ===== 称号チェック用コンテキスト =====
@@ -100,4 +118,5 @@ export interface TitleCheckContext {
   level: number;
   submittedDays: number;
   totalCompletions: CategoryCompletions;
+  maxStreak: number;
 }

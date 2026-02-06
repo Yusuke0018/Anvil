@@ -28,6 +28,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
   const hasLevelUp = result.newLevel > result.previousLevel;
   const hasStats = result.statGains.vitality > 0 || result.statGains.curiosity > 0 || result.statGains.intellect > 0;
+  const milestone = result.milestoneEvent;
 
   const stats = [
     { label: '心力', emoji: '🔥', value: result.statGains.vitality, color: 'text-accent' },
@@ -36,7 +37,11 @@ export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
   ];
 
   // アニメーション delay 計算
-  let nextDelay = hasStats ? 1.0 + stats.length * 0.2 + 0.2 : 0.8;
+  let nextDelay = milestone ? 1.4 : (hasStats ? 1.0 : 0.8);
+  if (hasStats) {
+    nextDelay = Math.max(nextDelay, 1.0);
+    nextDelay += stats.length * 0.2 + 0.2;
+  }
   const skillStartDelay = nextDelay;
   nextDelay += result.newSkills.length * 0.15 + (result.newSkills.length > 0 ? 0.2 : 0);
   const titleStartDelay = nextDelay;
@@ -134,6 +139,21 @@ export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
                 ))}
               </div>
             </div>
+
+            {/* マイルストーンイベント */}
+            {milestone && (
+              <div
+                className="mb-4 rounded-xl border border-gold/30 p-4 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,107,43,0.06) 100%)',
+                  animation: 'fade-in 0.4s ease-out 0.8s both',
+                }}
+              >
+                <div className="text-3xl mb-1">{milestone.emoji}</div>
+                <div className="text-sm font-bold text-gold mb-1">{milestone.name}</div>
+                <div className="text-xs text-text-secondary leading-relaxed">{milestone.message}</div>
+              </div>
+            )}
 
             {/* ステータス上昇 (スタガード) */}
             {hasStats && (

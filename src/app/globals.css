@@ -264,6 +264,18 @@ body * {
   opacity: 0;
 }
 
+/* === 覚悟ゲージ演出 === */
+
+/* 最高ティアのゲージグロー */
+@keyframes gauge-glow {
+  0%, 100% { box-shadow: 0 0 4px var(--color-gold), 0 0 8px var(--color-gold-dim); }
+  50% { box-shadow: 0 0 8px var(--color-gold), 0 0 16px var(--color-gold-dim), 0 0 24px var(--color-gold-dim); }
+}
+
+.gauge-glow {
+  animation: gauge-glow 2s ease-in-out infinite;
+}
+
 /* スクロールバー */
 ::-webkit-scrollbar {
   width: 4px;

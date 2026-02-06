@@ -177,6 +177,9 @@ export default function StatusPage() {
           <InfoRow label="次レベルまで" value={`${(needed - character.currentXP).toLocaleString()} XP`} />
           <InfoRow label="1習慣あたりXP" value={`${perHabit} XP`} />
           <InfoRow label="記録日数" value={`${submittedDays}日`} />
+          <InfoRow label="連続達成" value={`${state.resolutionGauge.streak}日`} />
+          <InfoRow label="最高連続" value={`${state.resolutionGauge.maxStreak}日`} />
+          <InfoRow label="覚悟ゲージ" value={`${state.resolutionGauge.current}/100`} />
         </div>
       </div>
 

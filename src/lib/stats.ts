@@ -77,6 +77,7 @@ export function applyLevelUp(
     statGains: totalGains,
     newSkills: [],
     newTitles: [],
+    milestoneEvent: null,
   };
 }
 

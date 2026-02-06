@@ -1,5 +1,6 @@
 import { GameState, Habit, DailyRecord } from '@/types';
 import { INITIAL_CHARACTER, GAME_STATE_VERSION } from '@/data/constants';
+import { INITIAL_RESOLUTION } from '@/lib/resolution-gauge';
 
 const STORAGE_KEY = 'anvil_game_state';
 
@@ -18,6 +19,8 @@ function defaultGameState(): GameState {
     unlockedSkillIds: [],
     unlockedTitleIds: [],
     equippedTitleId: null,
+    resolutionGauge: { ...INITIAL_RESOLUTION },
+    comebackChallenge: null,
   };
 }
 
@@ -100,6 +103,13 @@ function migrateState(state: GameState): GameState {
     state.unlockedTitleIds = [];
     state.equippedTitleId = null;
     state.version = 2;
+  }
+
+  // v2 → v3: 覚悟ゲージ・復帰チャレンジ追加
+  if (state.version === 2) {
+    state.resolutionGauge = { ...INITIAL_RESOLUTION };
+    state.comebackChallenge = null;
+    state.version = 3;
   }
 
   return state;
