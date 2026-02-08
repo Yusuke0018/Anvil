@@ -12,21 +12,23 @@ export default function LevelBar({ level, currentXP }: LevelBarProps) {
   const percent = Math.min((currentXP / needed) * 100, 100);
 
   return (
-    <div className="px-4 py-5">
-      <div className="flex items-baseline justify-between mb-2">
-        <div className="flex items-baseline gap-2">
-          <span className="text-text-secondary text-sm">Lv.</span>
-          <span className="text-3xl font-bold text-accent">{level}</span>
+    <div className="px-4 py-4">
+      <div className="rpg-panel p-3">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-text-secondary tracking-wider uppercase">Lv</span>
+            <span className="text-2xl font-bold text-accent pixel-num stat-value">{level}</span>
+          </div>
+          <span className="text-xs text-text-secondary pixel-num">
+            {currentXP} / {needed} EXP
+          </span>
         </div>
-        <span className="text-text-secondary text-sm">
-          {currentXP} / {needed} XP
-        </span>
-      </div>
-      <div className="h-3 bg-bg-surface rounded-full overflow-hidden">
-        <div
-          className={`h-full bg-accent rounded-full transition-all duration-500 ease-out xp-bar-animate${percent >= 80 ? ' xp-glow' : ''}`}
-          style={{ width: `${percent}%` }}
-        />
+        <div className="rpg-bar">
+          <div
+            className={`rpg-bar-fill rpg-bar-xp xp-bar-animate${percent >= 80 ? ' xp-glow' : ''}`}
+            style={{ width: `${percent}%` }}
+          />
+        </div>
       </div>
     </div>
   );

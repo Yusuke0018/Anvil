@@ -10,8 +10,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Anvil - 習慣化RPG",
-  description: "毎日の習慣達成をRPG的なキャラクター成長に変換する",
+  title: "冒険者クエスト - Anvil",
+  description: "毎日の習慣をクエストに変えて冒険者として成長しよう",
   applicationName: "Anvil",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -29,7 +29,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#ff6b2b",
+  themeColor: "#0d1117",
 };
 
 export default function RootLayout({

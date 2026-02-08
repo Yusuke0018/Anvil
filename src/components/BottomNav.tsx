@@ -8,7 +8,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-bg-card/95 backdrop-blur-sm border-t border-bg-surface">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 rpg-nav">
       <div className="mx-auto max-w-md flex">
         {NAV_ITEMS.map(item => {
           const isActive = pathname === item.href;
@@ -16,11 +16,11 @@ export default function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex-1 flex flex-col items-center py-3 transition-colors
-                ${isActive ? 'text-accent' : 'text-text-secondary'}`}
+              className={`flex-1 flex flex-col items-center py-3 rpg-nav-item transition-colors
+                ${isActive ? 'text-accent rpg-nav-item-active' : 'text-text-secondary'}`}
             >
               <span className="text-lg">{item.icon}</span>
-              <span className="text-[10px] mt-0.5">{item.label}</span>
+              <span className="text-[10px] mt-0.5 tracking-wider">{item.label}</span>
             </Link>
           );
         })}

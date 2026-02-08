@@ -7,50 +7,58 @@ interface ResolutionGaugeProps {
   gauge: ResolutionGaugeType;
 }
 
-const TIER_COLORS: Record<string, { bar: string; bg: string; text: string }> = {
-  gray: { bar: 'bg-gray-500', bg: 'bg-gray-500/20', text: 'text-gray-400' },
-  dim: { bar: 'bg-accent/60', bg: 'bg-accent/10', text: 'text-accent/60' },
-  accent: { bar: 'bg-accent', bg: 'bg-accent/20', text: 'text-accent' },
-  gold: { bar: 'bg-gold', bg: 'bg-gold/20', text: 'text-gold' },
-  'gold-glow': { bar: 'bg-gold', bg: 'bg-gold/20', text: 'text-gold' },
+const TIER_BAR_CLASS: Record<string, string> = {
+  gray: 'rpg-bar-gray',
+  dim: 'rpg-bar-dim',
+  accent: 'rpg-bar-accent',
+  gold: 'rpg-bar-gold',
+  'gold-glow': 'rpg-bar-gold-glow',
+};
+
+const TIER_TEXT_COLOR: Record<string, string> = {
+  gray: 'text-gray-400',
+  dim: 'text-accent/60',
+  accent: 'text-accent',
+  gold: 'text-gold',
+  'gold-glow': 'text-gold',
 };
 
 export default function ResolutionGauge({ gauge }: ResolutionGaugeProps) {
   const tier = getCurrentTier(gauge.current);
-  const colors = TIER_COLORS[tier.color] ?? TIER_COLORS.gray;
-  const isHighTier = tier.color === 'gold' || tier.color === 'gold-glow';
+  const barClass = TIER_BAR_CLASS[tier.color] ?? 'rpg-bar-gray';
+  const textColor = TIER_TEXT_COLOR[tier.color] ?? 'text-gray-400';
   const isMaxTier = tier.color === 'gold-glow';
 
   return (
     <div className="px-4 mb-1">
-      <div className="bg-bg-card rounded-xl px-4 py-3">
+      <div className="rpg-panel px-3 py-2.5">
         {/* ティア名 + 連続日数 */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
-            <span className="text-base">{tier.emoji}</span>
-            <span className={`text-xs font-medium ${colors.text}`}>{tier.name}</span>
+            <span className="text-sm">{tier.emoji}</span>
+            <span className={`text-xs font-medium ${textColor}`}>{tier.name}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-text-secondary">
+            <span className="text-[10px] text-text-secondary pixel-num">
               🔥 {gauge.streak}日連続
             </span>
-            <span className="text-xs text-text-secondary/60">
-              最高 {gauge.maxStreak}日
+            <span className="text-[10px] text-text-secondary/50 pixel-num">
+              MAX {gauge.maxStreak}日
             </span>
           </div>
         </div>
 
         {/* ゲージバー */}
-        <div className={`h-2 rounded-full ${colors.bg} overflow-hidden`}>
+        <div className="rpg-bar">
           <div
-            className={`h-full rounded-full transition-all duration-500 ${colors.bar} ${isMaxTier ? 'gauge-glow' : ''}`}
+            className={`rpg-bar-fill ${barClass} ${isMaxTier ? 'gauge-glow' : ''}`}
             style={{ width: `${gauge.current}%` }}
           />
         </div>
 
         {/* ゲージ値 */}
         <div className="flex justify-end mt-1">
-          <span className={`text-[10px] ${colors.text}`}>
+          <span className={`text-[10px] pixel-num ${textColor}`}>
             {gauge.current}/100
           </span>
         </div>

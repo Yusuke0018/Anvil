@@ -1,49 +1,61 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-bg-deep: #f5f6f8;
-  --color-bg-card: #ffffff;
-  --color-bg-surface: #eef0f4;
-  --color-accent: #ff6b2b;
+  --color-bg-deep: #0d1117;
+  --color-bg-card: #161b26;
+  --color-bg-surface: #1e2636;
+  --color-accent: #e8a020;
   --color-gold: #ffd700;
-  --color-text-primary: #1a1c2b;
-  --color-text-secondary: #6b7280;
-  --color-success: #4ade80;
-  --color-danger: #ef4444;
-  --color-accent-dim: #ff6b2b22;
-  --color-gold-dim: #ffd70022;
-  --color-success-dim: #4ade8022;
+  --color-text-primary: #e8dcc8;
+  --color-text-secondary: #8b9ab5;
+  --color-success: #50c878;
+  --color-danger: #e05050;
+  --color-accent-dim: #e8a02033;
+  --color-gold-dim: #ffd70033;
+  --color-success-dim: #50c87833;
+  --color-rpg-border: #c8a84e;
+  --color-rpg-border-dim: #c8a84e44;
+  --color-rpg-blue: #2a3a5c;
+  --color-rpg-navy: #141c2e;
+  --color-rpg-hp: #e05050;
+  --color-rpg-mp: #5088e0;
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
 }
 
-/* ライトモード (デフォルト) - クリーンな白基調 */
+/* ダークRPGモード (デフォルト) */
 :root {
-  --color-bg-deep: #f5f6f8;
-  --color-bg-card: #ffffff;
-  --color-bg-surface: #eef0f4;
-  --color-text-primary: #1a1c2b;
-  --color-text-secondary: #6b7280;
-  --color-accent-dim: #ff6b2b22;
-  --color-gold-dim: #ffd70022;
-  --color-success-dim: #4ade8022;
-  --adventure-bg: linear-gradient(170deg, #f5f6f8 0%, #eef0f8 40%, #f2f4fa 70%, #f5f6f8 100%);
-  --adventure-overlay: radial-gradient(ellipse at 30% 30%, rgba(100, 130, 200, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 70%, rgba(255, 107, 43, 0.03) 0%, transparent 50%);
+  --color-bg-deep: #0d1117;
+  --color-bg-card: #161b26;
+  --color-bg-surface: #1e2636;
+  --color-text-primary: #e8dcc8;
+  --color-text-secondary: #8b9ab5;
+  --color-accent-dim: #e8a02033;
+  --color-gold-dim: #ffd70033;
+  --color-success-dim: #50c87833;
+  --color-rpg-border: #c8a84e;
+  --color-rpg-border-dim: #c8a84e44;
+  --adventure-bg: linear-gradient(170deg, #0d1117 0%, #141c2e 40%, #0d1520 70%, #0d1117 100%);
+  --adventure-overlay:
+    radial-gradient(ellipse at 20% 20%, rgba(60, 80, 140, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(200, 168, 78, 0.04) 0%, transparent 50%);
 }
 
-/* ダークモード */
-[data-theme="dark"] {
-  --color-bg-deep: #0f0f13;
-  --color-bg-card: #1a1a24;
-  --color-bg-surface: #252535;
-  --color-text-primary: #e8e6e3;
-  --color-text-secondary: #9996a6;
-  --color-accent-dim: #ff6b2b33;
-  --color-gold-dim: #ffd70033;
-  --color-success-dim: #4ade8033;
-  --adventure-bg: linear-gradient(170deg, #0f0f13 0%, #1a1028 40%, #0d1520 70%, #0f0f13 100%);
-  --adventure-overlay: radial-gradient(ellipse at 20% 20%, rgba(100, 80, 160, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 60%, rgba(30, 60, 120, 0.06) 0%, transparent 50%);
+/* ライトモード - 羊皮紙 */
+[data-theme="light"] {
+  --color-bg-deep: #f0e8d8;
+  --color-bg-card: #faf4e8;
+  --color-bg-surface: #e8dcc8;
+  --color-text-primary: #2a1f10;
+  --color-text-secondary: #7a6850;
+  --color-accent-dim: #c8840022;
+  --color-gold-dim: #c8a84e22;
+  --color-success-dim: #40885022;
+  --color-rpg-border: #a08030;
+  --color-rpg-border-dim: #a0803044;
+  --adventure-bg: linear-gradient(170deg, #f0e8d8 0%, #e8dcc8 40%, #f0e4d0 70%, #f0e8d8 100%);
+  --adventure-overlay:
+    radial-gradient(ellipse at 30% 30%, rgba(160, 128, 48, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(100, 80, 40, 0.04) 0%, transparent 50%);
 }
 
 body {
@@ -65,7 +77,195 @@ body::before {
   z-index: 0;
 }
 
-/* XPバー アニメーション */
+/* === RPG ウィンドウフレーム === */
+.rpg-panel {
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-rpg-border);
+  border-radius: 4px;
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(200, 168, 78, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.rpg-panel::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--color-rpg-border-dim);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* RPG パネルヘッダー（セクションタイトル用） */
+.rpg-header {
+  background: linear-gradient(180deg, var(--color-rpg-blue) 0%, var(--color-rpg-navy) 100%);
+  border-bottom: 2px solid var(--color-rpg-border);
+  padding: 6px 12px;
+  margin: -2px -2px 0 -2px;
+  border-radius: 2px 2px 0 0;
+}
+
+/* RPGスタイルのバー (HP/MP/XP) */
+.rpg-bar {
+  height: 14px;
+  background: #0a0e18;
+  border: 1px solid var(--color-rpg-border-dim);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.rpg-bar-fill {
+  height: 100%;
+  border-radius: 1px;
+  transition: width 0.5s ease-out;
+  position: relative;
+}
+
+.rpg-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  right: 2px;
+  height: 4px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, transparent 100%);
+  border-radius: 1px;
+}
+
+/* XPバー色 */
+.rpg-bar-xp {
+  background: linear-gradient(180deg, #f0c040 0%, #d09020 50%, #b07818 100%);
+}
+
+/* 覚悟ゲージ色 (ティア別) */
+.rpg-bar-gray { background: linear-gradient(180deg, #888 0%, #555 100%); }
+.rpg-bar-dim { background: linear-gradient(180deg, #e0a040 0%, #a07020 100%); opacity: 0.6; }
+.rpg-bar-accent { background: linear-gradient(180deg, #f0c040 0%, #d09020 100%); }
+.rpg-bar-gold { background: linear-gradient(180deg, #ffe060 0%, #d4a020 100%); }
+.rpg-bar-gold-glow { background: linear-gradient(180deg, #ffe878 0%, #e8b830 100%); }
+
+/* ピクセル風ドットセパレータ */
+.rpg-dots::after {
+  content: '···';
+  letter-spacing: 3px;
+  color: var(--color-rpg-border-dim);
+}
+
+/* RPGボタン */
+.rpg-btn {
+  background: linear-gradient(180deg, #3a4a6c 0%, #2a3650 50%, #1e2a40 100%);
+  border: 2px solid var(--color-rpg-border);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-weight: bold;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.rpg-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.rpg-btn::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  right: 4px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 1px;
+}
+
+.rpg-btn-primary {
+  background: linear-gradient(180deg, #e0a030 0%, #c08020 50%, #a06818 100%);
+  color: #1a1000;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.rpg-btn-danger {
+  background: linear-gradient(180deg, #c04040 0%, #a03030 50%, #802020 100%);
+  color: #ffe0e0;
+}
+
+/* チェックマーク (RPG風) */
+.rpg-check {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--color-rpg-border-dim);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  background: #0a0e18;
+  transition: all 0.15s;
+}
+
+.rpg-check-done {
+  background: linear-gradient(135deg, #40a060 0%, #308050 100%);
+  border-color: #50c878;
+  color: #fff;
+}
+
+.rpg-check-auto {
+  background: linear-gradient(135deg, #d4a020 0%, #b08818 100%);
+  border-color: #ffd700;
+  color: #1a1000;
+}
+
+/* ナビゲーション RPG風 */
+.rpg-nav {
+  background: linear-gradient(180deg, var(--color-bg-card) 0%, #0d1117 100%);
+  border-top: 2px solid var(--color-rpg-border);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.rpg-nav-item {
+  position: relative;
+  transition: all 0.15s;
+}
+
+.rpg-nav-item-active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent);
+}
+
+/* ステータス値の装飾 */
+.stat-value {
+  text-shadow: 0 0 8px currentColor;
+}
+
+/* RPG モーダルオーバーレイ */
+.rpg-modal-overlay {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.rpg-modal {
+  background: var(--color-bg-card);
+  border: 3px solid var(--color-rpg-border);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1px rgba(200, 168, 78, 0.2),
+    0 0 30px rgba(200, 168, 78, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* === アニメーション === */
+
 @keyframes xp-fill {
   from { width: 0%; }
 }
@@ -74,7 +274,6 @@ body::before {
   animation: xp-fill 0.6s ease-out;
 }
 
-/* レベルアップ グロー */
 @keyframes glow-pulse {
   0%, 100% { box-shadow: 0 0 8px var(--color-accent); }
   50% { box-shadow: 0 0 24px var(--color-accent), 0 0 48px var(--color-accent-dim); }
@@ -84,10 +283,9 @@ body::before {
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
-/* チェックボタン タップフィードバック */
 @keyframes check-pop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+  50% { transform: scale(1.15); }
   100% { transform: scale(1); }
 }
 
@@ -95,9 +293,8 @@ body::before {
   animation: check-pop 0.2s ease-out;
 }
 
-/* モーダル フェードイン */
 @keyframes fade-in {
-  from { opacity: 0; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
@@ -111,22 +308,18 @@ body * {
   transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* === レベルアップ演出アニメーション === */
-
-/* 画面全体の金色フラッシュ */
+/* レベルアップ演出 */
 @keyframes screen-flash {
   0% { opacity: 0.7; }
   100% { opacity: 0; }
 }
 
-/* LEVEL UP! タイトルのバウンド登場 */
 @keyframes title-burst {
   0% { transform: scale(0); opacity: 0; }
   60% { transform: scale(1.3); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* 剣振り下ろし */
 @keyframes anvil-strike {
   0% { transform: translateY(-60px) rotate(-15deg); opacity: 0; }
   50% { transform: translateY(4px) rotate(3deg); opacity: 1; }
@@ -134,32 +327,27 @@ body * {
   100% { transform: translateY(0) rotate(0deg); }
 }
 
-/* ステータス行のスライドイン */
 @keyframes stat-slide-in {
   0% { transform: translateX(-20px); opacity: 0; }
   100% { transform: translateX(0); opacity: 1; }
 }
 
-/* +値のポップ */
 @keyframes number-pop {
   0% { transform: scale(1); }
   50% { transform: scale(1.4); color: var(--color-gold); }
   100% { transform: scale(1); }
 }
 
-/* 光の粒の放射 */
 @keyframes sparkle {
   0% { transform: translate(0, 0) scale(1); opacity: 1; }
   100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0; }
 }
 
-/* レベル数字背後の光輪 */
 @keyframes ring-expand {
   0% { transform: scale(0.3); opacity: 0.8; }
   100% { transform: scale(2.5); opacity: 0; }
 }
 
-/* XPバーの脈動グロー (80%超) */
 @keyframes xp-glow {
   0%, 100% { box-shadow: 0 0 4px var(--color-accent); }
   50% { box-shadow: 0 0 14px var(--color-accent), 0 0 28px var(--color-accent-dim); }
@@ -169,19 +357,16 @@ body * {
   animation: xp-glow 1.5s ease-in-out infinite;
 }
 
-/* 紙吹雪 (全達成ボーナス用) */
 @keyframes confetti-piece {
   0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
   100% { transform: translateY(40px) rotate(360deg); opacity: 0; }
 }
 
-/* XP数字の上昇フェードアウト */
 @keyframes float-up {
   0% { transform: translateY(0); opacity: 1; }
   100% { transform: translateY(-20px); opacity: 0; }
 }
 
-/* 金色シマーエフェクト */
 @keyframes gold-shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -203,7 +388,6 @@ body * {
   animation: gold-shimmer 2s linear infinite;
 }
 
-/* 確定ボタン強化グロー */
 @keyframes btn-glow-strong {
   0%, 100% { box-shadow: 0 0 8px var(--color-accent), 0 0 16px var(--color-accent-dim); }
   50% { box-shadow: 0 0 16px var(--color-accent), 0 0 32px var(--color-accent-dim), 0 0 48px var(--color-accent-dim); }
@@ -213,9 +397,7 @@ body * {
   animation: btn-glow-strong 1.8s ease-in-out infinite;
 }
 
-/* === 日常フィードバック演出 === */
-
-/* チェック時リップル (カテゴリ色のリング放射) */
+/* チェック時リップル */
 @keyframes check-ripple {
   0% { transform: scale(1); opacity: 0.6; }
   100% { transform: scale(2.2); opacity: 0; }
@@ -229,13 +411,12 @@ body * {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 9999px;
+  border-radius: 3px;
   border: 2px solid var(--ripple-color, var(--color-accent));
   animation: check-ripple 0.4s ease-out forwards;
   pointer-events: none;
 }
 
-/* 確定時の控えめフラッシュ */
 @keyframes submit-flash {
   0% { opacity: 0.25; }
   100% { opacity: 0; }
@@ -245,17 +426,14 @@ body * {
   animation: submit-flash 0.4s ease-out forwards;
 }
 
-/* XP数字の上昇フェードアウト (クラス化) */
 .float-up-anim {
   animation: float-up 1.2s ease-out forwards;
 }
 
-/* 紙吹雪 (クラス化) */
 .confetti {
   animation: confetti-piece 1s ease-out forwards;
 }
 
-/* 確定後テキストのフェードイン */
 @keyframes fade-in-delayed {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
@@ -267,9 +445,7 @@ body * {
   opacity: 0;
 }
 
-/* === 覚悟ゲージ演出 === */
-
-/* 最高ティアのゲージグロー */
+/* 覚悟ゲージグロー */
 @keyframes gauge-glow {
   0%, 100% { box-shadow: 0 0 4px var(--color-gold), 0 0 8px var(--color-gold-dim); }
   50% { box-shadow: 0 0 8px var(--color-gold), 0 0 16px var(--color-gold-dim), 0 0 24px var(--color-gold-dim); }
@@ -279,14 +455,33 @@ body * {
   animation: gauge-glow 2s ease-in-out infinite;
 }
 
+/* RPG ボーダーアニメーション */
+@keyframes rpg-border-glow {
+  0%, 100% { border-color: var(--color-rpg-border); }
+  50% { border-color: var(--color-gold); box-shadow: 0 0 12px var(--color-gold-dim); }
+}
+
+.rpg-border-glow {
+  animation: rpg-border-glow 2s ease-in-out infinite;
+}
+
+/* ピクセルフォント風の数字表示 */
+.pixel-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+
 /* スクロールバー */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--color-bg-deep);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-bg-surface);
-  border-radius: 2px;
+  background: var(--color-rpg-border-dim);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rpg-border);
 }

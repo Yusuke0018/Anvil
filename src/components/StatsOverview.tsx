@@ -7,23 +7,24 @@ interface StatsOverviewProps {
 }
 
 const STAT_CONFIG = [
-  { key: 'vitality' as const, label: '心力', emoji: '🔥', color: 'text-accent' },
-  { key: 'curiosity' as const, label: '探究力', emoji: '⚔️', color: 'text-gold' },
-  { key: 'intellect' as const, label: '知力', emoji: '📖', color: 'text-success' },
+  { key: 'vitality' as const, label: 'STR', fullLabel: '心力', emoji: '🔥', color: 'text-[#e05050]' },
+  { key: 'curiosity' as const, label: 'DEX', fullLabel: '探究力', emoji: '⚔️', color: 'text-accent' },
+  { key: 'intellect' as const, label: 'INT', fullLabel: '知力', emoji: '📖', color: 'text-[#5088e0]' },
 ];
 
 export default function StatsOverview({ stats }: StatsOverviewProps) {
   return (
     <div className="px-4 py-3">
       <div className="flex gap-2">
-        {STAT_CONFIG.map(({ key, label, emoji, color }) => (
+        {STAT_CONFIG.map(({ key, label, fullLabel, emoji, color }) => (
           <div
             key={key}
-            className="flex-1 bg-bg-card rounded-lg p-3 text-center"
+            className="flex-1 rpg-panel p-3 text-center"
           >
-            <div className="text-lg mb-1">{emoji}</div>
-            <div className={`text-xl font-bold ${color}`}>{stats[key]}</div>
-            <div className="text-xs text-text-secondary mt-1">{label}</div>
+            <div className="text-lg mb-0.5">{emoji}</div>
+            <div className={`text-xl font-bold pixel-num stat-value ${color}`}>{stats[key]}</div>
+            <div className="text-[10px] text-text-secondary mt-1 tracking-wider">{label}</div>
+            <div className="text-[9px] text-text-secondary/60">{fullLabel}</div>
           </div>
         ))}
       </div>

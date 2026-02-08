@@ -35,7 +35,7 @@ export default function Dashboard() {
   if (!state) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-text-secondary text-sm">Loading...</div>
+        <div className="text-text-secondary text-sm tracking-wider">Loading...</div>
       </div>
     );
   }
@@ -48,13 +48,14 @@ export default function Dashboard() {
     <>
       <header className="px-4 pt-6 pb-2 flex items-start justify-between">
         <div>
-          <h1 className="text-lg font-bold tracking-wide">
-            <span className="text-accent">⚔️</span> Anvil
+          <h1 className="text-lg font-bold tracking-wider">
+            <span className="text-accent">⚔️</span>{' '}
+            <span className="text-accent">冒険者クエスト</span>
           </h1>
           <div className="flex items-center gap-2 mt-1">
-            <p className="text-xs text-text-secondary">{today}</p>
+            <p className="text-[10px] text-text-secondary pixel-num">{today}</p>
             {equippedTitle && (
-              <span className="text-xs text-gold">
+              <span className="text-[10px] text-gold">
                 {equippedTitle.icon} {equippedTitle.name}
               </span>
             )}

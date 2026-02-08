@@ -13,10 +13,10 @@ export default function ComebackBanner({ challenge }: ComebackBannerProps) {
 
   return (
     <div className="px-4 mb-2">
-      <div className="bg-accent/10 border border-accent/20 rounded-xl px-4 py-3 flex items-center justify-between">
+      <div className="rpg-panel px-4 py-3 flex items-center justify-between rpg-border-glow">
         <div className="flex items-center gap-2">
           <span className="text-base">🔥</span>
-          <span className="text-xs font-medium text-accent">
+          <span className="text-xs font-medium text-accent tracking-wider">
             復帰チャレンジ: {challenge.daysCompleted}/3日
           </span>
         </div>
@@ -24,10 +24,10 @@ export default function ComebackBanner({ challenge }: ComebackBannerProps) {
           {dots.map(i => (
             <div
               key={i}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${
+              className={`w-3 h-3 rounded-sm border transition-all ${
                 i < challenge.daysCompleted
-                  ? 'bg-accent scale-110'
-                  : 'bg-bg-surface'
+                  ? 'bg-accent border-accent scale-110'
+                  : 'bg-bg-deep border-rpg-border-dim'
               }`}
             />
           ))}

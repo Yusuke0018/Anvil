@@ -10,12 +10,11 @@ interface ReviewModalProps {
 export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
   const isMonthly = review.type === 'monthly';
   const emoji = isMonthly ? '📜' : '📋';
-  const title = isMonthly ? '月の振り返り' : '週の振り返り';
+  const title = isMonthly ? '月の冒険報告' : '週の冒険報告';
   const periodLabel = isMonthly ? '30日間' : '7日間';
 
   const ratePercent = Math.round(review.completionRate * 100);
 
-  // 励ましメッセージ
   let message: string;
   if (ratePercent >= 90) {
     message = '素晴らしい冒険だ。その道は明るく輝いている。';
@@ -31,34 +30,32 @@ export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-8"
+      className="fixed inset-0 z-50 flex items-center justify-center rpg-modal-overlay px-8"
       onClick={onDismiss}
     >
       <div
-        className="bg-bg-card border border-gold/20 rounded-2xl p-6 w-full max-w-sm relative modal-enter"
+        className="rpg-modal p-6 w-full max-w-sm relative modal-enter"
         onClick={e => e.stopPropagation()}
       >
-        {/* ヘッダー */}
         <div className="text-center mb-4">
           <div className="text-4xl mb-2" style={{ animation: 'anvil-strike 0.5s ease-out 0.2s both' }}>
             {emoji}
           </div>
           <h2
-            className="text-lg font-bold text-gold"
+            className="text-lg font-bold text-gold pixel-num"
             style={{ animation: 'title-burst 0.5s ease-out 0.4s both' }}
           >
             {title}
           </h2>
-          <p className="text-xs text-text-secondary mt-1">{periodLabel}の冒険の成果</p>
+          <p className="text-xs text-text-secondary mt-1">{periodLabel}の冒険成果</p>
         </div>
 
-        {/* 統計 */}
-        <div className="space-y-2.5 mb-4" style={{ animation: 'fade-in 0.3s ease-out 0.6s both' }}>
+        <div className="space-y-1.5 mb-4" style={{ animation: 'fade-in 0.3s ease-out 0.6s both' }}>
           <ReviewStat label="レベル" value={review.startLevel === review.endLevel
             ? `Lv.${review.endLevel}`
             : `Lv.${review.startLevel} → Lv.${review.endLevel}`
           } highlight={review.levelsGained > 0} />
-          <ReviewStat label="獲得XP" value={`${review.xpGained.toLocaleString()} XP`} />
+          <ReviewStat label="獲得EXP" value={`${review.xpGained.toLocaleString()} EXP`} />
           <ReviewStat label="達成率" value={`${ratePercent}%`} highlight={ratePercent >= 80} />
           <ReviewStat label="最高連続" value={`${review.streakBest}日`} highlight={review.streakBest >= 7} />
           {review.skillsUnlocked > 0 && (
@@ -69,7 +66,6 @@ export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
           )}
         </div>
 
-        {/* 励ましメッセージ */}
         <div
           className="text-center mb-4 px-2"
           style={{ animation: 'fade-in 0.3s ease-out 0.8s both' }}
@@ -79,10 +75,9 @@ export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
           </p>
         </div>
 
-        {/* ボタン */}
         <button
           onClick={onDismiss}
-          className="w-full py-3 bg-gold/90 text-bg-deep rounded-lg font-bold text-sm active:scale-[0.98] transition-transform"
+          className="w-full py-3 rpg-btn rpg-btn-primary text-sm"
           style={{ animation: 'fade-in 0.3s ease-out 1.0s both' }}
         >
           次の冒険へ
@@ -94,9 +89,9 @@ export default function ReviewModal({ review, onDismiss }: ReviewModalProps) {
 
 function ReviewStat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex justify-between items-center bg-bg-surface rounded-lg px-4 py-2">
+    <div className="flex justify-between items-center rpg-panel px-4 py-2">
       <span className="text-xs text-text-secondary">{label}</span>
-      <span className={`text-sm font-bold ${highlight ? 'text-gold' : 'text-text-primary'}`}>
+      <span className={`text-sm font-bold pixel-num ${highlight ? 'text-gold stat-value' : 'text-text-primary'}`}>
         {value}
       </span>
     </div>

@@ -13,7 +13,6 @@ const WEEKDAYS = ['月', '火', '水', '木', '金', '土', '日'];
 function getMonthDays(year: number, month: number) {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-  // 月曜始まり: getDay() は日=0, 月=1... → 月=0, 火=1... 日=6 に変換
   const startOffset = (firstDay.getDay() + 6) % 7;
   return { daysInMonth: lastDay.getDate(), startOffset };
 }
@@ -29,7 +28,6 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
 
   const { daysInMonth, startOffset } = getMonthDays(viewYear, viewMonth);
 
-  // 今月の記録をMapに
   const recordMap = new Map<string, DailyRecord>();
   for (const r of dailyRecords) {
     recordMap.set(r.date, r);
@@ -48,29 +46,27 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
 
   return (
     <div className="px-4 mb-4">
-      <div className="bg-bg-card rounded-xl p-4">
+      <div className="rpg-panel p-4">
         {/* ヘッダー: 月ナビゲーション */}
         <div className="flex items-center justify-between mb-3">
-          <button onClick={goBack} className="text-text-secondary px-2 py-1 active:scale-95">◀</button>
-          <h3 className="text-sm font-medium text-text-primary">{formatMonth(viewYear, viewMonth)}</h3>
-          <button onClick={goForward} className="text-text-secondary px-2 py-1 active:scale-95">▶</button>
+          <button onClick={goBack} className="rpg-btn px-2 py-1 text-xs">◀</button>
+          <h3 className="text-sm font-medium text-text-primary pixel-num">{formatMonth(viewYear, viewMonth)}</h3>
+          <button onClick={goForward} className="rpg-btn px-2 py-1 text-xs">▶</button>
         </div>
 
         {/* 曜日ヘッダー */}
         <div className="grid grid-cols-7 gap-1 mb-1">
           {WEEKDAYS.map(d => (
-            <div key={d} className="text-center text-[10px] text-text-secondary">{d}</div>
+            <div key={d} className="text-center text-[10px] text-text-secondary tracking-wider">{d}</div>
           ))}
         </div>
 
         {/* 日付グリッド */}
         <div className="grid grid-cols-7 gap-1">
-          {/* 空セル (月初のオフセット) */}
           {Array.from({ length: startOffset }).map((_, i) => (
             <div key={`empty-${i}`} className="aspect-square" />
           ))}
 
-          {/* 日付セル */}
           {Array.from({ length: daysInMonth }).map((_, i) => {
             const day = i + 1;
             const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -84,13 +80,13 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
               const completedCount = record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
               const rate = totalHabits > 0 ? completedCount / totalHabits : 0;
               if (rate >= 1) {
-                bgColor = 'bg-accent/20';
+                bgColor = 'bg-accent/20 border border-accent/40';
                 dotColor = 'bg-accent';
               } else if (rate > 0) {
-                bgColor = 'bg-gold/15';
+                bgColor = 'bg-gold/15 border border-gold/30';
                 dotColor = 'bg-gold';
               } else {
-                bgColor = 'bg-bg-surface';
+                bgColor = 'bg-bg-surface border border-rpg-border-dim';
                 dotColor = 'bg-text-secondary/40';
               }
             }
@@ -98,11 +94,11 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
             return (
               <div
                 key={day}
-                className={`aspect-square rounded-lg flex flex-col items-center justify-center relative ${bgColor} ${
-                  isToday ? 'ring-1 ring-accent/50' : ''
+                className={`aspect-square rounded-sm flex flex-col items-center justify-center relative ${bgColor} ${
+                  isToday ? 'ring-1 ring-accent' : ''
                 }`}
               >
-                <span className={`text-[10px] ${isToday ? 'text-accent font-bold' : 'text-text-secondary'}`}>
+                <span className={`text-[10px] pixel-num ${isToday ? 'text-accent font-bold' : 'text-text-secondary'}`}>
                   {day}
                 </span>
                 {dotColor && (
@@ -127,7 +123,7 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-1">
-      <div className={`w-2 h-2 rounded-full ${color}`} />
+      <div className={`w-2 h-2 rounded-sm ${color}`} />
       <span className="text-[10px] text-text-secondary">{label}</span>
     </div>
   );

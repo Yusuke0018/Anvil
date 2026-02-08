@@ -12,7 +12,7 @@ export default function HistoryPage() {
   if (!state) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-text-secondary text-sm">Loading...</div>
+        <div className="text-text-secondary text-sm tracking-wider">Loading...</div>
       </div>
     );
   }
@@ -22,7 +22,6 @@ export default function HistoryPage() {
   const totalDays = submitted.length;
   const totalXP = character.totalXP;
 
-  // 達成率 (全日平均)
   const avgCompletionRate = totalDays > 0
     ? submitted.reduce((sum, r) => {
         const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
@@ -31,13 +30,11 @@ export default function HistoryPage() {
       }, 0) / totalDays
     : 0;
 
-  // 全達成日数
   const perfectDays = submitted.filter(r => {
     const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
     return done === habits.length && habits.length > 0;
   }).length;
 
-  // 日別XPの最高値
   const maxDailyXP = submitted.length > 0
     ? Math.max(...submitted.map(r => r.xpGained))
     : 0;
@@ -45,8 +42,8 @@ export default function HistoryPage() {
   return (
     <>
       <header className="px-4 pt-6 pb-2 flex items-start justify-between">
-        <h1 className="text-lg font-bold tracking-wide">
-          <span className="text-accent">📜</span> 履歴
+        <h1 className="text-lg font-bold tracking-wider">
+          <span className="text-accent">📜</span> 冒険記録
         </h1>
         <ThemeToggle />
       </header>
@@ -55,14 +52,14 @@ export default function HistoryPage() {
 
       {/* 統計サマリー */}
       <div className="px-4 mb-4">
-        <div className="bg-bg-card rounded-xl p-4">
-          <h3 className="text-sm font-medium text-text-secondary mb-3">統計</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <StatBox label="記録日数" value={`${totalDays}日`} />
+        <div className="rpg-panel p-4">
+          <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-widest uppercase">▸ 統計</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <StatBox label="冒険日数" value={`${totalDays}日`} />
             <StatBox label="全達成日" value={`${perfectDays}日`} />
             <StatBox label="平均達成率" value={`${Math.round(avgCompletionRate * 100)}%`} />
-            <StatBox label="総獲得XP" value={`${totalXP.toLocaleString()}`} />
-            <StatBox label="最高日次XP" value={`${maxDailyXP.toLocaleString()}`} />
+            <StatBox label="総獲得EXP" value={`${totalXP.toLocaleString()}`} />
+            <StatBox label="最高日次EXP" value={`${maxDailyXP.toLocaleString()}`} />
             <StatBox label="現在レベル" value={`Lv.${character.level}`} />
           </div>
         </div>
@@ -77,9 +74,9 @@ export default function HistoryPage() {
 
 function StatBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-bg-surface rounded-lg px-3 py-2.5">
-      <div className="text-[10px] text-text-secondary">{label}</div>
-      <div className="text-sm font-bold text-text-primary mt-0.5">{value}</div>
+    <div className="bg-bg-surface/40 border border-rpg-border-dim rounded-sm px-3 py-2.5">
+      <div className="text-[10px] text-text-secondary tracking-wider">{label}</div>
+      <div className="text-sm font-bold text-text-primary mt-0.5 pixel-num">{value}</div>
     </div>
   );
 }

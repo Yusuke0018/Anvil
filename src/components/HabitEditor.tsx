@@ -55,11 +55,11 @@ function CategoryEditor({
   };
 
   return (
-    <div>
-      <h3 className="text-sm font-medium text-text-secondary mb-3">
+    <div className="rpg-panel p-4">
+      <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-wider uppercase">
         {info.emoji} {info.label}
-        <span className="ml-2 text-xs text-text-secondary/60">
-          {habits.length} / {MAX_HABITS_PER_CATEGORY}
+        <span className="ml-2 text-text-secondary/50 pixel-num">
+          {habits.length}/{MAX_HABITS_PER_CATEGORY}
         </span>
       </h3>
 
@@ -80,20 +80,17 @@ function CategoryEditor({
               value={newName}
               onChange={e => setNewName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleAdd()}
-              placeholder="習慣名を入力..."
+              placeholder="クエスト名を入力..."
               autoFocus
-              className="flex-1 bg-bg-surface text-text-primary text-sm px-3 py-2 rounded-lg
-                border border-accent/30 outline-none focus:border-accent"
+              className="flex-1 bg-bg-deep text-text-primary text-sm px-3 py-2 rounded-sm
+                border-2 border-rpg-border-dim outline-none focus:border-accent"
             />
-            <button
-              onClick={handleAdd}
-              className="px-3 py-2 bg-accent text-white text-sm rounded-lg font-medium"
-            >
+            <button onClick={handleAdd} className="rpg-btn rpg-btn-primary px-3 py-2 text-sm">
               追加
             </button>
             <button
               onClick={() => { setIsAdding(false); setNewName(''); }}
-              className="px-3 py-2 bg-bg-surface text-text-secondary text-sm rounded-lg"
+              className="rpg-btn px-3 py-2 text-sm"
             >
               ✕
             </button>
@@ -101,10 +98,10 @@ function CategoryEditor({
         ) : canAdd ? (
           <button
             onClick={() => setIsAdding(true)}
-            className="w-full py-2 border border-dashed border-text-secondary/30 rounded-lg
+            className="w-full py-2 border-2 border-dashed border-rpg-border-dim rounded-sm
               text-text-secondary text-sm transition-colors hover:border-accent/50 hover:text-accent"
           >
-            + 追加
+            + クエスト追加
           </button>
         ) : null}
       </div>
@@ -142,18 +139,15 @@ function HabitItem({
           onChange={e => setEditName(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSave()}
           autoFocus
-          className="flex-1 bg-bg-surface text-text-primary text-sm px-3 py-2 rounded-lg
-            border border-accent/30 outline-none focus:border-accent"
+          className="flex-1 bg-bg-deep text-text-primary text-sm px-3 py-2 rounded-sm
+            border-2 border-rpg-border-dim outline-none focus:border-accent"
         />
-        <button
-          onClick={handleSave}
-          className="px-3 py-2 bg-accent text-white text-sm rounded-lg font-medium"
-        >
+        <button onClick={handleSave} className="rpg-btn rpg-btn-primary px-3 py-2 text-sm">
           保存
         </button>
         <button
           onClick={() => { setIsEditing(false); setEditName(habit.name); }}
-          className="px-3 py-2 bg-bg-surface text-text-secondary text-sm rounded-lg"
+          className="rpg-btn px-3 py-2 text-sm"
         >
           ✕
         </button>
@@ -162,11 +156,11 @@ function HabitItem({
   }
 
   return (
-    <div className="flex items-center gap-2 bg-bg-card rounded-lg p-3">
+    <div className="flex items-center gap-2 bg-bg-surface/40 border border-rpg-border-dim rounded-sm p-2.5">
       <span className="flex-1 text-sm text-text-primary">{habit.name}</span>
       <button
         onClick={() => { setEditName(habit.name); setIsEditing(true); }}
-        className="text-text-secondary text-xs px-2 py-1 rounded hover:text-accent transition-colors"
+        className="rpg-btn px-2 py-1 text-[10px]"
       >
         編集
       </button>
@@ -174,13 +168,13 @@ function HabitItem({
         <div className="flex gap-1">
           <button
             onClick={() => onDelete(habit.id)}
-            className="text-danger text-xs px-2 py-1 rounded bg-danger/10"
+            className="rpg-btn rpg-btn-danger px-2 py-1 text-[10px]"
           >
             削除
           </button>
           <button
             onClick={() => setShowConfirm(false)}
-            className="text-text-secondary text-xs px-2 py-1 rounded"
+            className="rpg-btn px-2 py-1 text-[10px]"
           >
             戻す
           </button>
@@ -188,7 +182,7 @@ function HabitItem({
       ) : (
         <button
           onClick={() => setShowConfirm(true)}
-          className="text-text-secondary text-xs px-2 py-1 rounded hover:text-danger transition-colors"
+          className="rpg-btn px-2 py-1 text-[10px]"
         >
           削除
         </button>

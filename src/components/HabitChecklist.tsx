@@ -11,12 +11,6 @@ interface HabitChecklistProps {
   disabled: boolean;
 }
 
-const STATUS_STYLES: Record<CheckStatus, { bg: string; icon: string; ring: string }> = {
-  done: { bg: 'bg-success', icon: '✓', ring: 'ring-2 ring-success' },
-  auto: { bg: 'bg-gold', icon: '★', ring: 'ring-2 ring-gold' },
-  none: { bg: 'bg-bg-surface', icon: '', ring: 'ring-1 ring-text-secondary/30' },
-};
-
 const CATEGORY_RIPPLE_COLOR: Record<HabitCategory, string> = {
   life: 'var(--color-accent)',
   hobby: 'var(--color-gold)',
@@ -49,13 +43,12 @@ function CategorySection({
 
   return (
     <div className="mb-4">
-      <h3 className="text-sm text-text-secondary mb-2 px-1">
+      <h3 className="text-xs text-text-secondary mb-2 px-1 tracking-wider uppercase">
         {info.emoji} {info.label}
       </h3>
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {categoryHabits.map(habit => {
           const status = getCheckStatus(habit.id);
-          const style = STATUS_STYLES[status];
           const isChecked = status !== 'none';
           const rippleKey = rippleKeys[habit.id];
 
@@ -64,22 +57,23 @@ function CategorySection({
               key={habit.id}
               onClick={() => handleToggle(habit.id)}
               disabled={disabled}
-              className={`w-full flex items-center gap-3 p-3 rounded-lg bg-bg-card
-                transition-all duration-150 active:scale-[0.98] disabled:opacity-50
-                ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              className={`w-full flex items-center gap-3 p-2.5 rpg-panel
+                transition-all duration-150 active:scale-[0.98]
+                ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className="relative">
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center
-                    text-sm font-bold transition-all ${style.bg} ${style.ring}
-                    ${isChecked ? 'text-bg-deep check-pop' : 'text-text-secondary'}`}
+                  className={`rpg-check ${
+                    status === 'done' ? 'rpg-check-done check-pop' :
+                    status === 'auto' ? 'rpg-check-auto check-pop' : ''
+                  }`}
                 >
-                  {style.icon}
+                  {status === 'done' ? '✓' : status === 'auto' ? '★' : ''}
                 </div>
                 {isChecked && rippleKey && (
                   <div
                     key={rippleKey}
-                    className="check-ripple absolute inset-0 rounded-full pointer-events-none"
+                    className="check-ripple absolute inset-0 pointer-events-none"
                     style={{ '--ripple-color': CATEGORY_RIPPLE_COLOR[category] } as React.CSSProperties}
                   />
                 )}
@@ -92,7 +86,7 @@ function CategorySection({
                 {habit.name}
               </span>
               {status === 'auto' && (
-                <span className="text-xs text-gold/70">自動</span>
+                <span className="text-[10px] text-gold/70 tracking-wider">AUTO</span>
               )}
             </button>
           );
@@ -112,7 +106,7 @@ export default function HabitChecklist({
     return (
       <div className="px-4 py-8 text-center">
         <p className="text-text-secondary text-sm">
-          習慣が登録されていません
+          クエストが登録されていません
         </p>
         <p className="text-text-secondary text-xs mt-1">
           下部の「習慣」タブから追加してください
