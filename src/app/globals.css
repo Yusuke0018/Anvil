@@ -238,6 +238,45 @@ body::before {
   color: #1a1000;
 }
 
+/* 大きいチェックマーク (クエスト一覧用) */
+.rpg-check-lg {
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--color-rpg-border-dim);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  background: #0a0e18;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.rpg-check-lg.rpg-check-done {
+  background: linear-gradient(135deg, #40a060 0%, #308050 100%);
+  border-color: #50c878;
+  color: #fff;
+}
+
+.rpg-check-lg.rpg-check-auto {
+  background: linear-gradient(135deg, #d4a020 0%, #b08818 100%);
+  border-color: #ffd700;
+  color: #1a1000;
+}
+
+/* クエストアイテム ホバー/フォーカス */
+.quest-item {
+  border: 1px solid transparent;
+}
+.quest-item:not(:disabled):hover {
+  border-color: var(--color-rpg-border-dim);
+}
+.quest-item:not(:disabled):active {
+  border-color: var(--color-rpg-border);
+}
+
 /* ナビゲーション RPG風 */
 .rpg-nav {
   background: linear-gradient(180deg, var(--color-bg-card) 0%, #0d1117 100%);
@@ -316,14 +355,21 @@ body::before {
   border-color: var(--color-rpg-border-dim);
 }
 
-[data-theme="light"] .rpg-check-done {
+[data-theme="light"] .rpg-check-done,
+[data-theme="light"] .rpg-check-lg.rpg-check-done {
   background: linear-gradient(135deg, #2e8a48 0%, #228040 100%);
   border-color: #2e8a48;
 }
 
-[data-theme="light"] .rpg-check-auto {
+[data-theme="light"] .rpg-check-auto,
+[data-theme="light"] .rpg-check-lg.rpg-check-auto {
   background: linear-gradient(135deg, #b07010 0%, #9a6010 100%);
   border-color: #b07010;
+}
+
+[data-theme="light"] .rpg-check-lg {
+  background: #f5f5f3;
+  border-color: var(--color-rpg-border-dim);
 }
 
 [data-theme="light"] .rpg-nav {

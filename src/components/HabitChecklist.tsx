@@ -17,6 +17,18 @@ const CATEGORY_RIPPLE_COLOR: Record<HabitCategory, string> = {
   work: 'var(--color-success)',
 };
 
+const CATEGORY_BORDER_COLOR: Record<HabitCategory, string> = {
+  life: 'var(--color-accent)',
+  hobby: 'var(--color-gold)',
+  work: 'var(--color-success)',
+};
+
+const CATEGORY_BG_TINT: Record<HabitCategory, string> = {
+  life: 'var(--color-accent-dim)',
+  hobby: 'var(--color-gold-dim)',
+  work: 'var(--color-success-dim)',
+};
+
 function CategorySection({
   category,
   habits,
@@ -36,17 +48,47 @@ function CategorySection({
 
   if (categoryHabits.length === 0) return null;
 
+  const doneCount = categoryHabits.filter(h => {
+    const s = getCheckStatus(h.id);
+    return s === 'done' || s === 'auto';
+  }).length;
+  const allDone = doneCount === categoryHabits.length;
+
   const handleToggle = (habitId: string) => {
     onToggle(habitId);
     setRippleKeys(prev => ({ ...prev, [habitId]: Date.now() }));
   };
 
   return (
-    <div className="mb-4">
-      <h3 className="text-xs text-text-secondary mb-2 px-1 tracking-wider uppercase">
-        {info.emoji} {info.label}
-      </h3>
-      <div className="space-y-1.5">
+    <div
+      className="mb-5 rpg-panel overflow-hidden"
+      style={{
+        borderColor: allDone ? CATEGORY_BORDER_COLOR[category] : undefined,
+        boxShadow: allDone ? `0 0 12px ${CATEGORY_BG_TINT[category]}, inset 0 0 0 1px ${CATEGORY_BG_TINT[category]}` : undefined,
+      }}
+    >
+      {/* カテゴリヘッダー */}
+      <div
+        className="px-4 py-2.5 flex items-center justify-between"
+        style={{ background: CATEGORY_BG_TINT[category] }}
+      >
+        <h3 className="text-sm font-bold tracking-wider" style={{ color: CATEGORY_BORDER_COLOR[category] }}>
+          {info.emoji} {info.label}
+        </h3>
+        <span
+          className="text-xs font-bold pixel-num px-2 py-0.5 rounded-sm"
+          style={{
+            color: allDone ? 'var(--color-bg-card)' : CATEGORY_BORDER_COLOR[category],
+            background: allDone ? CATEGORY_BORDER_COLOR[category] : 'transparent',
+            border: allDone ? 'none' : `1px solid ${CATEGORY_BORDER_COLOR[category]}40`,
+          }}
+        >
+          {doneCount}/{categoryHabits.length}
+        </span>
+      </div>
+
+      {/* クエスト一覧 */}
+      <div className="p-2.5 space-y-2">
         {categoryHabits.map(habit => {
           const status = getCheckStatus(habit.id);
           const isChecked = status !== 'none';
@@ -57,13 +99,17 @@ function CategorySection({
               key={habit.id}
               onClick={() => handleToggle(habit.id)}
               disabled={disabled}
-              className={`w-full flex items-center gap-3 p-2.5 rpg-panel
+              className={`quest-item w-full flex items-center gap-3.5 px-3.5 py-3 rounded-sm
                 transition-all duration-150 active:scale-[0.98]
                 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+              style={{
+                background: isChecked ? CATEGORY_BG_TINT[category] : 'var(--color-bg-surface)',
+                borderLeft: `3px solid ${isChecked ? CATEGORY_BORDER_COLOR[category] : 'var(--color-rpg-border-dim)'}`,
+              }}
             >
               <div className="relative">
                 <div
-                  className={`rpg-check ${
+                  className={`rpg-check-lg ${
                     status === 'done' ? 'rpg-check-done check-pop' :
                     status === 'auto' ? 'rpg-check-auto check-pop' : ''
                   }`}
@@ -78,7 +124,7 @@ function CategorySection({
                   />
                 )}
               </div>
-              <span className={`text-sm flex-1 text-left ${
+              <span className={`text-base font-medium flex-1 text-left ${
                 status === 'done' ? 'text-text-primary' :
                 status === 'auto' ? 'text-gold' :
                 'text-text-secondary'
@@ -86,7 +132,7 @@ function CategorySection({
                 {habit.name}
               </span>
               {status === 'auto' && (
-                <span className="text-xs sm:text-[11px] text-gold/70 tracking-wider">AUTO</span>
+                <span className="text-xs text-gold/70 tracking-wider font-bold">AUTO</span>
               )}
             </button>
           );
@@ -104,11 +150,11 @@ export default function HabitChecklist({
 }: HabitChecklistProps) {
   if (habits.length === 0) {
     return (
-      <div className="px-4 py-8 text-center">
-        <p className="text-text-secondary text-sm">
+      <div className="px-4 py-10 text-center">
+        <p className="text-text-secondary text-base">
           クエストが登録されていません
         </p>
-        <p className="text-text-secondary text-xs mt-1">
+        <p className="text-text-secondary text-sm mt-1.5">
           下部の「習慣」タブから追加してください
         </p>
       </div>
