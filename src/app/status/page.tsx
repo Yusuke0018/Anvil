@@ -105,8 +105,8 @@ export default function StatusPage() {
                           </>
                         ) : (
                           <>
-                            <span className="text-sm text-text-secondary/40">🔒</span>
-                            <span className="text-sm text-text-secondary/40 pixel-num">
+                            <span className="text-sm text-text-secondary/80">🔒</span>
+                            <span className="text-sm text-text-secondary/80 pixel-num">
                               Lv.{skill.unlockLevel} で解放
                             </span>
                           </>
@@ -159,8 +159,8 @@ export default function StatusPage() {
                     <>
                       <span className="text-lg opacity-30">🔒</span>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm text-text-secondary/40">???</div>
-                        <div className="text-xs text-text-secondary/30">{title.condition}</div>
+                        <div className="text-sm text-text-secondary/80">???</div>
+                        <div className="text-xs text-text-secondary/75">{title.condition}</div>
                       </div>
                     </>
                   )}

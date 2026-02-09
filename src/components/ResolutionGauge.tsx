@@ -16,7 +16,7 @@ const TIER_BAR_CLASS: Record<string, string> = {
 };
 
 const TIER_TEXT_COLOR: Record<string, string> = {
-  gray: 'text-gray-400',
+  gray: 'text-text-secondary',
   dim: 'text-accent/60',
   accent: 'text-accent',
   gold: 'text-gold',
@@ -26,7 +26,7 @@ const TIER_TEXT_COLOR: Record<string, string> = {
 export default function ResolutionGauge({ gauge }: ResolutionGaugeProps) {
   const tier = getCurrentTier(gauge.current);
   const barClass = TIER_BAR_CLASS[tier.color] ?? 'rpg-bar-gray';
-  const textColor = TIER_TEXT_COLOR[tier.color] ?? 'text-gray-400';
+  const textColor = TIER_TEXT_COLOR[tier.color] ?? 'text-text-secondary';
   const isMaxTier = tier.color === 'gold-glow';
 
   return (
@@ -42,7 +42,7 @@ export default function ResolutionGauge({ gauge }: ResolutionGaugeProps) {
             <span className="text-xs sm:text-[11px] text-text-secondary pixel-num">
               🔥 {gauge.streak}日連続
             </span>
-            <span className="text-xs sm:text-[11px] text-text-secondary/50 pixel-num">
+            <span className="text-xs sm:text-[11px] text-text-secondary/80 pixel-num">
               MAX {gauge.maxStreak}日
             </span>
           </div>
