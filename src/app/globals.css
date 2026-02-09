@@ -41,30 +41,28 @@
     radial-gradient(ellipse at 80% 60%, rgba(200, 168, 78, 0.04) 0%, transparent 50%);
 }
 
-/* ライトモード - 古書の羊皮紙 */
+/* ライトモード - 白背景 + 黒テキスト */
 [data-theme="light"] {
-  --color-bg-deep: #ede0c8;
-  --color-bg-card: #f7efdb;
-  --color-bg-surface: #e2d4b8;
-  --color-text-primary: #2a1a0e;
-  --color-text-secondary: #6b5540;
+  --color-bg-deep: #f5f5f3;
+  --color-bg-card: #ffffff;
+  --color-bg-surface: #eeecea;
+  --color-text-primary: #111111;
+  --color-text-secondary: #1a1a1a;
   --color-accent: #b07010;
   --color-gold: #9a7a10;
   --color-success: #2e8a48;
   --color-danger: #c03838;
-  --color-accent-dim: #b0701020;
-  --color-gold-dim: #9a7a1020;
-  --color-success-dim: #2e8a4820;
-  --color-rpg-border: #8b6914;
-  --color-rpg-border-dim: #8b691444;
+  --color-accent-dim: #b0701015;
+  --color-gold-dim: #9a7a1015;
+  --color-success-dim: #2e8a4815;
+  --color-rpg-border: #b08a30;
+  --color-rpg-border-dim: #b08a3040;
   --color-rpg-blue: #5c4a2e;
   --color-rpg-navy: #3a2e1a;
   --color-rpg-hp: #c03838;
   --color-rpg-mp: #2e5ea0;
-  --adventure-bg: linear-gradient(170deg, #ede0c8 0%, #e2d4b8 40%, #f0e4cc 70%, #ede0c8 100%);
-  --adventure-overlay:
-    radial-gradient(ellipse at 30% 30%, rgba(139, 105, 20, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 70%, rgba(100, 80, 40, 0.04) 0%, transparent 50%);
+  --adventure-bg: #f5f5f3;
+  --adventure-overlay: none;
 }
 
 body {
@@ -280,26 +278,26 @@ body::before {
 
 [data-theme="light"] .rpg-panel {
   box-shadow:
-    inset 0 0 0 1px rgba(139, 105, 20, 0.12),
-    0 2px 8px rgba(42, 26, 14, 0.06);
+    inset 0 0 0 1px rgba(176, 138, 48, 0.1),
+    0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .rpg-header {
-  background: linear-gradient(180deg, #6b5a3c 0%, #4a3c28 100%);
+  background: linear-gradient(180deg, #5c4a2e 0%, #3a2e1a 100%);
 }
 
 [data-theme="light"] .rpg-bar {
-  background: #d4c4a0;
+  background: #ddd8d0;
 }
 
 [data-theme="light"] .rpg-btn {
-  background: linear-gradient(180deg, #ede0c8 0%, #d8c8a8 50%, #c8b898 100%);
+  background: linear-gradient(180deg, #f0eeea 0%, #e4e0da 50%, #d8d4cc 100%);
   color: var(--color-text-primary);
-  box-shadow: 0 2px 4px rgba(42, 26, 14, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="light"] .rpg-btn::after {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.6);
 }
 
 [data-theme="light"] .rpg-btn-primary {
@@ -314,7 +312,7 @@ body::before {
 }
 
 [data-theme="light"] .rpg-check {
-  background: #f0e8d4;
+  background: #f5f5f3;
   border-color: var(--color-rpg-border-dim);
 }
 
@@ -329,19 +327,18 @@ body::before {
 }
 
 [data-theme="light"] .rpg-nav {
-  background: linear-gradient(180deg, var(--color-bg-card) 0%, #ddd0b4 100%);
-  box-shadow: 0 -2px 8px rgba(42, 26, 14, 0.08);
+  background: #ffffff;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="light"] .rpg-modal-overlay {
-  background: rgba(42, 26, 14, 0.6);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 [data-theme="light"] .rpg-modal {
   box-shadow:
-    inset 0 0 0 1px rgba(139, 105, 20, 0.2),
-    0 0 20px rgba(139, 105, 20, 0.12),
-    0 8px 24px rgba(42, 26, 14, 0.2);
+    inset 0 0 0 1px rgba(176, 138, 48, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="light"] .stat-value {
