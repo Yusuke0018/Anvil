@@ -24,7 +24,7 @@ export default function StatsOverview({ stats }: StatsOverviewProps) {
             <div className="text-lg mb-0.5">{emoji}</div>
             <div className={`text-xl font-bold pixel-num stat-value ${color}`}>{stats[key]}</div>
             <div className="text-xs sm:text-[11px] text-text-secondary mt-1 tracking-wider">{label}</div>
-            <div className="text-xs text-text-secondary/70">{fullLabel}</div>
+            <div className="text-xs text-text-secondary">{fullLabel}</div>
           </div>
         ))}
       </div>

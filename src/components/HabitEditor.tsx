@@ -58,7 +58,7 @@ function CategoryEditor({
     <div className="rpg-panel p-4">
       <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-wider uppercase">
         {info.emoji} {info.label}
-        <span className="ml-2 text-text-secondary/80 pixel-num">
+        <span className="ml-2 text-text-secondary pixel-num">
           {habits.length}/{MAX_HABITS_PER_CATEGORY}
         </span>
       </h3>

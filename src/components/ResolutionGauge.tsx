@@ -42,7 +42,7 @@ export default function ResolutionGauge({ gauge }: ResolutionGaugeProps) {
             <span className="text-xs sm:text-[11px] text-text-secondary pixel-num">
               🔥 {gauge.streak}日連続
             </span>
-            <span className="text-xs sm:text-[11px] text-text-secondary/80 pixel-num">
+            <span className="text-xs sm:text-[11px] text-text-secondary pixel-num">
               MAX {gauge.maxStreak}日
             </span>
           </div>
