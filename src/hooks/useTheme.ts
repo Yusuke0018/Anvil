@@ -34,6 +34,7 @@ export function useThemeProvider() {
 
   useEffect(() => {
     const initial = getStoredTheme() ?? getSystemTheme();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- クライアントでの初期テーマ確定処理
     setTheme(initial);
     applyTheme(initial);
   }, []);

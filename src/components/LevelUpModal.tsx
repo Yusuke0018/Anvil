@@ -181,7 +181,7 @@ export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
         {result.newSkills.length > 0 && (
           <div className="mb-4">
             <div
-              className="text-[10px] text-text-secondary mb-2 uppercase tracking-widest"
+              className="text-xs sm:text-[11px] text-text-secondary mb-2 uppercase tracking-widest"
               style={{ animation: `fade-in 0.3s ease-out ${skillStartDelay - 0.1}s both` }}
             >
               ▸ New Skills
@@ -213,7 +213,7 @@ export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
         {result.newTitles.length > 0 && (
           <div className="mb-4">
             <div
-              className="text-[10px] text-text-secondary mb-2 uppercase tracking-widest"
+              className="text-xs sm:text-[11px] text-text-secondary mb-2 uppercase tracking-widest"
               style={{ animation: `fade-in 0.3s ease-out ${titleStartDelay - 0.1}s both` }}
             >
               ▸ New Titles
@@ -273,7 +273,7 @@ function StatGain({
       style={{ animation: `stat-slide-in 0.4s ease-out ${delay}s both` }}
     >
       <span className="text-sm text-text-secondary">
-        {emoji} {label} <span className="text-[10px]">({fullLabel})</span>
+        {emoji} {label} <span className="text-xs sm:text-[11px]">({fullLabel})</span>
       </span>
       <span
         className={`font-bold pixel-num ${color} inline-block`}

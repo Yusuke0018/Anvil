@@ -23,7 +23,7 @@ export default function HabitsPage() {
           <h1 className="text-lg font-bold tracking-wider">
             <span className="text-accent">📋</span> クエスト管理
           </h1>
-          <p className="text-[10px] text-text-secondary mt-1 tracking-wider">
+          <p className="text-xs sm:text-[11px] text-text-secondary mt-1 tracking-wider">
             各カテゴリ最大3つまで登録可能
           </p>
         </div>

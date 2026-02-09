@@ -53,9 +53,9 @@ export default function Dashboard() {
             <span className="text-accent">冒険者クエスト</span>
           </h1>
           <div className="flex items-center gap-2 mt-1">
-            <p className="text-[10px] text-text-secondary pixel-num">{today}</p>
+            <p className="text-xs sm:text-[11px] text-text-secondary pixel-num">{today}</p>
             {equippedTitle && (
-              <span className="text-[10px] text-gold">
+              <span className="text-xs sm:text-[11px] text-gold">
                 {equippedTitle.icon} {equippedTitle.name}
               </span>
             )}

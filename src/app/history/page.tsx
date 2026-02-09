@@ -75,7 +75,7 @@ export default function HistoryPage() {
 function StatBox({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-bg-surface/40 border border-rpg-border-dim rounded-sm px-3 py-2.5">
-      <div className="text-[10px] text-text-secondary tracking-wider">{label}</div>
+      <div className="text-xs sm:text-[11px] text-text-secondary tracking-wider">{label}</div>
       <div className="text-sm font-bold text-text-primary mt-0.5 pixel-num">{value}</div>
     </div>
   );

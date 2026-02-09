@@ -20,7 +20,7 @@ export default function BottomNav() {
                 ${isActive ? 'text-accent rpg-nav-item-active' : 'text-text-secondary'}`}
             >
               <span className="text-lg">{item.icon}</span>
-              <span className="text-[10px] mt-0.5 tracking-wider">{item.label}</span>
+              <span className="text-xs sm:text-[11px] mt-0.5 tracking-wider">{item.label}</span>
             </Link>
           );
         })}

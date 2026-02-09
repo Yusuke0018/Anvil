@@ -76,7 +76,7 @@ export default function StatusPage() {
           <div className="space-y-4">
             {skillsByCategory.map(({ category, info, skills }) => (
               <div key={category}>
-                <div className="text-[10px] text-text-secondary mb-2 tracking-wider">
+                <div className="text-xs sm:text-[11px] text-text-secondary mb-2 tracking-wider">
                   {info.emoji} {info.statLabel}
                 </div>
                 <div className="space-y-1.5">
@@ -150,7 +150,7 @@ export default function StatusPage() {
                       <div className="flex-1 min-w-0">
                         <div className={`text-sm font-medium ${equipped ? 'text-gold' : 'text-text-primary'}`}>
                           {title.name}
-                          {equipped && <span className="text-[10px] text-gold/70 ml-2 tracking-wider">装備中</span>}
+                          {equipped && <span className="text-xs sm:text-[11px] text-gold/70 ml-2 tracking-wider">装備中</span>}
                         </div>
                         <div className="text-xs text-text-secondary">{title.condition}</div>
                       </div>

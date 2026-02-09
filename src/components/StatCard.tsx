@@ -15,7 +15,7 @@ export default function StatCard({ label, emoji, value, completions, color }: St
         <span className="text-2xl">{emoji}</span>
         <div>
           <h3 className="text-sm font-medium text-text-primary">{label}</h3>
-          <p className="text-[10px] text-text-secondary tracking-wider">累計達成: {completions}回</p>
+          <p className="text-xs sm:text-[11px] text-text-secondary tracking-wider">累計達成: {completions}回</p>
         </div>
       </div>
       <div className={`text-4xl font-bold pixel-num stat-value ${color}`}>{value}</div>

@@ -160,7 +160,7 @@ function HabitItem({
       <span className="flex-1 text-sm text-text-primary">{habit.name}</span>
       <button
         onClick={() => { setEditName(habit.name); setIsEditing(true); }}
-        className="rpg-btn px-2 py-1 text-[10px]"
+        className="rpg-btn px-2 py-1 text-xs sm:text-[11px]"
       >
         編集
       </button>
@@ -168,13 +168,13 @@ function HabitItem({
         <div className="flex gap-1">
           <button
             onClick={() => onDelete(habit.id)}
-            className="rpg-btn rpg-btn-danger px-2 py-1 text-[10px]"
+            className="rpg-btn rpg-btn-danger px-2 py-1 text-xs sm:text-[11px]"
           >
             削除
           </button>
           <button
             onClick={() => setShowConfirm(false)}
-            className="rpg-btn px-2 py-1 text-[10px]"
+            className="rpg-btn px-2 py-1 text-xs sm:text-[11px]"
           >
             戻す
           </button>
@@ -182,7 +182,7 @@ function HabitItem({
       ) : (
         <button
           onClick={() => setShowConfirm(true)}
-          className="rpg-btn px-2 py-1 text-[10px]"
+          className="rpg-btn px-2 py-1 text-xs sm:text-[11px]"
         >
           削除
         </button>

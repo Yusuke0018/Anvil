@@ -7,7 +7,7 @@
   --color-accent: #e8a020;
   --color-gold: #ffd700;
   --color-text-primary: #e8dcc8;
-  --color-text-secondary: #8b9ab5;
+  --color-text-secondary: #a6b4ca;
   --color-success: #50c878;
   --color-danger: #e05050;
   --color-accent-dim: #e8a02033;
@@ -19,7 +19,8 @@
   --color-rpg-navy: #141c2e;
   --color-rpg-hp: #e05050;
   --color-rpg-mp: #5088e0;
-  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-adventure-body), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --font-rpg-display: var(--font-adventure-display), var(--font-sans);
 }
 
 /* ダークRPGモード (デフォルト) */
@@ -28,7 +29,7 @@
   --color-bg-card: #161b26;
   --color-bg-surface: #1e2636;
   --color-text-primary: #e8dcc8;
-  --color-text-secondary: #8b9ab5;
+  --color-text-secondary: #a6b4ca;
   --color-accent-dim: #e8a02033;
   --color-gold-dim: #ffd70033;
   --color-success-dim: #50c87833;
@@ -46,7 +47,7 @@
   --color-bg-card: #faf4e8;
   --color-bg-surface: #e8dcc8;
   --color-text-primary: #2a1f10;
-  --color-text-secondary: #7a6850;
+  --color-text-secondary: #66533c;
   --color-accent-dim: #c8840022;
   --color-gold-dim: #c8a84e22;
   --color-success-dim: #40885022;
@@ -62,10 +63,19 @@ body {
   background: var(--adventure-bg);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
+  font-size: clamp(15px, 3.9vw, 17px);
+  line-height: 1.55;
+  font-weight: 500;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   position: relative;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-rpg-display);
+  letter-spacing: 0.04em;
 }
 
 body::before {
@@ -159,6 +169,8 @@ body::before {
   border: 2px solid var(--color-rpg-border);
   border-radius: 4px;
   color: var(--color-text-primary);
+  font-family: var(--font-rpg-display);
+  letter-spacing: 0.03em;
   font-weight: bold;
   position: relative;
   cursor: pointer;
@@ -229,6 +241,7 @@ body::before {
 
 .rpg-nav-item {
   position: relative;
+  font-family: var(--font-rpg-display);
   transition: all 0.15s;
 }
 
@@ -241,6 +254,13 @@ body::before {
   height: 2px;
   background: var(--color-accent);
   box-shadow: 0 0 8px var(--color-accent);
+}
+
+@media (max-width: 640px) {
+  [class~="text-xs"] {
+    font-size: 0.84rem;
+    line-height: 1.2rem;
+  }
 }
 
 /* ステータス値の装飾 */

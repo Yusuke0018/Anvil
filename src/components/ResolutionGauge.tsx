@@ -39,10 +39,10 @@ export default function ResolutionGauge({ gauge }: ResolutionGaugeProps) {
             <span className={`text-xs font-medium ${textColor}`}>{tier.name}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-[10px] text-text-secondary pixel-num">
+            <span className="text-xs sm:text-[11px] text-text-secondary pixel-num">
               🔥 {gauge.streak}日連続
             </span>
-            <span className="text-[10px] text-text-secondary/50 pixel-num">
+            <span className="text-xs sm:text-[11px] text-text-secondary/50 pixel-num">
               MAX {gauge.maxStreak}日
             </span>
           </div>
@@ -58,7 +58,7 @@ export default function ResolutionGauge({ gauge }: ResolutionGaugeProps) {
 
         {/* ゲージ値 */}
         <div className="flex justify-end mt-1">
-          <span className={`text-[10px] pixel-num ${textColor}`}>
+          <span className={`text-xs sm:text-[11px] pixel-num ${textColor}`}>
             {gauge.current}/100
           </span>
         </div>

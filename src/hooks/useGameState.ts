@@ -41,6 +41,7 @@ export function useGameState() {
 
     // 復帰イベント判定 (2日以上未記録)
     if (decayResult.missedDays >= 2) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 初回ロード時の復帰通知表示用
       setWelcomeBackInfo({
         missedDays: decayResult.missedDays,
         decayAmount: decayResult.decayAmount,
@@ -197,7 +198,6 @@ export function useGameState() {
     }
 
     // 振り返りイベント判定 (7日/30日ごと)
-    const prevSubmittedDays = submittedDays - 1; // 今回確定前の日数
     const lastReviewed = state.lastReviewedSubmittedDays;
     let newLastReviewed = lastReviewed;
 
@@ -219,7 +219,7 @@ export function useGameState() {
         const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
         return sum + done;
       }, 0);
-      const periodTotal = recentRecords.reduce((sum, _) => sum + state.habits.length, 0);
+      const periodTotal = recentRecords.length * state.habits.length;
       const completionRateVal = periodTotal > 0 ? periodCompletions / periodTotal : 0;
 
       // この期間内の新スキル・称号数はスナップショットとして概算

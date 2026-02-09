@@ -57,7 +57,7 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
         {/* 曜日ヘッダー */}
         <div className="grid grid-cols-7 gap-1 mb-1">
           {WEEKDAYS.map(d => (
-            <div key={d} className="text-center text-[10px] text-text-secondary tracking-wider">{d}</div>
+            <div key={d} className="text-center text-xs sm:text-[11px] text-text-secondary tracking-wider">{d}</div>
           ))}
         </div>
 
@@ -98,7 +98,7 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
                   isToday ? 'ring-1 ring-accent' : ''
                 }`}
               >
-                <span className={`text-[10px] pixel-num ${isToday ? 'text-accent font-bold' : 'text-text-secondary'}`}>
+                <span className={`text-xs sm:text-[11px] pixel-num ${isToday ? 'text-accent font-bold' : 'text-text-secondary'}`}>
                   {day}
                 </span>
                 {dotColor && (
@@ -124,7 +124,7 @@ function LegendItem({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-1">
       <div className={`w-2 h-2 rounded-sm ${color}`} />
-      <span className="text-[10px] text-text-secondary">{label}</span>
+      <span className="text-xs sm:text-[11px] text-text-secondary">{label}</span>
     </div>
   );
 }

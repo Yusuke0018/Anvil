@@ -1,12 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Kaisei_Decol, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import SwipeNavigator from "@/components/SwipeNavigator";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bodyFont = Noto_Sans_JP({
+  variable: "--font-adventure-body",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const displayFont = Kaisei_Decol({
+  variable: "--font-adventure-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +37,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: "#0d1117",
 };
 
@@ -39,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={`${geistSans.variable} antialiased`}>
+      <body className={`${bodyFont.variable} ${displayFont.variable} antialiased`}>
         <ThemeProvider>
           <SwipeNavigator>
             <div className="relative z-10 mx-auto max-w-md min-h-screen pb-20">

@@ -86,7 +86,7 @@ function CategorySection({
                 {habit.name}
               </span>
               {status === 'auto' && (
-                <span className="text-[10px] text-gold/70 tracking-wider">AUTO</span>
+                <span className="text-xs sm:text-[11px] text-gold/70 tracking-wider">AUTO</span>
               )}
             </button>
           );
