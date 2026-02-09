@@ -9,19 +9,21 @@ interface HabitEditorProps {
   onAdd: (name: string, category: HabitCategory) => void;
   onUpdate: (id: string, name: string) => void;
   onDelete: (id: string) => void;
+  onReorder: (id: string, direction: 'up' | 'down') => void;
 }
 
-export default function HabitEditor({ habits, onAdd, onUpdate, onDelete }: HabitEditorProps) {
+export default function HabitEditor({ habits, onAdd, onUpdate, onDelete, onReorder }: HabitEditorProps) {
   return (
     <div className="px-4 space-y-6">
       {(['life', 'hobby', 'work'] as HabitCategory[]).map(category => (
         <CategoryEditor
           key={category}
           category={category}
-          habits={habits.filter(h => h.category === category)}
+          habits={habits.filter(h => h.category === category).sort((a, b) => a.order - b.order)}
           onAdd={onAdd}
           onUpdate={onUpdate}
           onDelete={onDelete}
+          onReorder={onReorder}
         />
       ))}
     </div>
@@ -34,12 +36,14 @@ function CategoryEditor({
   onAdd,
   onUpdate,
   onDelete,
+  onReorder,
 }: {
   category: HabitCategory;
   habits: Habit[];
   onAdd: (name: string, category: HabitCategory) => void;
   onUpdate: (id: string, name: string) => void;
   onDelete: (id: string) => void;
+  onReorder: (id: string, direction: 'up' | 'down') => void;
 }) {
   const info = CATEGORY_INFO[category];
   const canAdd = habits.length < MAX_HABITS_PER_CATEGORY;
@@ -64,12 +68,15 @@ function CategoryEditor({
       </h3>
 
       <div className="space-y-2">
-        {habits.map(habit => (
+        {habits.map((habit, idx) => (
           <HabitItem
             key={habit.id}
             habit={habit}
             onUpdate={onUpdate}
             onDelete={onDelete}
+            onReorder={onReorder}
+            isFirst={idx === 0}
+            isLast={idx === habits.length - 1}
           />
         ))}
 
@@ -113,10 +120,16 @@ function HabitItem({
   habit,
   onUpdate,
   onDelete,
+  onReorder,
+  isFirst,
+  isLast,
 }: {
   habit: Habit;
   onUpdate: (id: string, name: string) => void;
   onDelete: (id: string) => void;
+  onReorder: (id: string, direction: 'up' | 'down') => void;
+  isFirst: boolean;
+  isLast: boolean;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(habit.name);
@@ -157,6 +170,26 @@ function HabitItem({
 
   return (
     <div className="flex items-center gap-2 bg-bg-surface/40 border border-rpg-border-dim rounded-sm p-2.5">
+      <div className="flex flex-col gap-0.5">
+        {!isFirst && (
+          <button
+            onClick={() => onReorder(habit.id, 'up')}
+            className="rpg-btn px-1.5 py-0 text-[10px] leading-tight"
+            aria-label="上へ移動"
+          >
+            ▲
+          </button>
+        )}
+        {!isLast && (
+          <button
+            onClick={() => onReorder(habit.id, 'down')}
+            className="rpg-btn px-1.5 py-0 text-[10px] leading-tight"
+            aria-label="下へ移動"
+          >
+            ▼
+          </button>
+        )}
+      </div>
       <span className="flex-1 text-sm text-text-primary">{habit.name}</span>
       <button
         onClick={() => { setEditName(habit.name); setIsEditing(true); }}

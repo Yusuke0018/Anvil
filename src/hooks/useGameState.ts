@@ -332,6 +332,37 @@ export function useGameState() {
     });
   }, [state]);
 
+  // 習慣の並び替え
+  const reorderHabit = useCallback((habitId: string, direction: 'up' | 'down') => {
+    if (!state) return;
+    setState(prev => {
+      if (!prev) return prev;
+      const target = prev.habits.find(h => h.id === habitId);
+      if (!target) return prev;
+
+      const categoryHabits = prev.habits
+        .filter(h => h.category === target.category)
+        .sort((a, b) => a.order - b.order);
+
+      const idx = categoryHabits.findIndex(h => h.id === habitId);
+      const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (swapIdx < 0 || swapIdx >= categoryHabits.length) return prev;
+
+      const swapTarget = categoryHabits[swapIdx];
+      const targetOrder = target.order;
+      const swapOrder = swapTarget.order;
+
+      return {
+        ...prev,
+        habits: prev.habits.map(h => {
+          if (h.id === habitId) return { ...h, order: swapOrder };
+          if (h.id === swapTarget.id) return { ...h, order: targetOrder };
+          return h;
+        }),
+      };
+    });
+  }, [state]);
+
   // 称号を装備/解除
   const equipTitle = useCallback((titleId: string | null) => {
     if (!state) return;
@@ -364,6 +395,7 @@ export function useGameState() {
     addHabit,
     updateHabit,
     deleteHabit,
+    reorderHabit,
     levelUpResult,
     dismissLevelUp,
     submittedXP,

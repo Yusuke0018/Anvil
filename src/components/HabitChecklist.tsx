@@ -31,7 +31,7 @@ function CategorySection({
   disabled: boolean;
 }) {
   const info = CATEGORY_INFO[category];
-  const categoryHabits = habits.filter(h => h.category === category);
+  const categoryHabits = habits.filter(h => h.category === category).sort((a, b) => a.order - b.order);
   const [rippleKeys, setRippleKeys] = useState<Record<string, number>>({});
 
   if (categoryHabits.length === 0) return null;

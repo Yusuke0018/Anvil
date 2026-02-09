@@ -2,6 +2,7 @@
 
 import { useGameState } from '@/hooks/useGameState';
 import GrowthChart from '@/components/GrowthChart';
+import WeeklyChart from '@/components/WeeklyChart';
 import CalendarView from '@/components/CalendarView';
 import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -49,6 +50,8 @@ export default function HistoryPage() {
       </header>
 
       <GrowthChart dailyRecords={dailyRecords} currentLevel={character.level} />
+
+      <WeeklyChart dailyRecords={dailyRecords} totalHabits={habits.length} />
 
       {/* 統計サマリー */}
       <div className="px-4 mb-4">

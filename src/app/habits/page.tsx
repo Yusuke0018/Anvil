@@ -6,7 +6,7 @@ import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
 
 export default function HabitsPage() {
-  const { state, addHabit, updateHabit, deleteHabit } = useGameState();
+  const { state, addHabit, updateHabit, deleteHabit, reorderHabit } = useGameState();
 
   if (!state) {
     return (
@@ -35,6 +35,7 @@ export default function HabitsPage() {
         onAdd={addHabit}
         onUpdate={updateHabit}
         onDelete={deleteHabit}
+        onReorder={reorderHabit}
       />
 
       <BottomNav />
