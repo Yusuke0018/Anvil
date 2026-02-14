@@ -9,6 +9,7 @@ import { checkNewSkills, checkNewTitles } from '@/lib/unlocks';
 import { updateGaugeOnSubmit, checkAndApplyDecay } from '@/lib/resolution-gauge';
 import { getMilestoneEvent } from '@/data/milestones';
 import { TITLES } from '@/data/titles';
+import { getRecordCompletionRate } from '@/lib/completion-rate';
 
 export interface WelcomeBackInfo {
   missedDays: number;
@@ -251,12 +252,12 @@ export function useGameState() {
         ? allSubmitted.sort((a, b) => b.date.localeCompare(a.date)).slice(0, periodDays)
         : [];
       const periodXP = recentRecords.reduce((sum, r) => sum + r.xpGained, 0);
-      const periodCompletions = recentRecords.reduce((sum, r) => {
-        const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
-        return sum + done;
-      }, 0);
-      const periodTotal = recentRecords.reduce((sum, r) => sum + (r.totalHabitsAtSubmit ?? totalHabits), 0);
-      const completionRateVal = periodTotal > 0 ? periodCompletions / periodTotal : 0;
+      const completionRateVal = recentRecords.length > 0
+        ? recentRecords.reduce(
+          (sum, r) => sum + getRecordCompletionRate(r, totalHabits, today),
+          0
+        ) / recentRecords.length
+        : 0;
 
       // この期間内の新スキル・称号数はスナップショットとして概算
       const recentSkillCount = newSkillIds.length;

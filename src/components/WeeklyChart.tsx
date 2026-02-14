@@ -1,6 +1,8 @@
 'use client';
 
 import { DailyRecord } from '@/types';
+import { getRecordCompletionRate } from '@/lib/completion-rate';
+import { getToday } from '@/lib/storage';
 
 interface WeeklyChartProps {
   dailyRecords: DailyRecord[];
@@ -12,6 +14,7 @@ const WEEKDAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'];
 export default function WeeklyChart({ dailyRecords, fallbackTotalHabits }: WeeklyChartProps) {
   if (fallbackTotalHabits === 0) return null;
 
+  const todayStr = getToday();
   const today = new Date();
   const days: { date: string; label: string; rate: number }[] = [];
 
@@ -24,9 +27,7 @@ export default function WeeklyChart({ dailyRecords, fallbackTotalHabits }: Weekl
     const record = dailyRecords.find(r => r.date === dateStr && r.submitted);
     let rate = 0;
     if (record) {
-      const done = record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
-      const total = record.totalHabitsAtSubmit ?? fallbackTotalHabits;
-      rate = total > 0 ? Math.round((done / total) * 100) : 0;
+      rate = Math.round(getRecordCompletionRate(record, fallbackTotalHabits, todayStr) * 100);
     }
 
     days.push({ date: dateStr, label: weekday, rate });

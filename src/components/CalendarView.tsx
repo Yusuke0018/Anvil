@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { DailyRecord } from '@/types';
+import { getRecordCompletionRate } from '@/lib/completion-rate';
+import { getToday } from '@/lib/storage';
 
 interface CalendarViewProps {
   dailyRecords: DailyRecord[];
@@ -42,7 +44,7 @@ export default function CalendarView({ dailyRecords, fallbackTotalHabits }: Cale
     else setViewMonth(viewMonth + 1);
   };
 
-  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const today = getToday();
 
   return (
     <div className="px-4 mb-4">
@@ -77,9 +79,7 @@ export default function CalendarView({ dailyRecords, fallbackTotalHabits }: Cale
             let dotColor = '';
 
             if (record?.submitted) {
-              const completedCount = record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
-              const totalHabits = record.totalHabitsAtSubmit ?? fallbackTotalHabits;
-              const rate = totalHabits > 0 ? completedCount / totalHabits : 0;
+              const rate = getRecordCompletionRate(record, fallbackTotalHabits, today);
               if (rate >= 1) {
                 bgColor = 'bg-accent/20 border border-accent/40';
                 dotColor = 'bg-accent';

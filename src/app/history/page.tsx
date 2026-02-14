@@ -6,6 +6,8 @@ import WeeklyChart from '@/components/WeeklyChart';
 import CalendarView from '@/components/CalendarView';
 import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
+import { getRecordCompletionRate, isRecordPerfect } from '@/lib/completion-rate';
+import { getToday } from '@/lib/storage';
 
 export default function HistoryPage() {
   const { state } = useGameState();
@@ -19,23 +21,19 @@ export default function HistoryPage() {
   }
 
   const { character, dailyRecords, habits } = state;
+  const today = getToday();
   const submitted = dailyRecords.filter(r => r.submitted);
   const totalDays = submitted.length;
   const totalXP = character.totalXP;
 
   const avgCompletionRate = totalDays > 0
-    ? submitted.reduce((sum, r) => {
-        const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
-        const total = (r.totalHabitsAtSubmit ?? habits.length) || 1;
-        return sum + done / total;
-      }, 0) / totalDays
+    ? submitted.reduce(
+      (sum, r) => sum + getRecordCompletionRate(r, habits.length, today),
+      0
+    ) / totalDays
     : 0;
 
-  const perfectDays = submitted.filter(r => {
-    const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
-    const total = r.totalHabitsAtSubmit ?? habits.length;
-    return done === total && total > 0;
-  }).length;
+  const perfectDays = submitted.filter(r => isRecordPerfect(r, habits.length, today)).length;
 
   const maxDailyXP = submitted.length > 0
     ? Math.max(...submitted.map(r => r.xpGained))
