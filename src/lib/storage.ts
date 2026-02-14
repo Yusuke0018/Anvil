@@ -12,7 +12,16 @@ function getToday(): string {
 function defaultGameState(): GameState {
   return {
     version: GAME_STATE_VERSION,
-    character: { ...INITIAL_CHARACTER, stats: { ...INITIAL_CHARACTER.stats }, totalCompletions: { ...INITIAL_CHARACTER.totalCompletions } },
+    character: {
+      ...INITIAL_CHARACTER,
+      stats: { ...INITIAL_CHARACTER.stats },
+      statXP: {
+        vitality: { ...INITIAL_CHARACTER.statXP.vitality },
+        curiosity: { ...INITIAL_CHARACTER.statXP.curiosity },
+        intellect: { ...INITIAL_CHARACTER.statXP.intellect },
+      },
+      totalCompletions: { ...INITIAL_CHARACTER.totalCompletions },
+    },
     habits: [],
     dailyRecords: [],
     currentDate: getToday(),
@@ -117,6 +126,24 @@ function migrateState(state: GameState): GameState {
   if (state.version === 3) {
     state.lastReviewedSubmittedDays = 0;
     state.version = 4;
+  }
+
+  // v4 → v5: 能力別XP追加
+  if (state.version === 4) {
+    state.character.statXP = {
+      vitality: { currentXP: 0, totalXP: 0 },
+      curiosity: { currentXP: 0, totalXP: 0 },
+      intellect: { currentXP: 0, totalXP: 0 },
+    };
+    state.version = 5;
+  }
+
+  if (!state.character.statXP) {
+    state.character.statXP = {
+      vitality: { currentXP: 0, totalXP: 0 },
+      curiosity: { currentXP: 0, totalXP: 0 },
+      intellect: { currentXP: 0, totalXP: 0 },
+    };
   }
 
   return state;

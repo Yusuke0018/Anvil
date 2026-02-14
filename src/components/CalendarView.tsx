@@ -5,7 +5,7 @@ import { DailyRecord } from '@/types';
 
 interface CalendarViewProps {
   dailyRecords: DailyRecord[];
-  totalHabits: number;
+  fallbackTotalHabits: number;
 }
 
 const WEEKDAYS = ['月', '火', '水', '木', '金', '土', '日'];
@@ -21,7 +21,7 @@ function formatMonth(year: number, month: number): string {
   return `${year}年${month + 1}月`;
 }
 
-export default function CalendarView({ dailyRecords, totalHabits }: CalendarViewProps) {
+export default function CalendarView({ dailyRecords, fallbackTotalHabits }: CalendarViewProps) {
   const now = new Date();
   const [viewYear, setViewYear] = useState(now.getFullYear());
   const [viewMonth, setViewMonth] = useState(now.getMonth());
@@ -78,6 +78,7 @@ export default function CalendarView({ dailyRecords, totalHabits }: CalendarView
 
             if (record?.submitted) {
               const completedCount = record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
+              const totalHabits = record.totalHabitsAtSubmit ?? fallbackTotalHabits;
               const rate = totalHabits > 0 ? completedCount / totalHabits : 0;
               if (rate >= 1) {
                 bgColor = 'bg-accent/20 border border-accent/40';

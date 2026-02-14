@@ -2,6 +2,7 @@ import {
   BASE_XP_PER_HABIT,
   XP_COMPOUND_RATE,
   FULL_COMPLETION_BONUS_RATE,
+  MAX_HABITS_PER_CATEGORY,
   TOTAL_HABITS_MAX,
   LEVEL_DAY_CURVE,
 } from '@/data/constants';
@@ -53,10 +54,18 @@ export function dailyXP(level: number, habitCount: number = TOTAL_HABITS_MAX): n
 /**
  * 次のレベルに必要なXP
  */
-export function expToNextLevel(level: number): number {
+export function expToNextLevel(level: number, habitCount: number = TOTAL_HABITS_MAX): number {
   const days = targetDays(level);
-  const daily = dailyXP(level);
+  const daily = dailyXP(level, habitCount);
   return Math.floor(days * daily);
+}
+
+/**
+ * 心力/探究力/知力の次レベル必要XP
+ * 各カテゴリ上限(3クエスト)を前提に算出
+ */
+export function expToNextStatLevel(level: number): number {
+  return expToNextLevel(level, MAX_HABITS_PER_CATEGORY);
 }
 
 /**
@@ -93,6 +102,34 @@ export function applyXP(
 
   while (xp >= expToNextLevel(level)) {
     xp -= expToNextLevel(level);
+    level++;
+    levelsGained++;
+  }
+
+  return { level, currentXP: xp, levelsGained };
+}
+
+/**
+ * 能力別XP計算 (カテゴリ内で達成したクエスト数のみ反映)
+ */
+export function calculateStatXP(level: number, completedCount: number): number {
+  return xpPerHabit(level) * completedCount;
+}
+
+/**
+ * 能力別XP追加後のレベル計算
+ */
+export function applyStatXP(
+  currentLevel: number,
+  currentXP: number,
+  gainedXP: number
+): { level: number; currentXP: number; levelsGained: number } {
+  let level = currentLevel;
+  let xp = currentXP + gainedXP;
+  let levelsGained = 0;
+
+  while (xp >= expToNextStatLevel(level)) {
+    xp -= expToNextStatLevel(level);
     level++;
     levelsGained++;
   }

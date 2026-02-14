@@ -23,6 +23,7 @@ export interface DailyRecord {
   checks: HabitCheck[];
   xpGained: number;
   submitted: boolean;
+  totalHabitsAtSubmit?: number; // 確定時点のクエスト総数
 }
 
 // ===== キャラクターステータス =====
@@ -31,6 +32,7 @@ export interface CharacterStatus {
   currentXP: number;
   totalXP: number;
   stats: Stats;
+  statXP: StatXPMap;
   totalCompletions: CategoryCompletions;
 }
 
@@ -47,6 +49,17 @@ export interface CategoryCompletions {
   life: number;
   hobby: number;
   work: number;
+}
+
+export interface StatXP {
+  currentXP: number;
+  totalXP: number;
+}
+
+export interface StatXPMap {
+  vitality: StatXP;
+  curiosity: StatXP;
+  intellect: StatXP;
 }
 
 // ===== スキル =====

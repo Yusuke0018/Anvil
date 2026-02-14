@@ -72,7 +72,7 @@ export default function Dashboard() {
         <ComebackBanner challenge={state.comebackChallenge} />
       )}
 
-      <StatsOverview stats={state.character.stats} />
+      <StatsOverview stats={state.character.stats} statXP={state.character.statXP} />
 
       <div className="mt-2">
         <HabitChecklist

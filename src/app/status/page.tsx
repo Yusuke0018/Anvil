@@ -5,7 +5,7 @@ import StatCard from '@/components/StatCard';
 import LevelBar from '@/components/LevelBar';
 import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
-import { expToNextLevel, xpPerHabit } from '@/lib/xp';
+import { expToNextLevel, expToNextStatLevel, xpPerHabit } from '@/lib/xp';
 import { SKILLS } from '@/data/skills';
 import { TITLES } from '@/data/titles';
 import { CATEGORY_INFO } from '@/data/constants';
@@ -49,21 +49,27 @@ export default function StatusPage() {
         <StatCard
           label="心力 (STR)"
           emoji="🔥"
-          value={character.stats.vitality}
+          level={character.stats.vitality}
+          currentXP={character.statXP.vitality.currentXP}
+          nextXP={expToNextStatLevel(character.stats.vitality)}
           completions={character.totalCompletions.life}
           color="text-[#e05050]"
         />
         <StatCard
           label="探究力 (DEX)"
           emoji="⚔️"
-          value={character.stats.curiosity}
+          level={character.stats.curiosity}
+          currentXP={character.statXP.curiosity.currentXP}
+          nextXP={expToNextStatLevel(character.stats.curiosity)}
           completions={character.totalCompletions.hobby}
           color="text-accent"
         />
         <StatCard
           label="知力 (INT)"
           emoji="📖"
-          value={character.stats.intellect}
+          level={character.stats.intellect}
+          currentXP={character.statXP.intellect.currentXP}
+          nextXP={expToNextStatLevel(character.stats.intellect)}
           completions={character.totalCompletions.work}
           color="text-[#5088e0]"
         />

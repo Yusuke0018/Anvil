@@ -51,7 +51,12 @@ export const INITIAL_CHARACTER: import('@/types').CharacterStatus = {
   currentXP: 0,
   totalXP: 0,
   stats: { vitality: 1, curiosity: 1, intellect: 1 },
+  statXP: {
+    vitality: { currentXP: 0, totalXP: 0 },
+    curiosity: { currentXP: 0, totalXP: 0 },
+    intellect: { currentXP: 0, totalXP: 0 },
+  },
   totalCompletions: { life: 0, hobby: 0, work: 0 },
 };
 
-export const GAME_STATE_VERSION = 4;
+export const GAME_STATE_VERSION = 5;

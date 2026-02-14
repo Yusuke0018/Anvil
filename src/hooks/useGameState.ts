@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { GameState, Habit, DailyRecord, HabitCheck, CheckStatus, LevelUpResult, HabitCategory, Skill, Title, MilestoneEvent, ReviewEvent } from '@/types';
 import { loadGameState, saveGameState, getToday, getDailyRecord, saveDailyRecord } from '@/lib/storage';
-import { calculateDailyXP, applyXP } from '@/lib/xp';
-import { applyLevelUp, addStats } from '@/lib/stats';
+import { calculateDailyXP, applyXP, calculateStatXP, applyStatXP } from '@/lib/xp';
 import { MAX_HABITS_PER_CATEGORY } from '@/data/constants';
 import { checkNewSkills, checkNewTitles } from '@/lib/unlocks';
 import { updateGaugeOnSubmit, checkAndApplyDecay } from '@/lib/resolution-gauge';
@@ -135,8 +134,33 @@ export function useGameState() {
       }
     }
 
-    // レベルアップ処理
-    let newStats = state.character.stats;
+    // 能力別XP/レベル処理（心力/探究力/知力は独立成長）
+    const newStats = { ...state.character.stats };
+    const newStatXP = {
+      vitality: { ...state.character.statXP.vitality },
+      curiosity: { ...state.character.statXP.curiosity },
+      intellect: { ...state.character.statXP.intellect },
+    };
+    const statLevelGains = { vitality: 0, curiosity: 0, intellect: 0 };
+
+    const statTargets = [
+      { statKey: 'vitality' as const, completed: categoryCompletions.life },
+      { statKey: 'curiosity' as const, completed: categoryCompletions.hobby },
+      { statKey: 'intellect' as const, completed: categoryCompletions.work },
+    ];
+
+    for (const target of statTargets) {
+      const gainedStatXP = calculateStatXP(newStats[target.statKey], target.completed);
+      const statResult = applyStatXP(newStats[target.statKey], newStatXP[target.statKey].currentXP, gainedStatXP);
+      newStats[target.statKey] = statResult.level;
+      newStatXP[target.statKey] = {
+        currentXP: statResult.currentXP,
+        totalXP: newStatXP[target.statKey].totalXP + gainedStatXP,
+      };
+      statLevelGains[target.statKey] = statResult.levelsGained;
+    }
+
+    const hasStatLevelUp = statLevelGains.vitality > 0 || statLevelGains.curiosity > 0 || statLevelGains.intellect > 0;
     let levelResult: LevelUpResult | null = null;
 
     const newTotalCompletions = {
@@ -147,16 +171,19 @@ export function useGameState() {
 
     // マイルストーンイベント判定
     let milestoneEvent: MilestoneEvent | null = null;
-
     if (xpResult.levelsGained > 0) {
-      levelResult = applyLevelUp(
-        state.character.stats,
-        state.character.level,
-        xpResult.levelsGained,
-        newTotalCompletions
-      );
-      newStats = addStats(state.character.stats, levelResult.statGains);
       milestoneEvent = getMilestoneEvent(state.character.level, xpResult.level);
+    }
+
+    if (xpResult.levelsGained > 0 || hasStatLevelUp) {
+      levelResult = {
+        previousLevel: state.character.level,
+        newLevel: xpResult.level,
+        statGains: statLevelGains,
+        newSkills: [],
+        newTitles: [],
+        milestoneEvent,
+      };
     }
 
     // 覚悟ゲージ更新
@@ -197,6 +224,15 @@ export function useGameState() {
       }
     }
 
+    // 記録更新（当日のクエスト総数をスナップショット保存）
+    const updatedRecord: DailyRecord = {
+      date: today,
+      checks,
+      xpGained,
+      submitted: true,
+      totalHabitsAtSubmit: totalHabits,
+    };
+
     // 振り返りイベント判定 (7日/30日ごと)
     const lastReviewed = state.lastReviewedSubmittedDays;
     let newLastReviewed = lastReviewed;
@@ -210,7 +246,7 @@ export function useGameState() {
       const periodDays = isMonthly ? 30 : 7;
 
       // 期間内の記録を集計
-      const allSubmitted = state.dailyRecords.filter(r => r.submitted);
+      const allSubmitted = [...state.dailyRecords.filter(r => r.submitted), updatedRecord];
       const recentRecords = allSubmitted.length > 0
         ? allSubmitted.sort((a, b) => b.date.localeCompare(a.date)).slice(0, periodDays)
         : [];
@@ -219,7 +255,7 @@ export function useGameState() {
         const done = r.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
         return sum + done;
       }, 0);
-      const periodTotal = recentRecords.length * state.habits.length;
+      const periodTotal = recentRecords.reduce((sum, r) => sum + (r.totalHabitsAtSubmit ?? totalHabits), 0);
       const completionRateVal = periodTotal > 0 ? periodCompletions / periodTotal : 0;
 
       // この期間内の新スキル・称号数はスナップショットとして概算
@@ -229,7 +265,7 @@ export function useGameState() {
       setReviewEvent({
         type: isMonthly ? 'monthly' : 'weekly',
         periodDays,
-        xpGained: periodXP + xpGained, // 今回分も含む
+        xpGained: periodXP,
         levelsGained: xpResult.levelsGained,
         skillsUnlocked: recentSkillCount,
         titlesUnlocked: recentTitleCount,
@@ -260,14 +296,6 @@ export function useGameState() {
       });
     }
 
-    // 記録更新
-    const updatedRecord: DailyRecord = {
-      date: today,
-      checks,
-      xpGained,
-      submitted: true,
-    };
-
     setState(prev => {
       if (!prev) return prev;
       const withRecord = saveDailyRecord(prev, updatedRecord);
@@ -279,6 +307,7 @@ export function useGameState() {
           currentXP: xpResult.currentXP,
           totalXP: withRecord.character.totalXP + xpGained,
           stats: newStats,
+          statXP: newStatXP,
           totalCompletions: newTotalCompletions,
         },
         unlockedSkillIds: [...prev.unlockedSkillIds, ...newSkillIds],

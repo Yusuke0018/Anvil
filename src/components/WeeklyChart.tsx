@@ -4,13 +4,13 @@ import { DailyRecord } from '@/types';
 
 interface WeeklyChartProps {
   dailyRecords: DailyRecord[];
-  totalHabits: number;
+  fallbackTotalHabits: number;
 }
 
 const WEEKDAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'];
 
-export default function WeeklyChart({ dailyRecords, totalHabits }: WeeklyChartProps) {
-  if (totalHabits === 0) return null;
+export default function WeeklyChart({ dailyRecords, fallbackTotalHabits }: WeeklyChartProps) {
+  if (fallbackTotalHabits === 0) return null;
 
   const today = new Date();
   const days: { date: string; label: string; rate: number }[] = [];
@@ -25,7 +25,8 @@ export default function WeeklyChart({ dailyRecords, totalHabits }: WeeklyChartPr
     let rate = 0;
     if (record) {
       const done = record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
-      rate = Math.round((done / totalHabits) * 100);
+      const total = record.totalHabitsAtSubmit ?? fallbackTotalHabits;
+      rate = total > 0 ? Math.round((done / total) * 100) : 0;
     }
 
     days.push({ date: dateStr, label: weekday, rate });
