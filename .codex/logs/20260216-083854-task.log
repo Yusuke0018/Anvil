@@ -1,0 +1,14 @@
+timestamp: 2026-02-16T08:38:59+09:00
+branch: main
+latest_commit: 8cddb09
+diff_summary: feat: 当日限定スポットクエストを追加 (7 files changed, 225 insertions(+), 15 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (240 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_ci: pass
+  npm_run_lint: pass
+  npm_run_build: pass
+push_result: pass (origin/main e6c4c9b..8cddb09)
+notes: 当日限定スポットクエストを追加し、達成時に心力/探究力/知力の3能力へ同時にEXPを加算する仕様を実装。
