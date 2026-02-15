@@ -91,8 +91,8 @@ export default function SpotQuestCard({
             borderColor: isChecked ? 'var(--color-gold)' : 'var(--color-rpg-border-dim)',
           }}
         >
-          <div className={`rpg-check-lg ${status === 'none' ? '' : 'rpg-check-auto check-pop'}`}>
-            {status === 'none' ? '' : '★'}
+          <div className={`rpg-check-lg ${status === 'none' ? '' : 'rpg-check-done check-pop'}`}>
+            {status === 'none' ? '' : '✓'}
           </div>
           <span className={`text-sm font-medium flex-1 text-left ${isChecked ? 'text-text-primary' : 'text-text-secondary'}`}>
             {questName}

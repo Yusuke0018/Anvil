@@ -11,7 +11,7 @@ export interface Habit {
 }
 
 // ===== 日次チェック結果 =====
-export type CheckStatus = 'done' | 'auto' | 'none';
+export type CheckStatus = 'done' | 'none';
 
 export interface HabitCheck {
   habitId: string;

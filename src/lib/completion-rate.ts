@@ -1,7 +1,7 @@
 import { DailyRecord } from '@/types';
 
 function getCompletedCount(record: DailyRecord): number {
-  return record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
+  return record.checks.filter(c => c.status === 'done').length;
 }
 
 function getRecordTotalHabits(record: DailyRecord): number {

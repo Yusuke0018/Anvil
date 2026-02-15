@@ -89,14 +89,12 @@ export function useGameState() {
     return check?.status ?? 'none';
   }, [todayRecord]);
 
-  // チェック状態の切り替え (none → done → auto → none)
+  // チェック状態の切り替え (none → done → none)
   const toggleCheck = useCallback((habitId: string) => {
     if (!state || isSubmitted) return;
 
     const currentStatus = getCheckStatus(habitId);
-    const nextStatus: CheckStatus =
-      currentStatus === 'none' ? 'done' :
-      currentStatus === 'done' ? 'auto' : 'none';
+    const nextStatus: CheckStatus = currentStatus === 'none' ? 'done' : 'none';
 
     const existingChecks = todayRecord?.checks ?? [];
     const otherChecks = existingChecks.filter(c => c.habitId !== habitId);
@@ -126,10 +124,10 @@ export function useGameState() {
       habitIdSet.has(c.habitId) || c.habitId === activeSpotQuestCheckId
     );
     const completedHabitCount = checks.filter(
-      c => (c.status === 'done' || c.status === 'auto') && habitIdSet.has(c.habitId)
+      c => c.status === 'done' && habitIdSet.has(c.habitId)
     ).length;
     const spotCompleted = activeSpotQuestCheckId
-      ? checks.some(c => c.habitId === activeSpotQuestCheckId && (c.status === 'done' || c.status === 'auto'))
+      ? checks.some(c => c.habitId === activeSpotQuestCheckId && c.status === 'done')
       : false;
     const completedCount = completedHabitCount + (spotCompleted ? 1 : 0);
     const totalQuests = state.habits.length + (activeSpotQuest ? 1 : 0);
@@ -149,7 +147,7 @@ export function useGameState() {
     // カテゴリ別達成数の集計
     const categoryCompletions = { life: 0, hobby: 0, work: 0 };
     for (const check of checks) {
-      if (check.status === 'done' || check.status === 'auto') {
+      if (check.status === 'done') {
         const habit = state.habits.find(h => h.id === check.habitId);
         if (habit) {
           categoryCompletions[habit.category]++;

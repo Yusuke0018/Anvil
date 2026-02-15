@@ -50,7 +50,7 @@ function CategorySection({
 
   const doneCount = categoryHabits.filter(h => {
     const s = getCheckStatus(h.id);
-    return s === 'done' || s === 'auto';
+    return s === 'done';
   }).length;
   const allDone = doneCount === categoryHabits.length;
 
@@ -109,12 +109,9 @@ function CategorySection({
             >
               <div className="relative">
                 <div
-                  className={`rpg-check-lg ${
-                    status === 'done' ? 'rpg-check-done check-pop' :
-                    status === 'auto' ? 'rpg-check-auto check-pop' : ''
-                  }`}
+                  className={`rpg-check-lg ${status === 'done' ? 'rpg-check-done check-pop' : ''}`}
                 >
-                  {status === 'done' ? '✓' : status === 'auto' ? '★' : ''}
+                  {status === 'done' ? '✓' : ''}
                 </div>
                 {isChecked && rippleKey && (
                   <div
@@ -125,15 +122,10 @@ function CategorySection({
                 )}
               </div>
               <span className={`text-base font-medium flex-1 text-left ${
-                status === 'done' ? 'text-text-primary' :
-                status === 'auto' ? 'text-gold' :
-                'text-text-secondary'
+                status === 'done' ? 'text-text-primary' : 'text-text-secondary'
               }`}>
                 {habit.name}
               </span>
-              {status === 'auto' && (
-                <span className="text-xs text-gold/70 tracking-wider font-bold">AUTO</span>
-              )}
             </button>
           );
         })}

@@ -10,7 +10,7 @@ function getToday(): string {
 }
 
 function getCompletedCount(record: DailyRecord): number {
-  return record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
+  return record.checks.filter(c => c.status === 'done').length;
 }
 
 function countHabitsExistingOnDate(habits: Habit[], date: string): number {
@@ -66,6 +66,20 @@ function backfillDailyRecordTotals(state: GameState): void {
 
     record.totalHabitsAtSubmit = inferredTotal;
     knownTotals[i] = inferredTotal > 0 ? inferredTotal : null;
+  }
+}
+
+/**
+ * 旧データ互換: auto ステータスを done に正規化
+ */
+function normalizeLegacyAutoChecks(state: GameState): void {
+  for (const record of state.dailyRecords) {
+    for (const check of record.checks) {
+      const status = (check as { status?: string }).status;
+      if (status === 'auto') {
+        check.status = 'done';
+      }
+    }
   }
 }
 
@@ -211,6 +225,12 @@ function migrateState(state: GameState): GameState {
     state.version = 7;
   }
 
+  // v7 → v8: auto ステータス廃止
+  if (state.version === 7) {
+    normalizeLegacyAutoChecks(state);
+    state.version = 8;
+  }
+
   if (!state.character.statXP) {
     state.character.statXP = {
       vitality: { currentXP: 0, totalXP: 0 },
@@ -222,6 +242,8 @@ function migrateState(state: GameState): GameState {
   if (!state.spotQuests) {
     state.spotQuests = [];
   }
+
+  normalizeLegacyAutoChecks(state);
 
   // 念のため古い欠損データを都度補完
   backfillDailyRecordTotals(state);

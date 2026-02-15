@@ -25,7 +25,7 @@ export default function DailySubmit({
   wasAllDone,
 }: DailySubmitProps) {
   const completedCount = questIds.filter(
-    id => getCheckStatus(id) === 'done' || getCheckStatus(id) === 'auto'
+    id => getCheckStatus(id) === 'done'
   ).length;
   const totalCount = questIds.length;
   const allDone = completedCount === totalCount && totalCount > 0;
