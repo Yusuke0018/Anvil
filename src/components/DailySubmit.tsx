@@ -5,7 +5,7 @@ import { xpPerHabit, fullCompletionBonus } from '@/lib/xp';
 
 interface DailySubmitProps {
   level: number;
-  habits: { id: string }[];
+  questIds: string[];
   getCheckStatus: (habitId: string) => CheckStatus;
   isSubmitted: boolean;
   onSubmit: () => void;
@@ -17,17 +17,17 @@ const CONFETTI_COLORS = ['#e8a020', '#ffd700', '#50c878', '#5088e0', '#e05050', 
 
 export default function DailySubmit({
   level,
-  habits,
+  questIds,
   getCheckStatus,
   isSubmitted,
   onSubmit,
   xpGained,
   wasAllDone,
 }: DailySubmitProps) {
-  const completedCount = habits.filter(
-    h => getCheckStatus(h.id) === 'done' || getCheckStatus(h.id) === 'auto'
+  const completedCount = questIds.filter(
+    id => getCheckStatus(id) === 'done' || getCheckStatus(id) === 'auto'
   ).length;
-  const totalCount = habits.length;
+  const totalCount = questIds.length;
   const allDone = completedCount === totalCount && totalCount > 0;
 
   const baseXP = xpPerHabit(level) * completedCount;

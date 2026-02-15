@@ -12,6 +12,7 @@ import ResolutionGauge from '@/components/ResolutionGauge';
 import WelcomeBackModal from '@/components/WelcomeBackModal';
 import ComebackBanner from '@/components/ComebackBanner';
 import ReviewModal from '@/components/ReviewModal';
+import SpotQuestCard from '@/components/SpotQuestCard';
 import { TITLES } from '@/data/titles';
 
 export default function Dashboard() {
@@ -19,6 +20,9 @@ export default function Dashboard() {
     state,
     today,
     isSubmitted,
+    todaySpotQuest,
+    spotQuestCheckId,
+    todayQuestIds,
     getCheckStatus,
     toggleCheck,
     submitDay,
@@ -30,6 +34,8 @@ export default function Dashboard() {
     dismissWelcomeBack,
     reviewEvent,
     dismissReview,
+    setTodaySpotQuest,
+    clearTodaySpotQuest,
   } = useGameState();
 
   if (!state) {
@@ -75,6 +81,16 @@ export default function Dashboard() {
       <StatsOverview stats={state.character.stats} statXP={state.character.statXP} />
 
       <div className="mt-2">
+        <SpotQuestCard
+          questName={todaySpotQuest?.name ?? null}
+          questId={spotQuestCheckId}
+          disabled={isSubmitted}
+          getCheckStatus={getCheckStatus}
+          onToggle={toggleCheck}
+          onSave={setTodaySpotQuest}
+          onClear={clearTodaySpotQuest}
+        />
+
         <HabitChecklist
           habits={state.habits}
           getCheckStatus={getCheckStatus}
@@ -85,7 +101,7 @@ export default function Dashboard() {
 
       <DailySubmit
         level={state.character.level}
-        habits={state.habits}
+        questIds={todayQuestIds}
         getCheckStatus={getCheckStatus}
         isSubmitted={isSubmitted}
         onSubmit={submitDay}

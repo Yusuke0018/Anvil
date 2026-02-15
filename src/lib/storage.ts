@@ -23,6 +23,7 @@ function defaultGameState(): GameState {
       totalCompletions: { ...INITIAL_CHARACTER.totalCompletions },
     },
     habits: [],
+    spotQuests: [],
     dailyRecords: [],
     currentDate: getToday(),
     unlockedSkillIds: [],
@@ -138,12 +139,22 @@ function migrateState(state: GameState): GameState {
     state.version = 5;
   }
 
+  // v5 → v6: 当日限定スポットクエスト追加
+  if (state.version === 5) {
+    state.spotQuests = [];
+    state.version = 6;
+  }
+
   if (!state.character.statXP) {
     state.character.statXP = {
       vitality: { currentXP: 0, totalXP: 0 },
       curiosity: { currentXP: 0, totalXP: 0 },
       intellect: { currentXP: 0, totalXP: 0 },
     };
+  }
+
+  if (!state.spotQuests) {
+    state.spotQuests = [];
   }
 
   return state;

@@ -26,6 +26,12 @@ export interface DailyRecord {
   totalHabitsAtSubmit?: number; // 確定時点のクエスト総数
 }
 
+// ===== 当日限定スポットクエスト =====
+export interface SpotQuest {
+  date: string; // YYYY-MM-DD
+  name: string;
+}
+
 // ===== キャラクターステータス =====
 export interface CharacterStatus {
   level: number;
@@ -85,6 +91,7 @@ export interface GameState {
   version: number;
   character: CharacterStatus;
   habits: Habit[];
+  spotQuests: SpotQuest[];
   dailyRecords: DailyRecord[];
   currentDate: string; // YYYY-MM-DD
   unlockedSkillIds: string[];

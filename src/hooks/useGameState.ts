@@ -16,6 +16,10 @@ export interface WelcomeBackInfo {
   decayAmount: number;
 }
 
+function getSpotQuestCheckId(date: string): string {
+  return `spot:${date}`;
+}
+
 export function useGameState() {
   const [state, setState] = useState<GameState | null>(null);
   const [levelUpResult, setLevelUpResult] = useState<LevelUpResult | null>(null);
@@ -28,6 +32,7 @@ export function useGameState() {
   useEffect(() => {
     const loaded = loadGameState();
     const today = getToday();
+    loaded.spotQuests = loaded.spotQuests.filter(q => q.date === today);
 
     // 最終記録日を取得
     const submittedRecords = loaded.dailyRecords
@@ -68,6 +73,11 @@ export function useGameState() {
 
   // 今日の記録
   const todayRecord: DailyRecord | undefined = state ? getDailyRecord(state, today) : undefined;
+  const todaySpotQuest = state?.spotQuests.find(q => q.date === today) ?? null;
+  const spotQuestCheckId = todaySpotQuest ? getSpotQuestCheckId(todaySpotQuest.date) : null;
+  const todayQuestIds = state
+    ? [...state.habits.map(h => h.id), ...(spotQuestCheckId ? [spotQuestCheckId] : [])]
+    : [];
 
   // 今日の記録が提出済みか
   const isSubmitted = todayRecord?.submitted ?? false;
@@ -108,14 +118,26 @@ export function useGameState() {
   const submitDay = useCallback(() => {
     if (!state || isSubmitted) return;
 
-    const checks = todayRecord?.checks ?? [];
-    const completedCount = checks.filter(c => c.status === 'done' || c.status === 'auto').length;
-    const totalHabits = state.habits.length;
+    const habitIdSet = new Set(state.habits.map(h => h.id));
+    const activeSpotQuest = state.spotQuests.find(q => q.date === today) ?? null;
+    const activeSpotQuestCheckId = activeSpotQuest ? getSpotQuestCheckId(activeSpotQuest.date) : null;
 
-    const allDone = completedCount === totalHabits && totalHabits > 0;
+    const checks = (todayRecord?.checks ?? []).filter(c =>
+      habitIdSet.has(c.habitId) || c.habitId === activeSpotQuestCheckId
+    );
+    const completedHabitCount = checks.filter(
+      c => (c.status === 'done' || c.status === 'auto') && habitIdSet.has(c.habitId)
+    ).length;
+    const spotCompleted = activeSpotQuestCheckId
+      ? checks.some(c => c.habitId === activeSpotQuestCheckId && (c.status === 'done' || c.status === 'auto'))
+      : false;
+    const completedCount = completedHabitCount + (spotCompleted ? 1 : 0);
+    const totalQuests = state.habits.length + (activeSpotQuest ? 1 : 0);
+
+    const allDone = completedCount === totalQuests && totalQuests > 0;
 
     // XP計算
-    const xpGained = calculateDailyXP(state.character.level, completedCount, totalHabits);
+    const xpGained = calculateDailyXP(state.character.level, completedCount, totalQuests);
 
     // 確定時の情報を保持（演出用）
     setSubmittedXP(xpGained);
@@ -133,6 +155,11 @@ export function useGameState() {
           categoryCompletions[habit.category]++;
         }
       }
+    }
+    if (spotCompleted) {
+      categoryCompletions.life++;
+      categoryCompletions.hobby++;
+      categoryCompletions.work++;
     }
 
     // 能力別XP/レベル処理（心力/探究力/知力は独立成長）
@@ -188,7 +215,7 @@ export function useGameState() {
     }
 
     // 覚悟ゲージ更新
-    const newGauge = updateGaugeOnSubmit(state.resolutionGauge, completedCount, totalHabits);
+    const newGauge = updateGaugeOnSubmit(state.resolutionGauge, completedCount, totalQuests);
 
     // スキル解放チェック
     const newSkills: Skill[] = checkNewSkills(xpResult.level, state.unlockedSkillIds);
@@ -231,7 +258,7 @@ export function useGameState() {
       checks,
       xpGained,
       submitted: true,
-      totalHabitsAtSubmit: totalHabits,
+      totalHabitsAtSubmit: totalQuests,
     };
 
     // 振り返りイベント判定 (7日/30日ごと)
@@ -254,7 +281,7 @@ export function useGameState() {
       const periodXP = recentRecords.reduce((sum, r) => sum + r.xpGained, 0);
       const completionRateVal = recentRecords.length > 0
         ? recentRecords.reduce(
-          (sum, r) => sum + getRecordCompletionRate(r, totalHabits, today),
+          (sum, r) => sum + getRecordCompletionRate(r, totalQuests, today),
           0
         ) / recentRecords.length
         : 0;
@@ -393,6 +420,45 @@ export function useGameState() {
     });
   }, [state]);
 
+  // 当日スポットクエストの設定/更新
+  const setTodaySpotQuest = useCallback((name: string) => {
+    if (!state || isSubmitted) return;
+    const trimmed = name.trim();
+    if (!trimmed) return;
+
+    setState(prev => {
+      if (!prev) return prev;
+      const withoutToday = prev.spotQuests.filter(q => q.date !== today);
+      return {
+        ...prev,
+        spotQuests: [...withoutToday, { date: today, name: trimmed }],
+      };
+    });
+  }, [state, today, isSubmitted]);
+
+  // 当日スポットクエストの削除
+  const clearTodaySpotQuest = useCallback(() => {
+    if (!state || isSubmitted) return;
+    const spotId = getSpotQuestCheckId(today);
+
+    setState(prev => {
+      if (!prev) return prev;
+
+      const withoutToday = prev.spotQuests.filter(q => q.date !== today);
+      const record = getDailyRecord(prev, today);
+      if (!record) {
+        return { ...prev, spotQuests: withoutToday };
+      }
+
+      const nextRecord: DailyRecord = {
+        ...record,
+        checks: record.checks.filter(c => c.habitId !== spotId),
+      };
+      const withRecord = saveDailyRecord(prev, nextRecord);
+      return { ...withRecord, spotQuests: withoutToday };
+    });
+  }, [state, today, isSubmitted]);
+
   // 称号を装備/解除
   const equipTitle = useCallback((titleId: string | null) => {
     if (!state) return;
@@ -419,6 +485,9 @@ export function useGameState() {
     today,
     todayRecord,
     isSubmitted,
+    todaySpotQuest,
+    spotQuestCheckId,
+    todayQuestIds,
     getCheckStatus,
     toggleCheck,
     submitDay,
@@ -426,6 +495,8 @@ export function useGameState() {
     updateHabit,
     deleteHabit,
     reorderHabit,
+    setTodaySpotQuest,
+    clearTodaySpotQuest,
     levelUpResult,
     dismissLevelUp,
     submittedXP,
