@@ -9,6 +9,66 @@ function getToday(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function getCompletedCount(record: DailyRecord): number {
+  return record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
+}
+
+function countHabitsExistingOnDate(habits: Habit[], date: string): number {
+  const dateEnd = new Date(`${date}T23:59:59.999`);
+  return habits.filter((habit) => {
+    const createdAtMs = new Date(habit.createdAt).getTime();
+    return Number.isFinite(createdAtMs) && createdAtMs <= dateEnd.getTime();
+  }).length;
+}
+
+/**
+ * 旧データの totalHabitsAtSubmit 未保存レコードを補完
+ * その日の総クエスト数に近い値を推定して保存する
+ */
+function backfillDailyRecordTotals(state: GameState): void {
+  const submittedRecords = state.dailyRecords
+    .filter(r => r.submitted)
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  const knownTotals = submittedRecords.map((record) =>
+    record.totalHabitsAtSubmit && record.totalHabitsAtSubmit > 0
+      ? record.totalHabitsAtSubmit
+      : null
+  );
+
+  for (let i = 0; i < submittedRecords.length; i++) {
+    const record = submittedRecords[i];
+    if (record.totalHabitsAtSubmit && record.totalHabitsAtSubmit > 0) continue;
+
+    const completed = getCompletedCount(record);
+    const byCreatedAt = countHabitsExistingOnDate(state.habits, record.date);
+
+    let previousKnown = 0;
+    for (let j = i - 1; j >= 0; j--) {
+      const known = knownTotals[j];
+      if (typeof known === 'number' && known > 0) {
+        previousKnown = known;
+        break;
+      }
+    }
+
+    let nextKnown = 0;
+    for (let j = i + 1; j < knownTotals.length; j++) {
+      const known = knownTotals[j];
+      if (typeof known === 'number' && known > 0) {
+        nextKnown = known;
+        break;
+      }
+    }
+
+    const neighborHint = previousKnown || nextKnown;
+    const inferredTotal = Math.max(completed, byCreatedAt, neighborHint);
+
+    record.totalHabitsAtSubmit = inferredTotal;
+    knownTotals[i] = inferredTotal > 0 ? inferredTotal : null;
+  }
+}
+
 function defaultGameState(): GameState {
   return {
     version: GAME_STATE_VERSION,
@@ -145,6 +205,12 @@ function migrateState(state: GameState): GameState {
     state.version = 6;
   }
 
+  // v6 → v7: 日次記録の総クエスト数スナップショット補完
+  if (state.version === 6) {
+    backfillDailyRecordTotals(state);
+    state.version = 7;
+  }
+
   if (!state.character.statXP) {
     state.character.statXP = {
       vitality: { currentXP: 0, totalXP: 0 },
@@ -156,6 +222,9 @@ function migrateState(state: GameState): GameState {
   if (!state.spotQuests) {
     state.spotQuests = [];
   }
+
+  // 念のため古い欠損データを都度補完
+  backfillDailyRecordTotals(state);
 
   return state;
 }

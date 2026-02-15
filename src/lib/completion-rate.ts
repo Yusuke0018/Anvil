@@ -4,21 +4,23 @@ function getCompletedCount(record: DailyRecord): number {
   return record.checks.filter(c => c.status === 'done' || c.status === 'auto').length;
 }
 
-export function getRecordCompletionRate(
-  record: DailyRecord,
-  fallbackTotalHabits: number
-): number {
+function getRecordTotalHabits(record: DailyRecord): number {
+  const completed = getCompletedCount(record);
+  if (record.totalHabitsAtSubmit && record.totalHabitsAtSubmit > 0) {
+    return Math.max(record.totalHabitsAtSubmit, completed);
+  }
+  return completed;
+}
+
+export function getRecordCompletionRate(record: DailyRecord): number {
   if (!record.submitted) return 0;
 
-  const total = record.totalHabitsAtSubmit ?? fallbackTotalHabits;
+  const total = getRecordTotalHabits(record);
   if (total <= 0) return 0;
 
   return Math.min(getCompletedCount(record) / total, 1);
 }
 
-export function isRecordPerfect(
-  record: DailyRecord,
-  fallbackTotalHabits: number
-): boolean {
-  return getRecordCompletionRate(record, fallbackTotalHabits) >= 1;
+export function isRecordPerfect(record: DailyRecord): boolean {
+  return getRecordCompletionRate(record) >= 1;
 }

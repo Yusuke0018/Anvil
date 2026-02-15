@@ -19,19 +19,19 @@ export default function HistoryPage() {
     );
   }
 
-  const { character, dailyRecords, habits } = state;
+  const { character, dailyRecords } = state;
   const submitted = dailyRecords.filter(r => r.submitted);
   const totalDays = submitted.length;
   const totalXP = character.totalXP;
 
   const avgCompletionRate = totalDays > 0
     ? submitted.reduce(
-      (sum, r) => sum + getRecordCompletionRate(r, habits.length),
+      (sum, r) => sum + getRecordCompletionRate(r),
       0
     ) / totalDays
     : 0;
 
-  const perfectDays = submitted.filter(r => isRecordPerfect(r, habits.length)).length;
+  const perfectDays = submitted.filter(r => isRecordPerfect(r)).length;
 
   const maxDailyXP = submitted.length > 0
     ? Math.max(...submitted.map(r => r.xpGained))
@@ -48,7 +48,7 @@ export default function HistoryPage() {
 
       <GrowthChart dailyRecords={dailyRecords} currentLevel={character.level} />
 
-      <WeeklyChart dailyRecords={dailyRecords} fallbackTotalHabits={habits.length} />
+      <WeeklyChart dailyRecords={dailyRecords} />
 
       {/* 統計サマリー */}
       <div className="px-4 mb-4">
@@ -65,7 +65,7 @@ export default function HistoryPage() {
         </div>
       </div>
 
-      <CalendarView dailyRecords={dailyRecords} fallbackTotalHabits={habits.length} />
+      <CalendarView dailyRecords={dailyRecords} />
 
       <BottomNav />
     </>

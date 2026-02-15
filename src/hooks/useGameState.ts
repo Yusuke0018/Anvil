@@ -281,7 +281,7 @@ export function useGameState() {
       const periodXP = recentRecords.reduce((sum, r) => sum + r.xpGained, 0);
       const completionRateVal = recentRecords.length > 0
         ? recentRecords.reduce(
-          (sum, r) => sum + getRecordCompletionRate(r, totalQuests),
+          (sum, r) => sum + getRecordCompletionRate(r),
           0
         ) / recentRecords.length
         : 0;
