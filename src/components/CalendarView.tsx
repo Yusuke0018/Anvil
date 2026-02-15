@@ -79,7 +79,7 @@ export default function CalendarView({ dailyRecords, fallbackTotalHabits }: Cale
             let dotColor = '';
 
             if (record?.submitted) {
-              const rate = getRecordCompletionRate(record, fallbackTotalHabits, today);
+              const rate = getRecordCompletionRate(record, fallbackTotalHabits);
               if (rate >= 1) {
                 bgColor = 'bg-accent/20 border border-accent/40';
                 dotColor = 'bg-accent';

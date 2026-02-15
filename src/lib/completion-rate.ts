@@ -6,13 +6,9 @@ function getCompletedCount(record: DailyRecord): number {
 
 export function getRecordCompletionRate(
   record: DailyRecord,
-  fallbackTotalHabits: number,
-  today: string
+  fallbackTotalHabits: number
 ): number {
   if (!record.submitted) return 0;
-
-  // 仕様: 今日より過去の記録は常に100%
-  if (record.date < today) return 1;
 
   const total = record.totalHabitsAtSubmit ?? fallbackTotalHabits;
   if (total <= 0) return 0;
@@ -22,8 +18,7 @@ export function getRecordCompletionRate(
 
 export function isRecordPerfect(
   record: DailyRecord,
-  fallbackTotalHabits: number,
-  today: string
+  fallbackTotalHabits: number
 ): boolean {
-  return getRecordCompletionRate(record, fallbackTotalHabits, today) >= 1;
+  return getRecordCompletionRate(record, fallbackTotalHabits) >= 1;
 }
