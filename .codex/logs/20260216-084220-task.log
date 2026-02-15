@@ -1,0 +1,13 @@
+timestamp: 2026-02-16T08:42:20+09:00
+branch: main
+latest_commit: e067af5
+diff_summary: fix: 達成率が常に100%になる判定を修正 (5 files changed, 8 insertions(+), 17 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (25 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_run_lint: pass
+  npm_run_build: pass
+push_result: pass (origin/main f3af7e7..e067af5)
+notes: 過去日付を強制100%にする特例を削除し、実データに基づく達成率算出へ統一。
