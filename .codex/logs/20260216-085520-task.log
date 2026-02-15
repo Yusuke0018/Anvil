@@ -1,0 +1,13 @@
+timestamp: 2026-02-16T08:55:20+09:00
+branch: main
+latest_commit: ac063c9
+diff_summary: fix: AUTO達成を廃止して2状態チェックに統一 (9 files changed, 38 insertions(+), 44 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (82 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_run_lint: pass
+  npm_run_build: pass
+push_result: pass (origin/main 8ead43e..ac063c9)
+notes: ★/AUTO を廃止し、チェック遷移を none↔done に変更。旧 auto データは v8 で done へ正規化。
