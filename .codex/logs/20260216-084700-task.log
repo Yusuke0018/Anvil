@@ -1,0 +1,13 @@
+timestamp: 2026-02-16T08:47:00+09:00
+branch: main
+latest_commit: 966710f
+diff_summary: fix: 日次クエスト数スナップショットで達成率を算出 (7 files changed, 93 insertions(+), 24 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (117 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_run_lint: pass
+  npm_run_build: pass
+push_result: pass (origin/main f9d3953..966710f)
+notes: 達成率をその日の totalHabitsAtSubmit ベースに統一。v7 マイグレーションで旧記録の欠損 total を補完。
