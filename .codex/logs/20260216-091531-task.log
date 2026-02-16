@@ -1,0 +1,13 @@
+timestamp: 2026-02-16T09:15:31+09:00
+branch: main
+latest_commit: a946d13
+diff_summary: fix: 当日スポットの経験値説明表示を削除 (1 file changed, 1 insertion(+), 7 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (8 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_run_lint: pass
+  npm_run_build: pass
+push_result: pass (origin/main 4f0822e..a946d13)
+notes: 当日スポットのEXP説明文と3能力EXPラベルを削除し、文言を簡素化。
