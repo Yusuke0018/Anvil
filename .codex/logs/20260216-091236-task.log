@@ -1,0 +1,13 @@
+timestamp: 2026-02-16T09:12:36+09:00
+branch: main
+latest_commit: 2a3e5c8
+diff_summary: refactor: 安定性向上の改善を一括適用 (5 files changed, 111 insertions(+), 40 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (151 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_run_lint: pass
+  npm_run_build: pass
+push_result: pass (origin/main 40660df..2a3e5c8)
+notes: 週間日付のUTC依存を解消、習慣 order 正規化を追加、旧データ補完推定と起動時補正条件を改善。
