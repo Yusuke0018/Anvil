@@ -43,8 +43,10 @@ export interface CharacterStatus {
 }
 
 export interface Stats {
-  // 体力 (人生/健康カテゴリから成長)
+  // 心力 (人生カテゴリから成長)
   vitality: number;
+  // 体力 (健康カテゴリから成長)
+  stamina: number;
   // 探究力 (趣味カテゴリから成長)
   curiosity: number;
   // 知力 (仕事カテゴリから成長)
@@ -53,6 +55,7 @@ export interface Stats {
 
 export interface CategoryCompletions {
   life: number;
+  health: number;
   hobby: number;
   work: number;
 }
@@ -64,6 +67,7 @@ export interface StatXP {
 
 export interface StatXPMap {
   vitality: StatXP;
+  stamina: StatXP;
   curiosity: StatXP;
   intellect: StatXP;
 }

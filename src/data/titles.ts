@@ -228,14 +228,14 @@ export const TITLES: TitleDefinition[] = [
 
   // ===== カテゴリ達成系 =====
   {
-    id: 't-life50', name: '体力の探求者', icon: '🔥',
-    description: '体力の道を深く歩む者', condition: '体力系カテゴリ50回達成',
+    id: 't-life50', name: '心の探求者', icon: '🔥',
+    description: '心力の道を深く歩む者', condition: '人生カテゴリ50回達成',
     check: (ctx) => ctx.totalCompletions.life >= 50,
   },
   {
     id: 't-vital200', name: '体力の鍛錬者', icon: '💪',
-    description: '体力系クエストを重ねた修練者', condition: '体力系カテゴリ200回達成',
-    check: (ctx) => ctx.totalCompletions.life >= 200,
+    description: '体力の道を鍛え上げる修練者', condition: '健康カテゴリ200回達成',
+    check: (ctx) => ctx.totalCompletions.health >= 200,
   },
   {
     id: 't-hobby50', name: '好奇心の冒険家', icon: '🧭',
@@ -252,24 +252,28 @@ export const TITLES: TitleDefinition[] = [
   {
     id: 't-total100', name: '百戦の勇者', icon: '💎',
     description: '百の戦いを経た強者', condition: '合計100回達成',
-    check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 100,
+    check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.health + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 100,
   },
   {
     id: 't-total500', name: '千里の旅人', icon: '🌟',
     description: '千の道を歩みし旅人', condition: '合計500回達成',
-    check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 500,
+    check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.health + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 500,
   },
   {
     id: 't-total1000', name: '万里の踏破者', icon: '🧿',
     description: '膨大な積み重ねを達成した者', condition: '合計1000回達成',
-    check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 1000,
+    check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.health + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 1000,
   },
 
   // ===== 特殊系 =====
   {
     id: 't-balanced', name: 'バランスマスター', icon: '⚖️',
     description: '全ての道を均等に歩む賢者', condition: '各カテゴリ30回以上',
-    check: (ctx) => ctx.totalCompletions.life >= 30 && ctx.totalCompletions.hobby >= 30 && ctx.totalCompletions.work >= 30,
+    check: (ctx) =>
+      ctx.totalCompletions.life >= 30 &&
+      ctx.totalCompletions.health >= 30 &&
+      ctx.totalCompletions.hobby >= 30 &&
+      ctx.totalCompletions.work >= 30,
   },
 
   // ===== 連続達成系 =====

@@ -169,13 +169,15 @@ export function useGameState() {
     const xpResult = applyXP(state.character.level, state.character.currentXP, xpGained);
 
     // カテゴリ別達成数の集計
-    const categoryCompletions = { life: 0, hobby: 0, work: 0 };
+    const categoryCompletions = { life: 0, health: 0, hobby: 0, work: 0 };
     for (const check of checks) {
       if (check.status === 'done') {
         const habit = state.habits.find(h => h.id === check.habitId);
         if (habit) {
-          if (habit.category === 'life' || habit.category === 'health') {
+          if (habit.category === 'life') {
             categoryCompletions.life++;
+          } else if (habit.category === 'health') {
+            categoryCompletions.health++;
           } else if (habit.category === 'hobby') {
             categoryCompletions.hobby++;
           } else if (habit.category === 'work') {
@@ -186,21 +188,24 @@ export function useGameState() {
     }
     if (spotCompleted) {
       categoryCompletions.life++;
+      categoryCompletions.health++;
       categoryCompletions.hobby++;
       categoryCompletions.work++;
     }
 
-    // 能力別XP/レベル処理（体力/探究力/知力は独立成長）
+    // 能力別XP/レベル処理（心力/体力/探究力/知力は独立成長）
     const newStats = { ...state.character.stats };
     const newStatXP = {
       vitality: { ...state.character.statXP.vitality },
+      stamina: { ...state.character.statXP.stamina },
       curiosity: { ...state.character.statXP.curiosity },
       intellect: { ...state.character.statXP.intellect },
     };
-    const statLevelGains = { vitality: 0, curiosity: 0, intellect: 0 };
+    const statLevelGains = { vitality: 0, stamina: 0, curiosity: 0, intellect: 0 };
 
     const statTargets = [
       { statKey: 'vitality' as const, completed: categoryCompletions.life },
+      { statKey: 'stamina' as const, completed: categoryCompletions.health },
       { statKey: 'curiosity' as const, completed: categoryCompletions.hobby },
       { statKey: 'intellect' as const, completed: categoryCompletions.work },
     ];
@@ -216,11 +221,16 @@ export function useGameState() {
       statLevelGains[target.statKey] = statResult.levelsGained;
     }
 
-    const hasStatLevelUp = statLevelGains.vitality > 0 || statLevelGains.curiosity > 0 || statLevelGains.intellect > 0;
+    const hasStatLevelUp =
+      statLevelGains.vitality > 0 ||
+      statLevelGains.stamina > 0 ||
+      statLevelGains.curiosity > 0 ||
+      statLevelGains.intellect > 0;
     let levelResult: LevelUpResult | null = null;
 
     const newTotalCompletions = {
       life: state.character.totalCompletions.life + categoryCompletions.life,
+      health: state.character.totalCompletions.health + categoryCompletions.health,
       hobby: state.character.totalCompletions.hobby + categoryCompletions.hobby,
       work: state.character.totalCompletions.work + categoryCompletions.work,
     };
@@ -345,7 +355,7 @@ export function useGameState() {
       setLevelUpResult({
         previousLevel: state.character.level,
         newLevel: state.character.level,
-        statGains: { vitality: 0, curiosity: 0, intellect: 0 },
+        statGains: { vitality: 0, stamina: 0, curiosity: 0, intellect: 0 },
         newSkills,
         newTitles,
         milestoneEvent: null,

@@ -32,23 +32,25 @@ export function distributeStatGrowth(
   completions: CategoryCompletions
 ): Stats {
   const growth = perStatGrowth(level);
-  const total = completions.life + completions.hobby + completions.work;
+  const total = completions.life + completions.health + completions.hobby + completions.work;
 
   if (total === 0) {
     // 達成データなし → 均等配分
-    const each = Math.max(1, Math.floor(growth / 3));
-    return { vitality: each, curiosity: each, intellect: each };
+    const each = Math.max(1, Math.floor(growth / 4));
+    return { vitality: each, stamina: each, curiosity: each, intellect: each };
   }
 
   // 比率計算 (最低1を保証)
   const lifeRatio = completions.life / total;
+  const healthRatio = completions.health / total;
   const hobbyRatio = completions.hobby / total;
   const workRatio = completions.work / total;
 
   return {
-    vitality: Math.max(1, Math.round(growth * lifeRatio * 3)),
-    curiosity: Math.max(1, Math.round(growth * hobbyRatio * 3)),
-    intellect: Math.max(1, Math.round(growth * workRatio * 3)),
+    vitality: Math.max(1, Math.round(growth * lifeRatio * 4)),
+    stamina: Math.max(1, Math.round(growth * healthRatio * 4)),
+    curiosity: Math.max(1, Math.round(growth * hobbyRatio * 4)),
+    intellect: Math.max(1, Math.round(growth * workRatio * 4)),
   };
 }
 
@@ -61,12 +63,13 @@ export function applyLevelUp(
   levelsGained: number,
   completions: CategoryCompletions
 ): LevelUpResult {
-  const totalGains: Stats = { vitality: 0, curiosity: 0, intellect: 0 };
+  const totalGains: Stats = { vitality: 0, stamina: 0, curiosity: 0, intellect: 0 };
 
   for (let i = 0; i < levelsGained; i++) {
     const lvl = currentLevel + i + 1;
     const gains = distributeStatGrowth(lvl, completions);
     totalGains.vitality += gains.vitality;
+    totalGains.stamina += gains.stamina;
     totalGains.curiosity += gains.curiosity;
     totalGains.intellect += gains.intellect;
   }
@@ -87,6 +90,7 @@ export function applyLevelUp(
 export function addStats(base: Stats, gains: Stats): Stats {
   return {
     vitality: base.vitality + gains.vitality,
+    stamina: base.stamina + gains.stamina,
     curiosity: base.curiosity + gains.curiosity,
     intellect: base.intellect + gains.intellect,
   };

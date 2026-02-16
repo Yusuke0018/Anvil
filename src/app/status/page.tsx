@@ -47,13 +47,22 @@ export default function StatusPage() {
       {/* ステータスカード */}
       <div className="px-4 space-y-3">
         <StatCard
-          label="体力 (STR)"
+          label="心力 (STR)"
           emoji="🔥"
           level={character.stats.vitality}
           currentXP={character.statXP.vitality.currentXP}
           nextXP={expToNextStatLevel(character.stats.vitality)}
           completions={character.totalCompletions.life}
           color="text-[#e05050]"
+        />
+        <StatCard
+          label="体力 (VIT)"
+          emoji="💪"
+          level={character.stats.stamina}
+          currentXP={character.statXP.stamina.currentXP}
+          nextXP={expToNextStatLevel(character.stats.stamina)}
+          completions={character.totalCompletions.health}
+          color="text-[#4fbf7f]"
         />
         <StatCard
           label="探究力 (DEX)"

@@ -2,7 +2,7 @@ import { Skill } from '@/types';
 
 export const SKILLS: Skill[] = [
   // ===================================================
-  // ===== life (体力系) - 自己管理から精神の覚醒へ =====
+  // ===== life (心力系) - 自己管理から精神の覚醒へ =====
   // ===================================================
   { id: 'life-01', name: '早起きの習慣', description: '朝の光を浴びて心身を目覚めさせる', unlockLevel: 3, category: 'life' },
   { id: 'life-09', name: '朝の準備運動', description: '一日の始まりに体を整える', unlockLevel: 4, category: 'life' },

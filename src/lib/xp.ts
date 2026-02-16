@@ -61,7 +61,7 @@ export function expToNextLevel(level: number, habitCount: number = TOTAL_HABITS_
 }
 
 /**
- * 体力/探究力/知力の次レベル必要XP
+ * 心力/体力/探究力/知力の次レベル必要XP
  * 各カテゴリ上限(3クエスト)を前提に算出
  */
 export function expToNextStatLevel(level: number): number {

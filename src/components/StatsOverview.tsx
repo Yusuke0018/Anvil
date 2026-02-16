@@ -9,7 +9,8 @@ interface StatsOverviewProps {
 }
 
 const STAT_CONFIG = [
-  { key: 'vitality' as const, label: 'STR', fullLabel: '体力', emoji: '🔥', color: 'text-[#e05050]' },
+  { key: 'vitality' as const, label: 'STR', fullLabel: '心力', emoji: '🔥', color: 'text-[#e05050]' },
+  { key: 'stamina' as const, label: 'VIT', fullLabel: '体力', emoji: '💪', color: 'text-[#4fbf7f]' },
   { key: 'curiosity' as const, label: 'DEX', fullLabel: '探究力', emoji: '⚔️', color: 'text-accent' },
   { key: 'intellect' as const, label: 'INT', fullLabel: '知力', emoji: '📖', color: 'text-[#5088e0]' },
 ];
@@ -17,11 +18,11 @@ const STAT_CONFIG = [
 export default function StatsOverview({ stats, statXP }: StatsOverviewProps) {
   return (
     <div className="px-4 py-3">
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 gap-2">
         {STAT_CONFIG.map(({ key, label, fullLabel, emoji, color }) => (
           <div
             key={key}
-            className="flex-1 rpg-panel p-3 text-center"
+            className="rpg-panel p-3 text-center"
           >
             <div className="text-lg mb-0.5">{emoji}</div>
             <div className={`text-lg font-bold pixel-num stat-value ${color}`}>Lv.{stats[key]}</div>

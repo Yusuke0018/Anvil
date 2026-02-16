@@ -28,8 +28,8 @@ export const STAT_GROWTH_TIERS: { maxLevel: number; minGrowth: number; maxGrowth
 
 // ===== カテゴリ表示情報 =====
 export const CATEGORY_INFO: Record<HabitCategory, { label: string; emoji: string; statLabel: string; statKey: string }> = {
-  life: { label: '人生', emoji: '🔥', statLabel: '体力', statKey: 'vitality' },
-  health: { label: '健康', emoji: '💪', statLabel: '体力', statKey: 'vitality' },
+  life: { label: '人生', emoji: '🔥', statLabel: '心力', statKey: 'vitality' },
+  health: { label: '健康', emoji: '💪', statLabel: '体力', statKey: 'stamina' },
   hobby: { label: '趣味', emoji: '⚔️', statLabel: '探究力', statKey: 'curiosity' },
   work: { label: '仕事', emoji: '📖', statLabel: '知力', statKey: 'intellect' },
 };
@@ -52,13 +52,14 @@ export const INITIAL_CHARACTER: import('@/types').CharacterStatus = {
   level: 1,
   currentXP: 0,
   totalXP: 0,
-  stats: { vitality: 1, curiosity: 1, intellect: 1 },
+  stats: { vitality: 1, stamina: 1, curiosity: 1, intellect: 1 },
   statXP: {
     vitality: { currentXP: 0, totalXP: 0 },
+    stamina: { currentXP: 0, totalXP: 0 },
     curiosity: { currentXP: 0, totalXP: 0 },
     intellect: { currentXP: 0, totalXP: 0 },
   },
-  totalCompletions: { life: 0, hobby: 0, work: 0 },
+  totalCompletions: { life: 0, health: 0, hobby: 0, work: 0 },
 };
 
-export const GAME_STATE_VERSION = 8;
+export const GAME_STATE_VERSION = 9;

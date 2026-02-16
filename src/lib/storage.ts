@@ -107,9 +107,12 @@ function defaultGameState(): GameState {
     version: GAME_STATE_VERSION,
     character: {
       ...INITIAL_CHARACTER,
-      stats: { ...INITIAL_CHARACTER.stats },
+      stats: {
+        ...INITIAL_CHARACTER.stats,
+      },
       statXP: {
         vitality: { ...INITIAL_CHARACTER.statXP.vitality },
+        stamina: { ...INITIAL_CHARACTER.statXP.stamina },
         curiosity: { ...INITIAL_CHARACTER.statXP.curiosity },
         intellect: { ...INITIAL_CHARACTER.statXP.intellect },
       },
@@ -226,6 +229,7 @@ function migrateState(state: GameState): GameState {
   if (state.version === 4) {
     state.character.statXP = {
       vitality: { currentXP: 0, totalXP: 0 },
+      stamina: { currentXP: 0, totalXP: 0 },
       curiosity: { currentXP: 0, totalXP: 0 },
       intellect: { currentXP: 0, totalXP: 0 },
     };
@@ -250,11 +254,59 @@ function migrateState(state: GameState): GameState {
     state.version = 8;
   }
 
+  // v8 → v9: 第4ステータス(体力)追加
+  if (state.version === 8) {
+    state.character.stats = {
+      ...state.character.stats,
+      stamina: 1,
+    };
+    state.character.statXP = {
+      ...state.character.statXP,
+      stamina: { currentXP: 0, totalXP: 0 },
+    };
+    state.character.totalCompletions = {
+      ...state.character.totalCompletions,
+      health: 0,
+    };
+    state.version = 9;
+  }
+
   if (!state.character.statXP) {
     state.character.statXP = {
       vitality: { currentXP: 0, totalXP: 0 },
+      stamina: { currentXP: 0, totalXP: 0 },
       curiosity: { currentXP: 0, totalXP: 0 },
       intellect: { currentXP: 0, totalXP: 0 },
+    };
+  }
+
+  if (!state.character.totalCompletions) {
+    state.character.totalCompletions = {
+      life: 0,
+      health: 0,
+      hobby: 0,
+      work: 0,
+    };
+  }
+
+  if (typeof state.character.stats.stamina !== 'number') {
+    state.character.stats = {
+      ...state.character.stats,
+      stamina: 1,
+    };
+  }
+
+  if (!state.character.statXP.stamina) {
+    state.character.statXP = {
+      ...state.character.statXP,
+      stamina: { currentXP: 0, totalXP: 0 },
+    };
+  }
+
+  if (typeof state.character.totalCompletions.health !== 'number') {
+    state.character.totalCompletions = {
+      ...state.character.totalCompletions,
+      health: 0,
     };
   }
 

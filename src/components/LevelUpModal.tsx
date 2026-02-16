@@ -28,11 +28,16 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
   const hasLevelUp = result.newLevel > result.previousLevel;
-  const hasStats = result.statGains.vitality > 0 || result.statGains.curiosity > 0 || result.statGains.intellect > 0;
+  const hasStats =
+    result.statGains.vitality > 0 ||
+    result.statGains.stamina > 0 ||
+    result.statGains.curiosity > 0 ||
+    result.statGains.intellect > 0;
   const milestone = result.milestoneEvent;
 
   const stats = [
-    { label: 'STR', fullLabel: '体力', emoji: '🔥', value: result.statGains.vitality, color: 'text-[#e05050]' },
+    { label: 'STR', fullLabel: '心力', emoji: '🔥', value: result.statGains.vitality, color: 'text-[#e05050]' },
+    { label: 'VIT', fullLabel: '体力', emoji: '💪', value: result.statGains.stamina, color: 'text-[#4fbf7f]' },
     { label: 'DEX', fullLabel: '探究力', emoji: '⚔️', value: result.statGains.curiosity, color: 'text-accent' },
     { label: 'INT', fullLabel: '知力', emoji: '📖', value: result.statGains.intellect, color: 'text-[#5088e0]' },
   ];
