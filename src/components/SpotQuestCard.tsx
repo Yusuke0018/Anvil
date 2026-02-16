@@ -35,12 +35,7 @@ export default function SpotQuestCard({
     return (
       <div className="px-4 mb-4">
         <div className="rpg-panel p-4 space-y-3">
-          <div>
-            <h3 className="text-xs font-medium text-text-secondary tracking-widest uppercase">▸ 当日スポット</h3>
-            <p className="text-xs text-text-secondary mt-1">
-              達成すると 心力/探究力/知力 の3能力すべてにEXPが入ります。
-            </p>
-          </div>
+          <h3 className="text-xs font-medium text-text-secondary tracking-widest uppercase">▸ 当日スポット</h3>
           <div className="flex gap-2">
             <input
               type="text"
@@ -97,7 +92,6 @@ export default function SpotQuestCard({
           <span className={`text-sm font-medium flex-1 text-left ${isChecked ? 'text-text-primary' : 'text-text-secondary'}`}>
             {questName}
           </span>
-          <span className="text-xs text-gold tracking-wider">3能力EXP</span>
         </button>
       </div>
     </div>
