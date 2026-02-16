@@ -13,6 +13,10 @@ function getCompletedCount(record: DailyRecord): number {
   return record.checks.filter(c => c.status === 'done').length;
 }
 
+function getObservedCheckCount(record: DailyRecord): number {
+  return new Set(record.checks.map(c => c.habitId)).size;
+}
+
 function countHabitsExistingOnDate(habits: Habit[], date: string): number {
   const dateEnd = new Date(`${date}T23:59:59.999`);
   return habits.filter((habit) => {
@@ -41,6 +45,7 @@ function backfillDailyRecordTotals(state: GameState): void {
     if (record.totalHabitsAtSubmit && record.totalHabitsAtSubmit > 0) continue;
 
     const completed = getCompletedCount(record);
+    const observedChecks = getObservedCheckCount(record);
     const byCreatedAt = countHabitsExistingOnDate(state.habits, record.date);
 
     let previousKnown = 0;
@@ -61,11 +66,13 @@ function backfillDailyRecordTotals(state: GameState): void {
       }
     }
 
-    const neighborHint = previousKnown || nextKnown;
-    const inferredTotal = Math.max(completed, byCreatedAt, neighborHint);
+    const neighborHint = Math.max(previousKnown, nextKnown);
+    const inferredTotal = Math.max(completed, observedChecks, byCreatedAt, neighborHint);
 
-    record.totalHabitsAtSubmit = inferredTotal;
-    knownTotals[i] = inferredTotal > 0 ? inferredTotal : null;
+    if (inferredTotal > 0) {
+      record.totalHabitsAtSubmit = inferredTotal;
+      knownTotals[i] = inferredTotal;
+    }
   }
 }
 
@@ -81,6 +88,18 @@ function normalizeLegacyAutoChecks(state: GameState): void {
       }
     }
   }
+}
+
+function hasLegacyAutoChecks(state: GameState): boolean {
+  return state.dailyRecords.some(record =>
+    record.checks.some(check => (check as { status?: string }).status === 'auto')
+  );
+}
+
+function hasMissingTotalSnapshots(state: GameState): boolean {
+  return state.dailyRecords.some(record =>
+    record.submitted && (!record.totalHabitsAtSubmit || record.totalHabitsAtSubmit <= 0)
+  );
 }
 
 function defaultGameState(): GameState {
@@ -243,10 +262,13 @@ function migrateState(state: GameState): GameState {
     state.spotQuests = [];
   }
 
-  normalizeLegacyAutoChecks(state);
+  if (hasLegacyAutoChecks(state)) {
+    normalizeLegacyAutoChecks(state);
+  }
 
-  // 念のため古い欠損データを都度補完
-  backfillDailyRecordTotals(state);
+  if (hasMissingTotalSnapshots(state)) {
+    backfillDailyRecordTotals(state);
+  }
 
   return state;
 }

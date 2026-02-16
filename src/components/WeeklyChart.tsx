@@ -9,6 +9,10 @@ interface WeeklyChartProps {
 
 const WEEKDAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'];
 
+function toLocalDateString(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
 export default function WeeklyChart({ dailyRecords }: WeeklyChartProps) {
   if (dailyRecords.every(r => !r.submitted)) return null;
 
@@ -18,7 +22,7 @@ export default function WeeklyChart({ dailyRecords }: WeeklyChartProps) {
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().slice(0, 10);
+    const dateStr = toLocalDateString(d);
     const weekday = WEEKDAY_LABELS[d.getDay()];
 
     const record = dailyRecords.find(r => r.date === dateStr && r.submitted);

@@ -20,6 +20,30 @@ function getSpotQuestCheckId(date: string): string {
   return `spot:${date}`;
 }
 
+function compareHabitsByOrder(a: Habit, b: Habit): number {
+  if (a.order !== b.order) return a.order - b.order;
+  if (a.createdAt !== b.createdAt) return a.createdAt.localeCompare(b.createdAt);
+  return a.id.localeCompare(b.id);
+}
+
+function sortCategoryHabits(habits: Habit[], category: HabitCategory): Habit[] {
+  return habits
+    .filter(h => h.category === category)
+    .sort(compareHabitsByOrder);
+}
+
+function normalizeCategoryOrders(habits: Habit[], category: HabitCategory): Habit[] {
+  const sorted = sortCategoryHabits(habits, category);
+  const orderById = new Map(sorted.map((habit, index) => [habit.id, index]));
+
+  return habits.map((habit) => {
+    if (habit.category !== category) return habit;
+    const nextOrder = orderById.get(habit.id);
+    if (nextOrder === undefined || nextOrder === habit.order) return habit;
+    return { ...habit, order: nextOrder };
+  });
+}
+
 export function useGameState() {
   const [state, setState] = useState<GameState | null>(null);
   const [levelUpResult, setLevelUpResult] = useState<LevelUpResult | null>(null);
@@ -347,76 +371,85 @@ export function useGameState() {
 
   // 習慣の追加
   const addHabit = useCallback((name: string, category: HabitCategory) => {
-    if (!state) return;
+    const trimmed = name.trim();
+    if (!trimmed) return;
 
-    const categoryHabits = state.habits.filter(h => h.category === category);
-    if (categoryHabits.length >= MAX_HABITS_PER_CATEGORY) return;
+    setState(prev => {
+      if (!prev) return prev;
 
-    const newHabit: Habit = {
-      id: crypto.randomUUID(),
-      name,
-      category,
-      order: categoryHabits.length,
-      createdAt: new Date().toISOString(),
-    };
+      const normalizedHabits = normalizeCategoryOrders(prev.habits, category);
+      const categoryHabits = sortCategoryHabits(normalizedHabits, category);
+      if (categoryHabits.length >= MAX_HABITS_PER_CATEGORY) return prev;
 
-    setState(prev => prev ? { ...prev, habits: [...prev.habits, newHabit] } : prev);
-  }, [state]);
+      const newHabit: Habit = {
+        id: crypto.randomUUID(),
+        name: trimmed,
+        category,
+        order: categoryHabits.length,
+        createdAt: new Date().toISOString(),
+      };
+
+      return { ...prev, habits: [...normalizedHabits, newHabit] };
+    });
+  }, []);
 
   // 習慣の編集
   const updateHabit = useCallback((id: string, name: string) => {
-    if (!state) return;
+    const trimmed = name.trim();
+    if (!trimmed) return;
+
     setState(prev => {
       if (!prev) return prev;
       return {
         ...prev,
-        habits: prev.habits.map(h => h.id === id ? { ...h, name } : h),
+        habits: prev.habits.map(h => h.id === id ? { ...h, name: trimmed } : h),
       };
     });
-  }, [state]);
+  }, []);
 
   // 習慣の削除
   const deleteHabit = useCallback((id: string) => {
-    if (!state) return;
     setState(prev => {
       if (!prev) return prev;
+      const target = prev.habits.find(h => h.id === id);
+      if (!target) return prev;
+      const filteredHabits = prev.habits.filter(h => h.id !== id);
       return {
         ...prev,
-        habits: prev.habits.filter(h => h.id !== id),
+        habits: normalizeCategoryOrders(filteredHabits, target.category),
       };
     });
-  }, [state]);
+  }, []);
 
   // 習慣の並び替え
   const reorderHabit = useCallback((habitId: string, direction: 'up' | 'down') => {
-    if (!state) return;
     setState(prev => {
       if (!prev) return prev;
       const target = prev.habits.find(h => h.id === habitId);
       if (!target) return prev;
 
-      const categoryHabits = prev.habits
-        .filter(h => h.category === target.category)
-        .sort((a, b) => a.order - b.order);
+      const normalizedHabits = normalizeCategoryOrders(prev.habits, target.category);
+      const categoryHabits = sortCategoryHabits(normalizedHabits, target.category);
 
       const idx = categoryHabits.findIndex(h => h.id === habitId);
       const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
       if (swapIdx < 0 || swapIdx >= categoryHabits.length) return prev;
 
-      const swapTarget = categoryHabits[swapIdx];
-      const targetOrder = target.order;
-      const swapOrder = swapTarget.order;
+      const swapped = [...categoryHabits];
+      [swapped[idx], swapped[swapIdx]] = [swapped[swapIdx], swapped[idx]];
+      const orderById = new Map(swapped.map((habit, index) => [habit.id, index]));
 
       return {
         ...prev,
-        habits: prev.habits.map(h => {
-          if (h.id === habitId) return { ...h, order: swapOrder };
-          if (h.id === swapTarget.id) return { ...h, order: targetOrder };
-          return h;
+        habits: normalizedHabits.map(h => {
+          if (h.category !== target.category) return h;
+          const nextOrder = orderById.get(h.id);
+          if (nextOrder === undefined || nextOrder === h.order) return h;
+          return { ...h, order: nextOrder };
         }),
       };
     });
-  }, [state]);
+  }, []);
 
   // 当日スポットクエストの設定/更新
   const setTodaySpotQuest = useCallback((name: string) => {

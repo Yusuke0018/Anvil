@@ -29,6 +29,12 @@ const CATEGORY_BG_TINT: Record<HabitCategory, string> = {
   work: 'var(--color-success-dim)',
 };
 
+function compareHabits(a: Habit, b: Habit): number {
+  if (a.order !== b.order) return a.order - b.order;
+  if (a.createdAt !== b.createdAt) return a.createdAt.localeCompare(b.createdAt);
+  return a.id.localeCompare(b.id);
+}
+
 function CategorySection({
   category,
   habits,
@@ -43,7 +49,7 @@ function CategorySection({
   disabled: boolean;
 }) {
   const info = CATEGORY_INFO[category];
-  const categoryHabits = habits.filter(h => h.category === category).sort((a, b) => a.order - b.order);
+  const categoryHabits = habits.filter(h => h.category === category).sort(compareHabits);
   const [rippleKeys, setRippleKeys] = useState<Record<string, number>>({});
 
   if (categoryHabits.length === 0) return null;

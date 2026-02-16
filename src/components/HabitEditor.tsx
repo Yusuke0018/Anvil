@@ -12,6 +12,12 @@ interface HabitEditorProps {
   onReorder: (id: string, direction: 'up' | 'down') => void;
 }
 
+function compareHabits(a: Habit, b: Habit): number {
+  if (a.order !== b.order) return a.order - b.order;
+  if (a.createdAt !== b.createdAt) return a.createdAt.localeCompare(b.createdAt);
+  return a.id.localeCompare(b.id);
+}
+
 export default function HabitEditor({ habits, onAdd, onUpdate, onDelete, onReorder }: HabitEditorProps) {
   return (
     <div className="px-4 space-y-6">
@@ -19,7 +25,7 @@ export default function HabitEditor({ habits, onAdd, onUpdate, onDelete, onReord
         <CategoryEditor
           key={category}
           category={category}
-          habits={habits.filter(h => h.category === category).sort((a, b) => a.order - b.order)}
+          habits={habits.filter(h => h.category === category).sort(compareHabits)}
           onAdd={onAdd}
           onUpdate={onUpdate}
           onDelete={onDelete}
