@@ -1,0 +1,14 @@
+timestamp: 2026-02-16T18:59:04+09:00
+branch: main
+latest_commit: 9135517
+diff_summary: feat: 第4ステータスとして体力を追加 (11 files changed, 126 insertions(+), 36 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (162 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_run_lint: pass
+  npm_run_build: pass
+  npm_test: not_defined
+push_result: pass (origin/main a3cfffc..9135517)
+notes: 心力(STR)を維持し、健康カテゴリ由来の体力(VIT)を第4ステータスとして追加。カテゴリ達成集計・レベルアップ・称号条件・保存マイグレーション(v9)を4カテゴリ前提へ更新。
