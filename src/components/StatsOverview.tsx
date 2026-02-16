@@ -9,7 +9,7 @@ interface StatsOverviewProps {
 }
 
 const STAT_CONFIG = [
-  { key: 'vitality' as const, label: 'STR', fullLabel: '心力', emoji: '🔥', color: 'text-[#e05050]' },
+  { key: 'vitality' as const, label: 'STR', fullLabel: '体力', emoji: '🔥', color: 'text-[#e05050]' },
   { key: 'curiosity' as const, label: 'DEX', fullLabel: '探究力', emoji: '⚔️', color: 'text-accent' },
   { key: 'intellect' as const, label: 'INT', fullLabel: '知力', emoji: '📖', color: 'text-[#5088e0]' },
 ];

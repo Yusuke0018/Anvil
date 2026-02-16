@@ -190,7 +190,7 @@ export function useGameState() {
       categoryCompletions.work++;
     }
 
-    // 能力別XP/レベル処理（心力/探究力/知力は独立成長）
+    // 能力別XP/レベル処理（体力/探究力/知力は独立成長）
     const newStats = { ...state.character.stats };
     const newStatXP = {
       vitality: { ...state.character.statXP.vitality },

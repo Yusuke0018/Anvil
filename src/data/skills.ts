@@ -2,7 +2,7 @@ import { Skill } from '@/types';
 
 export const SKILLS: Skill[] = [
   // ===================================================
-  // ===== life (心力系) - 自己管理から精神の覚醒へ =====
+  // ===== life (体力系) - 自己管理から精神の覚醒へ =====
   // ===================================================
   { id: 'life-01', name: '早起きの習慣', description: '朝の光を浴びて心身を目覚めさせる', unlockLevel: 3, category: 'life' },
   { id: 'life-09', name: '朝の準備運動', description: '一日の始まりに体を整える', unlockLevel: 4, category: 'life' },
@@ -32,6 +32,22 @@ export const SKILLS: Skill[] = [
   { id: 'life-26', name: '無限の活力', description: '疲れを知らぬ不滅の体', unlockLevel: 89, category: 'life' },
   { id: 'life-27', name: '魂の覚醒', description: '真の自分に目覚める', unlockLevel: 94, category: 'life' },
   { id: 'life-28', name: '永遠の炎', description: '決して消えぬ心の炎', unlockLevel: 99, category: 'life' },
+
+  // ==================================================
+  // ===== health (体力系) - 鍛錬から不屈の肉体へ =====
+  // ==================================================
+  { id: 'health-01', name: '水分補給の心得', description: 'こまめな給水で身体の巡りを整える', unlockLevel: 4, category: 'health' },
+  { id: 'health-02', name: '歩行の習慣', description: '日々の歩行で基礎体力を養う', unlockLevel: 8, category: 'health' },
+  { id: 'health-03', name: '姿勢制御', description: '正しい姿勢で疲労をためにくくする', unlockLevel: 12, category: 'health' },
+  { id: 'health-04', name: '深睡眠の術', description: '睡眠の質を高めて回復力を底上げする', unlockLevel: 16, category: 'health' },
+  { id: 'health-05', name: '体幹錬成', description: '軸を鍛え、安定した動作を身につける', unlockLevel: 22, category: 'health' },
+  { id: 'health-06', name: '柔軟の極意', description: '可動域を広げ、しなやかな身体を作る', unlockLevel: 28, category: 'health' },
+  { id: 'health-07', name: '呼吸循環', description: '呼吸のリズムで持久力を高める', unlockLevel: 34, category: 'health' },
+  { id: 'health-08', name: '栄養設計', description: '食事バランスを最適化して土台を固める', unlockLevel: 40, category: 'health' },
+  { id: 'health-09', name: '疲労回復プロトコル', description: '回復手順を確立し継戦能力を上げる', unlockLevel: 48, category: 'health' },
+  { id: 'health-10', name: '鉄壁のコンディション', description: '乱れない生活リズムで安定を維持する', unlockLevel: 58, category: 'health' },
+  { id: 'health-11', name: '持久の覇気', description: '長時間でも折れない体力を獲得する', unlockLevel: 72, category: 'health' },
+  { id: 'health-12', name: '不屈の肉体', description: '試練に耐える強靭な身体を築き上げる', unlockLevel: 90, category: 'health' },
 
   // =====================================================
   // ===== hobby (探究力系) - 好奇心から創世の力へ =====

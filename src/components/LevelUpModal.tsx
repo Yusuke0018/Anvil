@@ -21,6 +21,7 @@ const SPARKLE_DIRS = [
 
 const CATEGORY_COLORS: Record<string, string> = {
   life: 'text-[#e05050]',
+  health: 'text-[#4fbf7f]',
   hobby: 'text-accent',
   work: 'text-[#5088e0]',
 };
@@ -31,7 +32,7 @@ export default function LevelUpModal({ result, onDismiss }: LevelUpModalProps) {
   const milestone = result.milestoneEvent;
 
   const stats = [
-    { label: 'STR', fullLabel: '心力', emoji: '🔥', value: result.statGains.vitality, color: 'text-[#e05050]' },
+    { label: 'STR', fullLabel: '体力', emoji: '🔥', value: result.statGains.vitality, color: 'text-[#e05050]' },
     { label: 'DEX', fullLabel: '探究力', emoji: '⚔️', value: result.statGains.curiosity, color: 'text-accent' },
     { label: 'INT', fullLabel: '知力', emoji: '📖', value: result.statGains.intellect, color: 'text-[#5088e0]' },
   ];

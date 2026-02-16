@@ -220,12 +220,22 @@ export const TITLES: TitleDefinition[] = [
     description: '100日の旅を歩んだ達人', condition: '100日間記録',
     check: (ctx) => ctx.submittedDays >= 100,
   },
+  {
+    id: 't-days180', name: '半歳の鍛錬者', icon: '🗓️',
+    description: '180日の歩みを重ねた継続者', condition: '180日間記録',
+    check: (ctx) => ctx.submittedDays >= 180,
+  },
 
   // ===== カテゴリ達成系 =====
   {
-    id: 't-life50', name: '心の探求者', icon: '🔥',
-    description: '心力の道を深く歩む者', condition: '人生カテゴリ50回達成',
+    id: 't-life50', name: '体力の探求者', icon: '🔥',
+    description: '体力の道を深く歩む者', condition: '体力系カテゴリ50回達成',
     check: (ctx) => ctx.totalCompletions.life >= 50,
+  },
+  {
+    id: 't-vital200', name: '体力の鍛錬者', icon: '💪',
+    description: '体力系クエストを重ねた修練者', condition: '体力系カテゴリ200回達成',
+    check: (ctx) => ctx.totalCompletions.life >= 200,
   },
   {
     id: 't-hobby50', name: '好奇心の冒険家', icon: '🧭',
@@ -249,6 +259,11 @@ export const TITLES: TitleDefinition[] = [
     description: '千の道を歩みし旅人', condition: '合計500回達成',
     check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 500,
   },
+  {
+    id: 't-total1000', name: '万里の踏破者', icon: '🧿',
+    description: '膨大な積み重ねを達成した者', condition: '合計1000回達成',
+    check: (ctx) => ctx.totalCompletions.life + ctx.totalCompletions.hobby + ctx.totalCompletions.work >= 1000,
+  },
 
   // ===== 特殊系 =====
   {
@@ -267,6 +282,11 @@ export const TITLES: TitleDefinition[] = [
     id: 't-streak30', name: '月光の守護者', icon: '🌕',
     description: '三十日の月光に導かれし守護者', condition: '30日連続記録',
     check: (ctx) => ctx.maxStreak >= 30,
+  },
+  {
+    id: 't-streak60', name: '鋼鉄の継続者', icon: '⛓️',
+    description: '長期継続を成し遂げる不屈の者', condition: '60日連続記録',
+    check: (ctx) => ctx.maxStreak >= 60,
   },
 
   // ===== 復帰系 =====

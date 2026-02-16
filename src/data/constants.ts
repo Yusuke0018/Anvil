@@ -28,8 +28,8 @@ export const STAT_GROWTH_TIERS: { maxLevel: number; minGrowth: number; maxGrowth
 
 // ===== カテゴリ表示情報 =====
 export const CATEGORY_INFO: Record<HabitCategory, { label: string; emoji: string; statLabel: string; statKey: string }> = {
-  life: { label: '人生', emoji: '🔥', statLabel: '心力', statKey: 'vitality' },
-  health: { label: '健康', emoji: '💪', statLabel: '心力', statKey: 'vitality' },
+  life: { label: '人生', emoji: '🔥', statLabel: '体力', statKey: 'vitality' },
+  health: { label: '健康', emoji: '💪', statLabel: '体力', statKey: 'vitality' },
   hobby: { label: '趣味', emoji: '⚔️', statLabel: '探究力', statKey: 'curiosity' },
   work: { label: '仕事', emoji: '📖', statLabel: '知力', statKey: 'intellect' },
 };

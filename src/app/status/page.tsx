@@ -27,7 +27,7 @@ export default function StatusPage() {
   const perHabit = xpPerHabit(character.level);
   const submittedDays = state.dailyRecords.filter(r => r.submitted).length;
 
-  const skillsByCategory = (['life', 'hobby', 'work'] as HabitCategory[]).map(cat => ({
+  const skillsByCategory = (['life', 'health', 'hobby', 'work'] as HabitCategory[]).map(cat => ({
     category: cat,
     info: CATEGORY_INFO[cat],
     skills: SKILLS.filter(s => s.category === cat),
@@ -47,7 +47,7 @@ export default function StatusPage() {
       {/* ステータスカード */}
       <div className="px-4 space-y-3">
         <StatCard
-          label="心力 (STR)"
+          label="体力 (STR)"
           emoji="🔥"
           level={character.stats.vitality}
           currentXP={character.statXP.vitality.currentXP}
@@ -101,6 +101,7 @@ export default function StatusPage() {
                           <>
                             <span className={`text-sm font-medium shrink-0 ${
                               category === 'life' ? 'text-[#e05050]' :
+                              category === 'health' ? 'text-[#4fbf7f]' :
                               category === 'hobby' ? 'text-accent' : 'text-[#5088e0]'
                             }`}>
                               {skill.name}

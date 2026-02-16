@@ -43,7 +43,7 @@ export interface CharacterStatus {
 }
 
 export interface Stats {
-  // 心力 (人生カテゴリから成長)
+  // 体力 (人生/健康カテゴリから成長)
   vitality: number;
   // 探究力 (趣味カテゴリから成長)
   curiosity: number;
