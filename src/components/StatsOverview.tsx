@@ -25,7 +25,7 @@ export default function StatsOverview({ stats, statXP }: StatsOverviewProps) {
             className="rpg-panel p-3 text-center"
           >
             <div className="text-lg mb-0.5">{emoji}</div>
-            <div className={`text-lg font-bold pixel-num stat-value ${color}`}>Lv.{stats[key]}</div>
+            <div className={`text-lg font-bold pixel-num stat-value ${color}`}>熟練度 {stats[key]}</div>
             <div className="text-xs sm:text-[11px] text-text-secondary pixel-num mt-0.5">
               {statXP[key].currentXP}/{expToNextStatLevel(stats[key])}
             </div>

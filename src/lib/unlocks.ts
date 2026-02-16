@@ -1,11 +1,12 @@
-import { Skill, TitleCheckContext } from '@/types';
+import { Skill, Stats, TitleCheckContext } from '@/types';
 import { SKILLS } from '@/data/skills';
 import { TITLES, TitleDefinition } from '@/data/titles';
+import { CATEGORY_INFO } from '@/data/constants';
 
-/** 現在レベルで解放できる未取得スキルを返す */
-export function checkNewSkills(level: number, unlockedIds: string[]): Skill[] {
+/** 各能力の熟練度で解放できる未取得スキルを返す */
+export function checkNewSkills(stats: Stats, unlockedIds: string[]): Skill[] {
   return SKILLS.filter(
-    s => s.unlockLevel <= level && !unlockedIds.includes(s.id)
+    s => stats[CATEGORY_INFO[s.category].statKey] >= s.unlockLevel && !unlockedIds.includes(s.id)
   );
 }
 

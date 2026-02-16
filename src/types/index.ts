@@ -77,7 +77,7 @@ export interface Skill {
   id: string;
   name: string;
   description: string;
-  unlockLevel: number;
+  unlockLevel: number; // 対応カテゴリ能力の熟練度しきい値
   category: HabitCategory;
 }
 

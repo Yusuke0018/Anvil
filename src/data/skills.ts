@@ -112,7 +112,12 @@ export const SKILLS: Skill[] = [
   { id: 'work-27', name: '万象の理', description: '森羅万象の法則を理解する', unlockLevel: 97, category: 'work' },
 ];
 
-/** 指定レベル以下で解放可能なスキルをすべて返す */
+/** 指定熟練度以下で解放可能なスキルをすべて返す */
+export function getSkillsForMastery(mastery: number): Skill[] {
+  return SKILLS.filter(s => s.unlockLevel <= mastery);
+}
+
+/** 互換用: level 引数は熟練度として扱う */
 export function getSkillsForLevel(level: number): Skill[] {
-  return SKILLS.filter(s => s.unlockLevel <= level);
+  return getSkillsForMastery(level);
 }

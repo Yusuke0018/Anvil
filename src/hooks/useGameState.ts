@@ -255,8 +255,8 @@ export function useGameState() {
     // 覚悟ゲージ更新
     const newGauge = updateGaugeOnSubmit(state.resolutionGauge, completedCount, totalQuests);
 
-    // スキル解放チェック
-    const newSkills: Skill[] = checkNewSkills(xpResult.level, state.unlockedSkillIds);
+    // スキル解放チェック（各能力の熟練度に応じて解放）
+    const newSkills: Skill[] = checkNewSkills(newStats, state.unlockedSkillIds);
     const newSkillIds = newSkills.map(s => s.id);
 
     // 称号解放チェック（記録日数は今回の確定を含める、maxStreakも含める）

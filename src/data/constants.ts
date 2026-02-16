@@ -1,4 +1,4 @@
-import { HabitCategory } from '@/types';
+import { HabitCategory, Stats } from '@/types';
 
 // ===== XP計算 =====
 export const BASE_XP_PER_HABIT = 10;
@@ -27,7 +27,7 @@ export const STAT_GROWTH_TIERS: { maxLevel: number; minGrowth: number; maxGrowth
 ];
 
 // ===== カテゴリ表示情報 =====
-export const CATEGORY_INFO: Record<HabitCategory, { label: string; emoji: string; statLabel: string; statKey: string }> = {
+export const CATEGORY_INFO: Record<HabitCategory, { label: string; emoji: string; statLabel: string; statKey: keyof Stats }> = {
   life: { label: '人生', emoji: '🔥', statLabel: '心力', statKey: 'vitality' },
   health: { label: '健康', emoji: '💪', statLabel: '体力', statKey: 'stamina' },
   hobby: { label: '趣味', emoji: '⚔️', statLabel: '探究力', statKey: 'curiosity' },
