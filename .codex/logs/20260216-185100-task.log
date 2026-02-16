@@ -1,0 +1,13 @@
+timestamp: 2026-02-16T18:51:00+09:00
+branch: main
+latest_commit: aa9045d
+diff_summary: feat: 体力表示への統一と追加スキル・称号を実装 (9 files changed, 50 insertions(+), 12 deletions(-))
+checks:
+  secret_scan: pass
+  large_diff_guard: pass (62 lines total < 5000)
+  dangerous_paths_guard: pass (no node_modules/dist/binary staged)
+verification:
+  npm_run_lint: pass
+  npm_run_build: pass
+push_result: pass (origin/main 8eb2bbd..aa9045d)
+notes: vitality表示を体力へ統一、healthスキル12件を追加、新称号4件を追加、healthカテゴリをステータス画面のスキル一覧に追加。
