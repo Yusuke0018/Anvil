@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Habit, HabitCategory } from '@/types';
-import { CATEGORY_INFO, MAX_HABITS_PER_CATEGORY } from '@/data/constants';
+import { CATEGORY_INFO, HABIT_CATEGORIES, MAX_HABITS_PER_CATEGORY } from '@/data/constants';
 
 interface HabitEditorProps {
   habits: Habit[];
@@ -21,7 +21,7 @@ function compareHabits(a: Habit, b: Habit): number {
 export default function HabitEditor({ habits, onAdd, onUpdate, onDelete, onReorder }: HabitEditorProps) {
   return (
     <div className="px-4 space-y-6">
-      {(['life', 'hobby', 'work'] as HabitCategory[]).map(category => (
+      {HABIT_CATEGORIES.map(category => (
         <CategoryEditor
           key={category}
           category={category}

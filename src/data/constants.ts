@@ -5,7 +5,8 @@ export const BASE_XP_PER_HABIT = 10;
 export const XP_COMPOUND_RATE = 1.02; // 2%複利
 export const FULL_COMPLETION_BONUS_RATE = 0.30; // 全達成ボーナス 30%
 export const MAX_HABITS_PER_CATEGORY = 3;
-export const TOTAL_HABITS_MAX = MAX_HABITS_PER_CATEGORY * 3; // 9
+export const HABIT_CATEGORIES: HabitCategory[] = ['life', 'health', 'hobby', 'work'];
+export const TOTAL_HABITS_MAX = MAX_HABITS_PER_CATEGORY * HABIT_CATEGORIES.length; // 12
 
 // ===== レベルアップ日数 (ピースワイズ線形補間) =====
 // [level, targetDays] のペア
@@ -28,6 +29,7 @@ export const STAT_GROWTH_TIERS: { maxLevel: number; minGrowth: number; maxGrowth
 // ===== カテゴリ表示情報 =====
 export const CATEGORY_INFO: Record<HabitCategory, { label: string; emoji: string; statLabel: string; statKey: string }> = {
   life: { label: '人生', emoji: '🔥', statLabel: '心力', statKey: 'vitality' },
+  health: { label: '健康', emoji: '💪', statLabel: '心力', statKey: 'vitality' },
   hobby: { label: '趣味', emoji: '⚔️', statLabel: '探究力', statKey: 'curiosity' },
   work: { label: '仕事', emoji: '📖', statLabel: '知力', statKey: 'intellect' },
 };

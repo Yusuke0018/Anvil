@@ -174,7 +174,13 @@ export function useGameState() {
       if (check.status === 'done') {
         const habit = state.habits.find(h => h.id === check.habitId);
         if (habit) {
-          categoryCompletions[habit.category]++;
+          if (habit.category === 'life' || habit.category === 'health') {
+            categoryCompletions.life++;
+          } else if (habit.category === 'hobby') {
+            categoryCompletions.hobby++;
+          } else if (habit.category === 'work') {
+            categoryCompletions.work++;
+          }
         }
       }
     }

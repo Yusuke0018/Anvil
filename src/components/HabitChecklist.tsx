@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Habit, HabitCategory, CheckStatus } from '@/types';
-import { CATEGORY_INFO } from '@/data/constants';
+import { CATEGORY_INFO, HABIT_CATEGORIES } from '@/data/constants';
 
 interface HabitChecklistProps {
   habits: Habit[];
@@ -13,20 +13,23 @@ interface HabitChecklistProps {
 
 const CATEGORY_RIPPLE_COLOR: Record<HabitCategory, string> = {
   life: 'var(--color-accent)',
+  health: 'var(--color-success)',
   hobby: 'var(--color-gold)',
-  work: 'var(--color-success)',
+  work: '#5088e0',
 };
 
 const CATEGORY_BORDER_COLOR: Record<HabitCategory, string> = {
   life: 'var(--color-accent)',
+  health: 'var(--color-success)',
   hobby: 'var(--color-gold)',
-  work: 'var(--color-success)',
+  work: '#5088e0',
 };
 
 const CATEGORY_BG_TINT: Record<HabitCategory, string> = {
   life: 'var(--color-accent-dim)',
+  health: 'var(--color-success-dim)',
   hobby: 'var(--color-gold-dim)',
-  work: 'var(--color-success-dim)',
+  work: 'rgba(80, 136, 224, 0.18)',
 };
 
 function compareHabits(a: Habit, b: Habit): number {
@@ -161,7 +164,7 @@ export default function HabitChecklist({
 
   return (
     <div className="px-4">
-      {(['life', 'hobby', 'work'] as HabitCategory[]).map(cat => (
+      {HABIT_CATEGORIES.map(cat => (
         <CategorySection
           key={cat}
           category={cat}

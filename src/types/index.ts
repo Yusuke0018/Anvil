@@ -1,5 +1,5 @@
 // ===== カテゴリ =====
-export type HabitCategory = 'life' | 'hobby' | 'work';
+export type HabitCategory = 'life' | 'health' | 'hobby' | 'work';
 
 // ===== 習慣 =====
 export interface Habit {
