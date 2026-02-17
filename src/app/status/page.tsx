@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import StatCard from '@/components/StatCard';
 import BottomNav from '@/components/BottomNav';
@@ -18,7 +19,8 @@ const CATEGORY_COLORS: Record<HabitCategory, string> = {
 };
 
 export default function StatusPage() {
-  const { state } = useGameState();
+  const { state, equipTitle } = useGameState();
+  const [showTitlePicker, setShowTitlePicker] = useState(false);
 
   if (!state) {
     return (
@@ -92,19 +94,87 @@ export default function StatusPage() {
       <div className="px-4 mt-4">
         <div className="rpg-panel p-4">
           <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-widest uppercase">▸ 現在の所持</h3>
-          {equippedTitle ? (
-            <div className="flex items-center gap-3 rounded-sm px-3 py-2.5 bg-bg-surface/60 border border-gold/60 rpg-border-glow">
-              <span className="text-xl">{equippedTitle.icon}</span>
-              <div className="min-w-0">
-                <div className="text-sm font-bold text-gold">{equippedTitle.name}</div>
-                <div className="text-xs text-text-secondary">{equippedTitle.condition}</div>
+          <button
+            type="button"
+            onClick={() => setShowTitlePicker(prev => !prev)}
+            className={`w-full text-left rounded-sm px-3 py-2.5 border ${
+              equippedTitle
+                ? 'bg-bg-surface/60 border-gold/60'
+                : 'bg-bg-deep/40 border-bg-surface/30'
+            }`}
+          >
+            {equippedTitle ? (
+              <div className="flex items-center gap-3">
+                <span className="text-xl">{equippedTitle.icon}</span>
+                <div className="min-w-0">
+                  <div className="text-sm font-bold text-gold">{equippedTitle.name}</div>
+                  <div className="text-xs text-text-secondary">{equippedTitle.condition}</div>
+                </div>
+                <span className="ml-auto text-xs text-text-secondary">{showTitlePicker ? '閉じる' : '称号を選ぶ'}</span>
               </div>
-            </div>
-          ) : (
-            <div className="rounded-sm px-3 py-2.5 bg-bg-deep/40 border border-bg-surface/30 text-sm text-text-secondary">
-              現在装備中の称号はありません
+            ) : (
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm text-text-secondary">現在装備中の称号はありません</span>
+                <span className="text-xs text-text-secondary">{showTitlePicker ? '閉じる' : '称号を選ぶ'}</span>
+              </div>
+            )}
+          </button>
+
+          {showTitlePicker && (
+            <div className="mt-2 space-y-2">
+              <button
+                type="button"
+                className={`w-full flex items-center gap-3 rounded-sm px-3 py-2.5 text-left border ${
+                  state.equippedTitleId === null
+                    ? 'bg-bg-surface/60 border-rpg-border-dim'
+                    : 'bg-bg-deep/40 border-bg-surface/30'
+                }`}
+                onClick={() => {
+                  equipTitle(null);
+                  setShowTitlePicker(false);
+                }}
+              >
+                <span className="text-lg">🧺</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-text-primary">称号を外す</div>
+                </div>
+              </button>
+
+              {unlockedTitles.length === 0 ? (
+                <div className="rounded-sm px-3 py-2.5 bg-bg-deep/40 border border-bg-surface/30 text-sm text-text-secondary">
+                  まだ所持称号はありません。
+                </div>
+              ) : (
+                unlockedTitles.map(title => {
+                  const equipped = state.equippedTitleId === title.id;
+                  return (
+                    <button
+                      key={title.id}
+                      type="button"
+                      className={`w-full flex items-center gap-3 rounded-sm px-3 py-2.5 text-left border ${
+                        equipped
+                          ? 'bg-bg-surface/60 border-gold/60 rpg-border-glow'
+                          : 'bg-bg-surface/40 border-rpg-border-dim'
+                      }`}
+                      onClick={() => {
+                        equipTitle(title.id);
+                        setShowTitlePicker(false);
+                      }}
+                    >
+                      <span className="text-lg">{title.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className={`text-sm font-medium ${equipped ? 'text-gold' : 'text-text-primary'}`}>
+                          {title.name}
+                        </div>
+                        <div className="text-xs text-text-secondary">{title.condition}</div>
+                      </div>
+                    </button>
+                  );
+                })
+              )}
             </div>
           )}
+
           <p className="text-xs sm:text-[11px] text-text-secondary mt-2">
             所持称号: <span className="pixel-num">{unlockedTitles.length}</span> / {TITLES.length} ・
             所持スキル: <span className="pixel-num">{unlockedSkills.length}</span> / {SKILLS.length}
