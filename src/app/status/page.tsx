@@ -1,8 +1,10 @@
 'use client';
 
 import { useGameState } from '@/hooks/useGameState';
+import StatCard from '@/components/StatCard';
 import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
+import { expToNextStatLevel } from '@/lib/xp';
 import { SKILLS } from '@/data/skills';
 import { TITLES } from '@/data/titles';
 import { CATEGORY_INFO } from '@/data/constants';
@@ -16,7 +18,7 @@ const CATEGORY_COLORS: Record<HabitCategory, string> = {
 };
 
 export default function StatusPage() {
-  const { state, equipTitle } = useGameState();
+  const { state } = useGameState();
 
   if (!state) {
     return (
@@ -26,6 +28,7 @@ export default function StatusPage() {
     );
   }
 
+  const { character } = state;
   const equippedTitle = state.equippedTitleId
     ? TITLES.find(t => t.id === state.equippedTitleId) ?? null
     : null;
@@ -47,6 +50,45 @@ export default function StatusPage() {
         <ThemeToggle />
       </header>
 
+      <div className="px-4 mt-4 space-y-3">
+        <StatCard
+          label="心力 (STR)"
+          emoji="🔥"
+          mastery={character.stats.vitality}
+          currentXP={character.statXP.vitality.currentXP}
+          nextXP={expToNextStatLevel(character.stats.vitality)}
+          completions={character.totalCompletions.life}
+          color="text-[#e05050]"
+        />
+        <StatCard
+          label="体力 (VIT)"
+          emoji="💪"
+          mastery={character.stats.stamina}
+          currentXP={character.statXP.stamina.currentXP}
+          nextXP={expToNextStatLevel(character.stats.stamina)}
+          completions={character.totalCompletions.health}
+          color="text-[#4fbf7f]"
+        />
+        <StatCard
+          label="探究力 (DEX)"
+          emoji="⚔️"
+          mastery={character.stats.curiosity}
+          currentXP={character.statXP.curiosity.currentXP}
+          nextXP={expToNextStatLevel(character.stats.curiosity)}
+          completions={character.totalCompletions.hobby}
+          color="text-accent"
+        />
+        <StatCard
+          label="知力 (INT)"
+          emoji="📖"
+          mastery={character.stats.intellect}
+          currentXP={character.statXP.intellect.currentXP}
+          nextXP={expToNextStatLevel(character.stats.intellect)}
+          completions={character.totalCompletions.work}
+          color="text-[#5088e0]"
+        />
+      </div>
+
       <div className="px-4 mt-4">
         <div className="rpg-panel p-4">
           <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-widest uppercase">▸ 現在の所持</h3>
@@ -60,7 +102,7 @@ export default function StatusPage() {
             </div>
           ) : (
             <div className="rounded-sm px-3 py-2.5 bg-bg-deep/40 border border-bg-surface/30 text-sm text-text-secondary">
-              未装備です（下の称号一覧から選択できます）
+              現在装備中の称号はありません
             </div>
           )}
           <p className="text-xs sm:text-[11px] text-text-secondary mt-2">
@@ -97,107 +139,6 @@ export default function StatusPage() {
               })}
             </div>
           )}
-        </div>
-      </div>
-
-      {/* スキル一覧 */}
-      <div className="px-4 mt-4">
-        <div className="rpg-panel p-4">
-          <h3 className="text-xs font-medium text-text-secondary mb-1 tracking-widest uppercase">▸ スキル図鑑</h3>
-          <div className="space-y-4">
-            {skillsByCategory.map(({ category, info, skills }) => (
-              <div key={category}>
-                <div className="text-xs sm:text-[11px] text-text-secondary mb-2 tracking-wider">
-                  {info.emoji} {info.statLabel}
-                </div>
-                <div className="space-y-1.5">
-                  {skills.map(skill => {
-                    const unlocked = state.unlockedSkillIds.includes(skill.id);
-                    return (
-                      <div
-                        key={skill.id}
-                        className={`flex items-center gap-3 rounded-sm px-3 py-2 border ${
-                          unlocked
-                            ? 'bg-bg-surface/60 border-rpg-border-dim'
-                            : 'bg-bg-deep/40 border-bg-surface/30'
-                        }`}
-                      >
-                        {unlocked ? (
-                          <>
-                            <span className={`text-sm font-medium shrink-0 ${
-                              CATEGORY_COLORS[category]
-                            }`}>
-                              {skill.name}
-                            </span>
-                            <span className="text-xs text-gold flex-1 text-right tracking-wider">
-                              所持済み
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="text-sm text-text-secondary">🔒</span>
-                            <span className="text-sm text-text-secondary pixel-num">
-                              {info.statLabel} 熟練度 {skill.unlockLevel} で解放
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* 称号一覧 */}
-      <div className="px-4 mt-4">
-        <div className="rpg-panel p-4">
-          <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-widest uppercase">▸ 称号</h3>
-          <div className="space-y-2">
-            {TITLES.map(title => {
-              const unlocked = state.unlockedTitleIds.includes(title.id);
-              const equipped = state.equippedTitleId === title.id;
-              return (
-                <button
-                  key={title.id}
-                  className={`w-full flex items-center gap-3 rounded-sm px-3 py-2.5 text-left transition-all border ${
-                    equipped
-                      ? 'bg-bg-surface/60 border-gold/60 rpg-border-glow'
-                      : unlocked
-                        ? 'bg-bg-surface/40 border-rpg-border-dim active:scale-[0.98]'
-                        : 'bg-bg-deep/40 border-bg-surface/30 cursor-default'
-                  }`}
-                  onClick={() => {
-                    if (!unlocked) return;
-                    equipTitle(equipped ? null : title.id);
-                  }}
-                >
-                  {unlocked ? (
-                    <>
-                      <span className="text-lg">{title.icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className={`text-sm font-medium ${equipped ? 'text-gold' : 'text-text-primary'}`}>
-                          {title.name}
-                          {equipped && <span className="text-xs sm:text-[11px] text-gold/70 ml-2 tracking-wider">装備中</span>}
-                        </div>
-                        <div className="text-xs text-text-secondary">{title.condition}</div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-lg opacity-30">🔒</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm text-text-secondary">???</div>
-                        <div className="text-xs text-text-secondary">{title.condition}</div>
-                      </div>
-                    </>
-                  )}
-                </button>
-              );
-            })}
-          </div>
         </div>
       </div>
 
