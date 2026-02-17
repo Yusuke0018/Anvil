@@ -1,11 +1,8 @@
 'use client';
 
 import { useGameState } from '@/hooks/useGameState';
-import StatCard from '@/components/StatCard';
-import LevelBar from '@/components/LevelBar';
 import BottomNav from '@/components/BottomNav';
 import ThemeToggle from '@/components/ThemeToggle';
-import { expToNextLevel, expToNextStatLevel, xpPerHabit } from '@/lib/xp';
 import { SKILLS } from '@/data/skills';
 import { TITLES } from '@/data/titles';
 import { CATEGORY_INFO } from '@/data/constants';
@@ -29,10 +26,6 @@ export default function StatusPage() {
     );
   }
 
-  const { character } = state;
-  const needed = expToNextLevel(character.level);
-  const perHabit = xpPerHabit(character.level);
-  const submittedDays = state.dailyRecords.filter(r => r.submitted).length;
   const equippedTitle = state.equippedTitleId
     ? TITLES.find(t => t.id === state.equippedTitleId) ?? null
     : null;
@@ -54,11 +47,9 @@ export default function StatusPage() {
         <ThemeToggle />
       </header>
 
-      <LevelBar level={character.level} currentXP={character.currentXP} />
-
-      <div className="px-4 mt-4 space-y-3">
+      <div className="px-4 mt-4">
         <div className="rpg-panel p-4">
-          <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-widest uppercase">▸ 現在の称号</h3>
+          <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-widest uppercase">▸ 現在の所持</h3>
           {equippedTitle ? (
             <div className="flex items-center gap-3 rounded-sm px-3 py-2.5 bg-bg-surface/60 border border-gold/60 rpg-border-glow">
               <span className="text-xl">{equippedTitle.icon}</span>
@@ -73,18 +64,15 @@ export default function StatusPage() {
             </div>
           )}
           <p className="text-xs sm:text-[11px] text-text-secondary mt-2">
-            所持称号: <span className="pixel-num">{unlockedTitles.length}</span> / {TITLES.length}
+            所持称号: <span className="pixel-num">{unlockedTitles.length}</span> / {TITLES.length} ・
+            所持スキル: <span className="pixel-num">{unlockedSkills.length}</span> / {SKILLS.length}
           </p>
-        </div>
-
-        <div className="rpg-panel p-4">
-          <h3 className="text-xs font-medium text-text-secondary mb-3 tracking-widest uppercase">▸ 現在の所持スキル</h3>
           {unlockedSkills.length === 0 ? (
-            <div className="rounded-sm px-3 py-2.5 bg-bg-deep/40 border border-bg-surface/30 text-sm text-text-secondary">
+            <div className="rounded-sm px-3 py-2.5 mt-3 bg-bg-deep/40 border border-bg-surface/30 text-sm text-text-secondary">
               まだスキルはありません。各能力の熟練度を上げると解放されます。
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 mt-3">
               {skillsByCategory.map(({ category, info, skills }) => {
                 const owned = skills.filter(skill => state.unlockedSkillIds.includes(skill.id));
                 if (owned.length === 0) return null;
@@ -112,58 +100,15 @@ export default function StatusPage() {
         </div>
       </div>
 
-      {/* ステータスカード */}
-      <div className="px-4 mt-4 space-y-3">
-        <StatCard
-          label="心力 (STR)"
-          emoji="🔥"
-          mastery={character.stats.vitality}
-          currentXP={character.statXP.vitality.currentXP}
-          nextXP={expToNextStatLevel(character.stats.vitality)}
-          completions={character.totalCompletions.life}
-          color="text-[#e05050]"
-        />
-        <StatCard
-          label="体力 (VIT)"
-          emoji="💪"
-          mastery={character.stats.stamina}
-          currentXP={character.statXP.stamina.currentXP}
-          nextXP={expToNextStatLevel(character.stats.stamina)}
-          completions={character.totalCompletions.health}
-          color="text-[#4fbf7f]"
-        />
-        <StatCard
-          label="探究力 (DEX)"
-          emoji="⚔️"
-          mastery={character.stats.curiosity}
-          currentXP={character.statXP.curiosity.currentXP}
-          nextXP={expToNextStatLevel(character.stats.curiosity)}
-          completions={character.totalCompletions.hobby}
-          color="text-accent"
-        />
-        <StatCard
-          label="知力 (INT)"
-          emoji="📖"
-          mastery={character.stats.intellect}
-          currentXP={character.statXP.intellect.currentXP}
-          nextXP={expToNextStatLevel(character.stats.intellect)}
-          completions={character.totalCompletions.work}
-          color="text-[#5088e0]"
-        />
-      </div>
-
       {/* スキル一覧 */}
-      <div className="px-4 mt-6">
+      <div className="px-4 mt-4">
         <div className="rpg-panel p-4">
           <h3 className="text-xs font-medium text-text-secondary mb-1 tracking-widest uppercase">▸ スキル図鑑</h3>
-          <p className="text-xs sm:text-[11px] text-text-secondary mb-3">
-            スキルは総合レベルではなく、対応する能力の熟練度が条件です。
-          </p>
           <div className="space-y-4">
             {skillsByCategory.map(({ category, info, skills }) => (
               <div key={category}>
                 <div className="text-xs sm:text-[11px] text-text-secondary mb-2 tracking-wider">
-                  {info.emoji} {info.statLabel}（現在: 熟練度 {character.stats[info.statKey]}）
+                  {info.emoji} {info.statLabel}
                 </div>
                 <div className="space-y-1.5">
                   {skills.map(skill => {
@@ -184,8 +129,8 @@ export default function StatusPage() {
                             }`}>
                               {skill.name}
                             </span>
-                            <span className="text-xs text-text-secondary flex-1 text-right">
-                              {skill.description}
+                            <span className="text-xs text-gold flex-1 text-right tracking-wider">
+                              所持済み
                             </span>
                           </>
                         ) : (
@@ -256,30 +201,7 @@ export default function StatusPage() {
         </div>
       </div>
 
-      {/* 概要情報 */}
-      <div className="px-4 mt-4">
-        <div className="rpg-panel p-4 space-y-2">
-          <h3 className="text-xs font-medium text-text-secondary mb-2 tracking-widest uppercase">▸ 概要</h3>
-          <InfoRow label="総獲得EXP" value={`${character.totalXP.toLocaleString()} EXP`} />
-          <InfoRow label="次レベルまで" value={`${(needed - character.currentXP).toLocaleString()} EXP`} />
-          <InfoRow label="1クエストあたりEXP" value={`${perHabit} EXP`} />
-          <InfoRow label="冒険日数" value={`${submittedDays}日`} />
-          <InfoRow label="連続達成" value={`${state.resolutionGauge.streak}日`} />
-          <InfoRow label="最高連続" value={`${state.resolutionGauge.maxStreak}日`} />
-          <InfoRow label="覚悟ゲージ" value={`${state.resolutionGauge.current}/100`} />
-        </div>
-      </div>
-
       <BottomNav />
     </>
-  );
-}
-
-function InfoRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between items-center text-sm border-b border-rpg-border-dim/30 pb-1.5">
-      <span className="text-text-secondary text-xs">{label}</span>
-      <span className="text-text-primary font-medium pixel-num text-xs">{value}</span>
-    </div>
   );
 }
